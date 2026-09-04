@@ -33,6 +33,7 @@ tile_set = ExtResource("5_n4ce2")
 
 [node name="Head" type="Sprite2D" parent="World/PlayerFx" unique_id=1446686610]
 visible = false
+z_index = 1
 texture = ExtResource("6_mm6ix")
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]

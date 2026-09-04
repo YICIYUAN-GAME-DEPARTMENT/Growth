@@ -27,7 +27,7 @@ svg 未经 `--import` 前 `load()` 会失败，**.tres 生成必须分两步**�
 - **禁 `set_cells_terrain_connect` 批量重涂**：会外扩（地板 40→70 格案例）。重铺一律**确定性直写**：按格集对角邻居算掩码，`layer.set_cell(c, 0, Vector2i(mask, 0))`，绝不外扩。可参考 `Level._paint_auto` 与 `tools/MigrateTerrain.gd` / `RebuildLevelTiles.gd`。
 - 三套地形 .tres 用 **AtlasTexture 裁对应图集行**（`terrain_placeholder.svg` 512×96，row0 地板/row1 障碍/row2 机关），瓦片坐标统一 `(mask,0)`；瓦片建在非 0 行而场景按 `(mask,0)` 写格会**静默不显示**。角序 bit0=左上 bit1=右上 bit2=左下 bit3=右下。
 - 机关生长体铺瓦集合=全部 `claimed` 格**含核心格**（掩码才把核心当邻居，角点不缺瓦）；核心由 Core Sprite 画，Mechanism 根节点 `z_index=1` 浮瓦片层之上（MechanismCells 层在场景树里位于 EntityRoot 之后）。
-- 头/尾是独立 Sprite（非瓦片），贴图必须 **32×32 单格画布**（Sprite 按纹理中心定位；192×32 画布会让美术整体左移 80px→"不显示"）。
+- 头/尾是独立 Sprite（非瓦片），贴图**可大于单格**，按"接口点"锚定：默认接口点=纹理中心=格中心（Sprite 居中定位）；内容不在画布中心的正式美术用 `Sprite2D.offset` 把接口点移到格中心（旋转绕该点）。教训：192×32 图集画布、内容只画最左 32px → 整体左移 80px"不显示"。
 
 ## 4. 场景脚本注入 / 保存
 
@@ -38,7 +38,7 @@ svg 未经 `--import` 前 `load()` 会失败，**.tres 生成必须分两步**�
 
 - 建 `tools/VerifyFixes.gd` + `.tscn`：`_ready()` 里实例化目标场景 → `await get_tree().process_frame` → 逐条 `_ok(cond, msg)`（PASS/FAIL）→ `get_tree().quit(1 if fails>0 else 0)`。
 - 断言**必须查 `is_visible_in_tree()` 与纹理尺寸**，别只看字段——"纹理内美术偏移"类 bug 只能靠几何断言拦。
-- 校验要点示例：头/尾位置=格中心、旋转、身体瓦片列号（0/1/2/3/4/5 直/弯）、机关 claimed 含核心格、核心格已铺瓦、掩码位含核心。
+- 校验要点示例：头/尾位置=格中心、旋转与贴图尺寸（可>32px，须几何断言）、PlayerCells 瓦片列号（中段 0/1/2/3/4/5 直/弯 + 头格/尾格端点瓦 6=E 7=W 8=S 9=N）、机关 claimed 含核心格、核心格已铺瓦、掩码位含核心。
 - 跑完**删除三个文件**（.gd / .gd.uid / .tscn）。
 
 ## 6. 编辑器/文件系统陷阱（已多次踩实）
@@ -52,4 +52,4 @@ svg 未经 `--import` 前 `load()` 会失败，**.tres 生成必须分两步**�
 ## 7. 产出收尾
 
 - 新贴图/图集登记进 [开发文档](../../开发文档.md) §3.9（A-xx）。
-- 替换占位（`terrain_placeholder.svg` / `player_snek.svg`）保持「行列+角序 / 单格画布」等结构契约，否则已画地图/已绑 Sprite 错位。
+- 替换占位（`terrain_placeholder.svg` / `player_snek.svg`）保持「行列+角序 / 瓦片列号」等结构契约，否则已画地图/已绑 Sprite 错位。`player_snek.svg` 现为 320×32（col0..5 连接件 + col6..9 端点半截瓦）；头/尾大贴图替换后须复查 Sprite2D.offset 接口点是否仍对齐格中心。

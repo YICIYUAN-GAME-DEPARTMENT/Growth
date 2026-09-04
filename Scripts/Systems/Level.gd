@@ -10,8 +10,8 @@ extends Node2D
 ##   │  ├─ Obstacles       (TileMapLayer)  涂障碍（每个被涂的格=不可走）
 ##   │  ├─ EntityRoot      (Node2D)   PlayerSpawn / Goal / Food ×N / Mechanism ×N
 ##   │  ├─ MechanismCells  (TileMapLayer)  机关生长体（运行时同步实际占格，含核心格）
-##   │  ├─ PlayerCells     (TileMapLayer)  玩家身体中段（运行时按 trail 同步）
-##   │  └─ PlayerFx        (Node2D)       Head/Tail 两个 Sprite（运行时驱动，容器须可见）
+##   │  ├─ PlayerCells     (TileMapLayer)  玩家管道中段 + 头/尾端点半截瓦（运行时按 trail 同步）
+##   │  └─ PlayerFx        (Node2D)       Head/Tail 两个 Sprite（Head z 高于 Tail，头可叠尾上）
 ##   ├─ LevelHUD           (instance)
 ##   └─ Cam                (Camera2D)  运行时不移动、不缩放；作者自己摆放
 ## 规则权威：[docs/design/功能需求文档.md]；数值 = 全局 Balance 基准，可被本关 *_override 覆盖。
@@ -64,11 +64,13 @@ const CORNER_OFFS := [
 ## 每套只有 1 个 terrain（terrain_set=0, terrain=0）；运行期用 _paint_auto 按格集
 ## 几何直写 4 角掩码瓦片（确定性贴边，绝不外扩）。
 ## 玩家视觉：
-##   · PlayerCells 只画"前后都有格子的中间身体格"（PlayerSnek.tres row0 电线连接件：
-##     0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE）——每一格连接前一个格与后一个格，
-##     相邻瓦片拼成连续"电线"。
-##   · 头/尾是独立 Sprite 贴图（非瓦片）：头 Sprite 位于 head 格、朝行进方向旋转；
-##     尾 Sprite 固定在出生点 S 格。二者挂在 World/PlayerFx 下，贴图由场景直接绑定。
+##   · PlayerCells 画身体"管道"（PlayerSnek.tres row0）：
+##     · 中间格（前后都有格）用连接件 0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE，
+##       每格连接前格与后格，相邻瓦片拼成连续管道；
+##     · 头格/尾格垫"端点"半截瓦 6=E 7=W 8=S 9=N（中心→边），把管道接进头/尾底下。
+##   · 头/尾是独立 Sprite 贴图（非瓦片，画布可大于单格）：头位于 head 格、朝行进方向
+##     旋转；尾固定在出生点 S 格（起步即显示）。Head 在场景里 z_index=1，起步/回到
+##     起点（n=1）时"头叠放在尾之上"。二者挂在 World/PlayerFx 下，贴图由场景直接绑定。
 const TILE_SOURCE := 0
 
 @onready var _ground: TileMapLayer = $World/Ground
@@ -264,13 +266,20 @@ func _sync_mech_layer() -> void:
 
 
 ## 同步玩家视觉：
-## 身体只在"前后都有格子的中间格"画电线连接瓦片（连前一个格与后一个格）；
-## 头/尾为独立 Sprite，跟随 head / 出生点 S，按方向旋转，不占瓦片。
+## 身体中段只画"前后都有格子的中间格"管道连接件（连前一个格与后一个格）；
+## 头/尾格各垫一块"端点"半截瓦（中心→邻边，col6..9），把管道接进头/尾底部——
+## 端点瓦先于 PlayerFx 绘制，被头/尾贴图盖住的部分形成"管道从贴图底下接入"。
+## 头/尾为独立 Sprite（可大于单格），跟随 head / 出生点 S，按方向旋转，不占瓦片。
 func _sync_player_layer() -> void:
 	_player_cells.clear()
 	var n := trail.size()
 	for i in range(1, n - 1):
 		_player_cells.set_cell(trail[i], TILE_SOURCE, _body_connector(i))
+	if n > 1:
+		# 尾格（起点 S）：半截瓦指向身体延伸方向
+		_player_cells.set_cell(trail[0], TILE_SOURCE, _endpoint_col(trail[1] - trail[0]))
+		# 头格：半截瓦指向"身后那格"（进入该格的方向）
+		_player_cells.set_cell(trail[n - 1], TILE_SOURCE, _endpoint_col(trail[n - 1] - trail[n - 2]))
 	_update_end_sprites(n)
 
 
@@ -283,18 +292,27 @@ func _body_connector(i: int) -> Vector2i:
 	return Vector2i(_corner_col(a, b), 0)
 
 
+## 端点半截瓦列号：由"邻格 - 本格"定方向（6=E 7=W 8=S 9=N，与 GenSnek 图集一致）
+func _endpoint_col(d: Vector2i) -> Vector2i:
+	match d:
+		Vector2i.RIGHT: return Vector2i(6, 0)
+		Vector2i.LEFT: return Vector2i(7, 0)
+		Vector2i.DOWN: return Vector2i(8, 0)
+	return Vector2i(9, 0)   # UP
+
+
 func _update_end_sprites(n: int) -> void:
 	# 头：位于 head 格，朝向"进入该格的方向"（未移动时默认朝右）
 	_head_sprite.visible = n > 0
 	var face := trail[n - 1] - trail[n - 2] if n > 1 else Vector2i.RIGHT
 	_head_sprite.position = GridMetrics.cell_center(trail[n - 1])
 	_head_sprite.rotation = Vector2(face).angle()
-	# 尾：固定在出生点 S，朝向"身体延伸方向"；仅当存在"身段"时才显示
-	_tail_sprite.visible = n > 1
-	if n > 1:
-		var out_dir := trail[1] - trail[0]
-		_tail_sprite.position = GridMetrics.cell_center(trail[0])
-		_tail_sprite.rotation = Vector2(out_dir).angle()
+	# 尾（机器）：固定在出生点 S，从开局（n=1）就显示——起步/回到起点时头叠放在其上；
+	# 朝向"身体延伸方向"，n=1 无身段时默认朝右。
+	_tail_sprite.visible = n > 0
+	var out_dir := trail[1] - trail[0] if n > 1 else Vector2i.RIGHT
+	_tail_sprite.position = GridMetrics.cell_center(trail[0])
+	_tail_sprite.rotation = Vector2(out_dir).angle()
 
 
 ## 弯角瓦片列号：按入口边与出口边围出的外侧拐角（b - a）定 4 种朝向

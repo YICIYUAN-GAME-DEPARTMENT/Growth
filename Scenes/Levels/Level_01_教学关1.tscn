@@ -1,15 +1,15 @@
 [gd_scene format=4 uid="uid://1ru3nsc6u5uy"]
 
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_s0llq"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainFloor.tres" id="2_c4yfg"]
+[ext_resource type="TileSet" uid="uid://dacmdx2iwbv7p" path="res://Art/Tiles/TerrainFloor.tres" id="2_c4yfg"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="3_0fwhh"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="3_0kjcf"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainWall.tres" id="3_7lg6d"]
+[ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_7lg6d"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="3_8873k"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_fgguq"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="5_0fwhh"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainMech.tres" id="12_q58va"]
-[ext_resource type="TileSet" path="res://Art/Tiles/PlayerSnek.tres" id="13_wrux4"]
+[ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="12_q58va"]
+[ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="13_wrux4"]
 [ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="14_27klx"]
 [ext_resource type="Texture2D" uid="uid://bt8cohaharnou" path="res://Art/Sprites/player_tail.svg" id="15_eche3"]
 
@@ -34,6 +34,7 @@ position = Vector2(592, 304)
 cell = Vector2i(18, 9)
 
 [node name="Mechanism" parent="World/EntityRoot" unique_id=774705862 instance=ExtResource("3_0fwhh")]
+z_index = 1
 position = Vector2(592, 368)
 cell = Vector2i(18, 11)
 
@@ -60,6 +61,7 @@ visible = false
 
 [node name="Head" type="Sprite2D" parent="World/PlayerFx" unique_id=637901850]
 visible = false
+z_index = 1
 texture = ExtResource("14_27klx")
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=63143469]
