@@ -7,7 +7,6 @@
 - `feat/<topic>`：新功能 / 机制
 - `fix/<topic>`：修 bug
 - `art/<topic>`：纯资源入库（贴图/音频）
-- `lvl/<id>`：关卡场景（`Scenes/Levels/Level_*.tscn`）改动
 - `docs/<topic>`：仅文档
 
 > 分支名小写、连字符、简短（`feat/grid-system`）。
@@ -17,11 +16,11 @@
 ```
 feat(level): 接入 GridSystem 走格子判定
 fix(mech): 修正机关占格冲突重试
-feat(level-3): 新增教程关 3 数据
+feat(level-3): 直编教程关 3 场景
 art: 入库主角占位贴图 A-02
-asset: 入库机关 5 阶段占位图 (A-03)
+asset: 入库机关 Core 占位贴图 (A-03)
 docs: 权威文档 v1.0 重写
-refactor(audio): AudioManager 用对象池
+refactor(level): 机关生长重涂逻辑抽出
 chore: 升级 .gitignore
 ```
 | 前缀 | 用途 |
@@ -30,7 +29,6 @@ chore: 升级 .gitignore
 | `fix` | 修 bug |
 | `art` | 美术资源 |
 | `asset` | 任意 LFS 大资源入库 |
-| `lvl` | 关卡数据（.tres） |
 | `docs` | 仅文档 |
 | `refactor` | 重构（不改行为） |
 | `chore` | 杂项配置 |
@@ -66,5 +64,5 @@ chore: 升级 .gitignore
 
 ## 7. AI 智能体协作接力
 - 脚本侧需要新信号 → 先在 `EventManager` 加好（PR1）→ 玩法接（PR2）。
-- 制作关卡/平衡 `.tres` 前先核对 [功能需求文档](../../design/功能需求文档.md) §6–7 与 [开发文档](../../开发文档.md) §5.2，并在 PR 附上数值出处。
+- 制作关卡场景（`Level_*.tscn` 直编）或调整 `Balance.tres` 前，先核对 [功能需求文档](../../design/功能需求文档.md) §6–7 与 [开发文档](../../开发文档.md) §5.2/§5.5，并在 PR 附上数值出处。
 - **涉及玩法/数值变更需求，AI 智能体必须先停下来问人类**，人类确认后同步更新权威文档，禁止代码里擅自改规则。

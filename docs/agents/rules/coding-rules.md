@@ -17,7 +17,6 @@
 | 常量 | SCREAMING_SNAKE | `DIRS_4` |
 | 枚举 | PascalCase 值 / snake_case 名 | `Dir.UP` |
 | 输入动作 | snake_case | `move_up`、`restart` |
-| 资源 id（ResourceManager key） | snake_case | `lvl_01`、`balance` |
 
 ## 3. 类型标注
 - 函数参数与返回值**必须**标类型（`func add(a: int) -> int:`）。
@@ -41,7 +40,7 @@
 
 ## 7. 网格玩法判定
 - 本作基于数据网格（GridSystem），**不使用物理碰撞**；障碍/机关/可走均由数据判定。
-- 关卡的 S/E/障碍/食物/机关通过**场景摆放**（Level_*.tscn 实体节点 + `cell` 导出）定义，**禁止在脚本里硬编码关卡布局**。
+- 关卡的 S/E/食物/机关通过**场景摆放**（Level_*.tscn 实体节点 + `cell` 导出）定义；障碍**不是实体**，由 `Obstacles` TileMapLayer 涂格定义（被涂格=不可走）。**禁止在脚本里硬编码关卡布局**。
 
 ## 8. 错误处理
 - 边界（外部输入、资源获取失败）用 `push_warning/push_error` + 早返回。
@@ -52,11 +51,10 @@
 - 回合制游戏尽量少轮询；移动/生长/胜负全部事件驱动。
 - 不在 `_process` 做重分配、`load`、`get_node`。
 
-## 10. 资源 / 音频 / 场景
-- 场景与资源经显式 `load()`（或 ResourceManager 缓存）获取，**禁止**在热路径反复 `load()`；路径统一写在常量/调用处。
-- 播音频走 `AudioManager.play_sfx/play_music`，禁止业务代码自建 `AudioStreamPlayer`。
+## 10. 资源 / 场景
+- 场景与资源经显式 `load()` 获取（可缓存引用复用），**禁止**在热路径反复 `load()`；路径统一写在常量/调用处。
 - 切场景走 `GameManager.change_scene()`（选关进关卡用 `GameManager.start_level`），禁止裸 `change_scene`。
-- 数值一律来自 `Balance.tres`；**禁止在代码里硬编码玩法数值**（如 6 步、+2、1/5/9/13/21 只可出现在集中常量定义并注释权威出处）。
+- 数值一律来自 `Balance.tres`（全局基准）或关卡根节点导出 `*_override`（0=沿用全局）；**禁止在代码里硬编码玩法数值**（如 6 步、+2、1/5/9/13/21 只可出现在集中常量定义并注释权威出处）。
 
 ## 11. 注释
 - 只在"为什么"非显而易见处注释，**禁止**复述代码。

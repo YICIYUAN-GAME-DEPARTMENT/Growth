@@ -76,6 +76,7 @@
 4. [docs/agents/rules/coding-rules.md](docs/agents/rules/coding-rules.md) — 编码规范
 5. [docs/agents/rules/collaboration-rules.md](docs/agents/rules/collaboration-rules.md) — 提交/协作/LFS
 6. 对应自己的 [skills/](docs/agents/skills/) 技能文件
+7. 涉及 `tools/`、headless 生成/迁移/验证、瓦片贴图/场景实例注入时，先读 [skills/godot-tooling.md](docs/agents/skills/godot-tooling.md) — 工具链实战防坑
 
 ---
 
@@ -84,3 +85,4 @@
 |------|------|------|
 | 2026-09-04 | 初版，定义 5 类智能体角色与协作流程 | 架构组 |
 | 2026-09-04 | 玩法冻结：确立双权威源（开发文档 + 功能需求文档）；删除卡牌/敌人等无关描述；角色职责对齐网格解谜 | 架构组 |
+| 2026-09-05 | 项目整理：必读文档登记 skills/godot-tooling.md（headless 工具链防坑） | 架构组 |

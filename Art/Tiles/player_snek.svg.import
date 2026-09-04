@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ew0o2v5useq6"
-path="res://.godot/imported/tiles.svg-9a0caa8c4ded10af543eca6550f188ff.ctex"
+uid="uid://njllt5hqe5wx"
+path="res://.godot/imported/player_snek.svg-f15d0107a385b9203ca354624d710b12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/tiles.svg"
-dest_files=["res://.godot/imported/tiles.svg-9a0caa8c4ded10af543eca6550f188ff.ctex"]
+source_file="res://Art/Tiles/player_snek.svg"
+dest_files=["res://.godot/imported/player_snek.svg-f15d0107a385b9203ca354624d710b12.ctex"]
 
 [params]
 

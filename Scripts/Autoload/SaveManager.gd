@@ -4,12 +4,11 @@ extends Node
 ## ----------------------------------------------------------------------------
 ## 文件：user://growth_save.cfg（ConfigFile）
 ## 内容：best_steps { level_key: int }  每关最优步数（记录展示用）
-## 当前为"测试期全开"：不做关卡锁定；保留 unlocked 字段以备后续切换。
-## 接口：save() / load() / record_result(level_key, steps) / best_steps_for(key)
+## 当前为"测试期全开"：不做关卡锁定。
+## 接口：save_data() / load_data() / record_result(level_key, steps) / best_steps_for(key)
 ## ============================================================================
 
 const SAVE_PATH := "user://growth_save.cfg"
-const DEFAULT_UNLOCKED := 1  # 后续如启用线性解锁，从 1 开始
 
 var best_steps: Dictionary = {}   # String(level_key) -> int
 
@@ -46,7 +45,3 @@ func record_result(level_key: String, steps: int) -> void:
 
 func best_steps_for(level_key: String) -> int:
 	return best_steps.get(level_key, -1)
-
-
-func has_cleared(level_key: String) -> bool:
-	return best_steps.has(level_key)

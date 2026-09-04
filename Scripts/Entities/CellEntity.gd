@@ -13,7 +13,6 @@ extends Node2D
 		cell = v
 		if Engine.is_editor_hint() or is_inside_tree():
 			position = GridMetrics.cell_center(cell)
-		queue_redraw()
 
 var _last_pos := Vector2(-999999, -999999)
 

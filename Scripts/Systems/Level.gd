@@ -9,16 +9,28 @@ extends Node2D
 ##   │  ├─ Ground          (TileMapLayer)  手涂地板；地图范围=涂格包围盒
 ##   │  ├─ Obstacles       (TileMapLayer)  涂障碍（每个被涂的格=不可走）
 ##   │  ├─ EntityRoot      (Node2D)   PlayerSpawn / Goal / Food ×N / Mechanism ×N
-##   │  ├─ MechanismCells  (TileMapLayer)  机关生长体（运行时同步实际占格）
-##   │  └─ PlayerCells     (TileMapLayer)  玩家头/身（运行时按 trail 同步）
+##   │  ├─ MechanismCells  (TileMapLayer)  机关生长体（运行时同步实际占格，含核心格）
+##   │  ├─ PlayerCells     (TileMapLayer)  玩家身体中段（运行时按 trail 同步）
+##   │  └─ PlayerFx        (Node2D)       Head/Tail 两个 Sprite（运行时驱动，容器须可见）
 ##   ├─ LevelHUD           (instance)
 ##   └─ Cam                (Camera2D)  运行时不移动、不缩放；作者自己摆放
-## 规则权威：[docs/design/功能需求文档.md]；数值来自 GameManager.balance。
+## 规则权威：[docs/design/功能需求文档.md]；数值 = 全局 Balance 基准，可被本关 *_override 覆盖。
 ## ============================================================================
 
 @export var level_id: int = 1
 @export var level_name: String = "关卡"
 @export var map_size: Vector2i = Vector2i(32, 32)
+
+@export_group("本关数值（0 = 沿用全局 Balance.tres）")
+## 初始最大身长 L；>0 时本关覆盖全局
+@export var initial_max_len_override: int = 0
+## 吃到 1 个食物增长的最大身长 ΔL；>0 时本关覆盖全局
+@export var food_len_gain_override: int = 0
+## 机关最高阶段（0..4）；>0 时本关覆盖全局
+@export var mechanism_max_level_override: int = 0
+## 每累计多少有效步机关生长一次；>0 时本关覆盖全局
+@export var growth_step_interval_override: int = 0
+## 说明：grow_anim_sec（生长动画时长）只在全局 Balance.tres，不进关卡。
 
 ## 逻辑
 var trail: Array[Vector2i] = []
@@ -38,20 +50,34 @@ var _foods: Array = []
 var _goal: Goal = null
 var _spawn: PlayerSpawn = null
 var _head_cell := Vector2i.ZERO
+## 本关机关生长周期（_place_player 时解析 override/全局）
+var _growth_interval := 6
 
 const DIRS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
+## 4 个对角邻格（列号掩码位：bit0=TL bit1=TR bit2=BL bit3=BR，与 Terrain* 瓦片集一致）
+const CORNER_OFFS := [
+	Vector2i(-1, -1), Vector2i(1, -1),
+	Vector2i(-1, 1), Vector2i(1, 1),
+]
 
-## 静态瓦片（PlayerCells 用 GameTiles.tres：头/身两块固定贴图）。
-## Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres，
-## 每套只有 1 个 terrain（terrain_set=0, terrain=0），画格用 terrain connect 自动贴边。
-const TILE_PLAYER_HEAD := 3
-const TILE_PLAYER_BODY := 4
+## 地形层：Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres，
+## 每套只有 1 个 terrain（terrain_set=0, terrain=0）；运行期用 _paint_auto 按格集
+## 几何直写 4 角掩码瓦片（确定性贴边，绝不外扩）。
+## 玩家视觉：
+##   · PlayerCells 只画"前后都有格子的中间身体格"（PlayerSnek.tres row0 电线连接件：
+##     0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE）——每一格连接前一个格与后一个格，
+##     相邻瓦片拼成连续"电线"。
+##   · 头/尾是独立 Sprite 贴图（非瓦片）：头 Sprite 位于 head 格、朝行进方向旋转；
+##     尾 Sprite 固定在出生点 S 格。二者挂在 World/PlayerFx 下，贴图由场景直接绑定。
 const TILE_SOURCE := 0
 
 @onready var _ground: TileMapLayer = $World/Ground
 @onready var _obstacles: TileMapLayer = $World/Obstacles
 @onready var _mech_cells: TileMapLayer = $World/MechanismCells
 @onready var _player_cells: TileMapLayer = $World/PlayerCells
+@onready var _player_fx: Node2D = $World/PlayerFx
+@onready var _head_sprite: Sprite2D = $World/PlayerFx/Head
+@onready var _tail_sprite: Sprite2D = $World/PlayerFx/Tail
 @onready var _hud: CanvasLayer = $LevelHUD
 
 
@@ -65,6 +91,9 @@ func _ready() -> void:
 		m.set_grid_bounds(_board_origin, _board_size)
 	_fill_ground_fallback()
 	_place_player()
+	# PlayerFx 容器在场景里可能被作者隐藏（编辑器不挡眼）；运行时必须打开，
+	# 否则 Head/Tail 各自 visible=true 也不会渲染（父节点不可见）。
+	_player_fx.visible = true
 	_sync_player_layer()
 	EventManager.level_loaded.emit(level_id)
 	_check_deadlock()
@@ -120,11 +149,25 @@ func _compute_board_rect() -> void:
 	_board_size = max_c - min_c + Vector2i.ONE
 
 
-## 地板兜底 + terrain 重连：把地图矩形内整块涂成地板，
-## 用 set_cells_terrain_connect 让引擎按 4 角自动贴边（已涂格位置保持不变形）。
+## 确定性贴边：给整层清空后，按"格集"几何写瓦片列号=4 角掩码（row0 为地形类），
+## 只写给定格、绝不外扩，结果与 terrain 自动贴边语义一致。
+func _paint_auto(layer: TileMapLayer, cells: Array) -> void:
+	layer.clear()
+	var set := {}
+	for c: Vector2i in cells:
+		set[c] = true
+	for c: Vector2i in cells:
+		var mask := 0
+		for b in 4:
+			if set.has(c + CORNER_OFFS[b]):
+				mask |= 1 << b
+		layer.set_cell(c, TILE_SOURCE, Vector2i(mask, 0))
+
+
+## 地板兜底：把地图矩形内整块涂成地板（已涂格位置不变，整层按几何重贴边）
 func _fill_ground_fallback() -> void:
-	var cells: Array[Vector2i] = []
-	for c in _ground.get_used_cells():
+	var cells: Array = []
+	for c: Vector2i in _ground.get_used_cells():
 		cells.append(c)
 	for y in _board_size.y:
 		for x in _board_size.x:
@@ -133,8 +176,12 @@ func _fill_ground_fallback() -> void:
 				cells.append(cell)
 	if cells.is_empty():
 		return
-	_ground.clear()
-	_ground.set_cells_terrain_connect(cells, 0, 0, true)
+	_paint_auto(_ground, cells)
+
+
+## override 为 0 时沿用全局 Balance 数值
+func _resolve(override_val: int, global_val: int) -> int:
+	return global_val if override_val <= 0 else override_val
 
 
 func _place_player() -> void:
@@ -146,15 +193,19 @@ func _place_player() -> void:
 	if _spawn == null or _goal == null:
 		push_error("Level %d: 需要 PlayerSpawn 与 Goal" % level_id)
 		return
-	grid.spawn_cell = _spawn.cell
 	grid.goal_cell = _goal.cell
 	trail = [_spawn.cell]
 	_head_cell = _spawn.cell
-	max_len = GameManager.balance.initial_max_len
+	max_len = _resolve(initial_max_len_override, GameManager.balance.initial_max_len)
+	_growth_interval = _resolve(growth_step_interval_override, GameManager.balance.growth_step_interval)
 	steps = 0
 	food_eaten = 0
 	finished = false
 	_spawn.visible = false  # 出生点标识由玩家身体覆盖
+	# 机关本关最高阶段（在首次占格前注入）
+	var cap := _resolve(mechanism_max_level_override, GameManager.balance.mechanism_max_level)
+	for m in _mechanisms:
+		m.set_level_cap(cap)
 	_claim_initial_mechanisms()
 	_update_hud()
 	_sync_mech_layer()
@@ -177,12 +228,14 @@ func _claim_initial_mechanisms() -> void:
 	_rebuild_mech_grid()
 
 
+## 机关生长：未满级则 +1 阶段；满级后每次生长仍刷新——把此前被玩家身体
+## 挡住、现已空出的 shape 格补齐（阶段维持在本关最高 level_cap）。
 func _grow_all_mechanisms() -> void:
 	var blocked := _blocked_cells()
 	for m in _mechanisms:
-		if m.level < MechanicShapes.max_level():
+		if m.level < m.level_cap:
 			m.set_level(m.level + 1)
-			m.claim_missing(blocked)
+		m.claim_missing(blocked)
 	_sync_mech_layer()
 	_rebuild_mech_grid()
 
@@ -196,24 +249,64 @@ func _rebuild_mech_grid() -> void:
 				grid.mech_cells[cell] = true
 
 
-## 把机关实际占格(去掉核心)画到 MechanismCells 层（terrain 自动贴边）
+## 把机关实际占格（含核心格）画到 MechanismCells 层（确定性贴边）。
+## 核心格同样铺瓦：贴边掩码天然把核心算作生长体的一部分，核心与生长体
+## 相邻角点不缺瓦；核心外观由 Core Sprite（z_index=1）浮在瓦片上层绘制。
 func _sync_mech_layer() -> void:
-	_mech_cells.clear()
-	var cells: Array[Vector2i] = []
+	var cells: Array = []
 	for m in _mechanisms:
-		for cell in m.body_cells():
+		for cell: Vector2i in m.claimed:
 			cells.append(cell)
 	if cells.is_empty():
+		_mech_cells.clear()
 		return
-	_mech_cells.set_cells_terrain_connect(cells, 0, 0, true)
+	_paint_auto(_mech_cells, cells)
 
 
-## 把玩家 trail 画到 PlayerCells 层（头=HEAD，其余=BODY）
+## 同步玩家视觉：
+## 身体只在"前后都有格子的中间格"画电线连接瓦片（连前一个格与后一个格）；
+## 头/尾为独立 Sprite，跟随 head / 出生点 S，按方向旋转，不占瓦片。
 func _sync_player_layer() -> void:
 	_player_cells.clear()
-	for i in range(trail.size()):
-		var tile := TILE_PLAYER_BODY if i < trail.size() - 1 else TILE_PLAYER_HEAD
-		_player_cells.set_cell(trail[i], TILE_SOURCE, Vector2i(tile, 0))
+	var n := trail.size()
+	for i in range(1, n - 1):
+		_player_cells.set_cell(trail[i], TILE_SOURCE, _body_connector(i))
+	_update_end_sprites(n)
+
+
+## 中间身体格连接件：由进入方向 a、离开方向 b 决定 直/弯 列号（row0）
+func _body_connector(i: int) -> Vector2i:
+	var a := trail[i] - trail[i - 1]
+	var b := trail[i + 1] - trail[i]
+	if a == b:  # 直
+		return Vector2i(0 if a.x != 0 else 1, 0)
+	return Vector2i(_corner_col(a, b), 0)
+
+
+func _update_end_sprites(n: int) -> void:
+	# 头：位于 head 格，朝向"进入该格的方向"（未移动时默认朝右）
+	_head_sprite.visible = n > 0
+	var face := trail[n - 1] - trail[n - 2] if n > 1 else Vector2i.RIGHT
+	_head_sprite.position = GridMetrics.cell_center(trail[n - 1])
+	_head_sprite.rotation = Vector2(face).angle()
+	# 尾：固定在出生点 S，朝向"身体延伸方向"；仅当存在"身段"时才显示
+	_tail_sprite.visible = n > 1
+	if n > 1:
+		var out_dir := trail[1] - trail[0]
+		_tail_sprite.position = GridMetrics.cell_center(trail[0])
+		_tail_sprite.rotation = Vector2(out_dir).angle()
+
+
+## 弯角瓦片列号：按入口边与出口边围出的外侧拐角（b - a）定 4 种朝向
+func _corner_col(a: Vector2i, b: Vector2i) -> int:
+	var s := b - a
+	if s == Vector2i(1, -1):
+		return 2  # NE
+	if s == Vector2i(-1, -1):
+		return 3  # NW
+	if s == Vector2i(-1, 1):
+		return 4  # SW
+	return 5      # SE
 
 
 # ── 输入（回合制单步）──────────────────────────────────────────
@@ -277,7 +370,7 @@ func _consume_food_at(cell: Vector2i) -> void:
 			_foods.erase(f)
 			f.queue_free()
 			food_eaten += 1
-			max_len += GameManager.balance.food_len_gain
+			max_len += _resolve(food_len_gain_override, GameManager.balance.food_len_gain)
 			EventManager.max_length_changed.emit(max_len)
 			EventManager.food_eaten.emit(cell)
 			return
@@ -288,7 +381,7 @@ func _after_action() -> void:
 	EventManager.move_count_changed.emit(steps)
 	_sync_player_layer()
 	_update_hud()
-	if steps > 0 and steps % GameManager.balance.growth_step_interval == 0:
+	if steps > 0 and steps % _growth_interval == 0:
 		_growth_sequence()
 	else:
 		_check_deadlock()

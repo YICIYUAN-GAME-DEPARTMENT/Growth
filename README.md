@@ -23,17 +23,18 @@ git lfs pull
 Growth/
 ├── project.godot            # 引擎配置（GDScript / Forward+ / 入口 MainMenu）
 ├── Scenes/
-│   ├── UI/                  # MainMenu（入口）/ LevelSelect
+│   ├── UI/                  # MainMenu（入口）/ LevelSelect / LevelHUD
 │   ├── Levels/              # LevelTemplate + Level_<nn>.tscn（关卡即场景，直编）
-│   └── Entities/            # PlayerSpawn / Obstacle / Food / Goal / Mechanism(+5阶段)
+│   └── Entities/            # PlayerSpawn / Food / Goal / Mechanism
 ├── Scripts/
-│   ├── Autoload/            # GameManager(balance) / EventManager / AudioManager / SaveManager
+│   ├── Autoload/            # GameManager(balance) / EventManager / SaveManager
 │   ├── Systems/             # Level.gd / GridSystem（网格+BFS）
-│   ├── Entities/            # CellEntity / PlayerSpawn / Obstacle / Food / Goal / Mechanism
-│   ├── UI/  Data/  Utils/   # UI 逻辑 / 数据类 / 工具
+│   ├── Entities/            # CellEntity 基类 / PlayerSpawn / Food / Goal / Mechanism
+│   ├── UI/  Data/           # UI 逻辑 / 数据类（Balance/MechanicShapes/GridMetrics）
 ├── Resources/
 │   └── Config/              # Balance.tres（全局数值，可 Inspector 直接调）
-├── Art/  Audio/             # 美术 / 音频（Git LFS）
+├── Art/                     # Sprites / Tiles（占位 svg，登记 A-xx，见开发文档 §3.9）
+├── tools/                   # 贴图/瓦片集生成与场景迁移工具（headless 运行）
 ├── docs/                    # 开发文档 / 功能需求 / 架构 / 环境 / 技能 / 规则
 └── AGENTS.md                # AI 智能体角色与协作约定
 ```
@@ -44,7 +45,7 @@ Growth/
 |------|------|
 | [docs/开发文档.md](docs/开发文档.md) | **工程规范·权威**（架构 / 目录 / 命名 / 数据 / LFS / 协作） |
 | [docs/design/功能需求文档.md](docs/design/功能需求文档.md) | **产品需求·权威**（玩法规则 / 界面 / 关卡 / 数值 / 验收） |
-| [docs/design/玩法说明.md](docs/design/玩法说明.md) | 设计推导与决策记录（追溯用） |
+| [docs/design/玩法说明.md](docs/design/玩法说明.md) | 设计推导与决策记录（追溯用，已被权威文档取代） |
 | [docs/architecture/架构说明.md](docs/architecture/架构说明.md) | 分层 / Autoload / 事件总线 / 场景编排细节 |
 | [docs/development/环境搭建指南.md](docs/development/环境搭建指南.md) | 15 分钟配好开发环境 |
 | [docs/development/关卡制作指南.md](docs/development/关卡制作指南.md) | **设计者：新建/摆放关卡** |
@@ -53,11 +54,12 @@ Growth/
 | [docs/agents/rules/](docs/agents/rules/) | 编码规范 / 协作规范 |
 
 ## 架构要点
-- **Autoload 单例**：`GameManager`（状态/场景/持有 Balance）、`EventManager`（信号总线）、`ResourceManager`（资源缓存）、`AudioManager`（音频）、`SaveManager`（步数存档）。
-- **通信解耦**：跨系统走 `EventManager.*`，播音频走 `AudioManager.*`。
-- **关卡=场景直编**：每关一个 `Scenes/Levels/Level_<nn>.tscn`，在编辑器里直接摆放 PlayerSpawn/Obstacle/Food/Goal/Mechanism 节点（拖动吸附格子）。
-- **数值集中**：初始 L / ΔL / 生长步数都在 `Resources/Config/Balance.tres`（@export，Inspector 直接调）；脚本禁硬编码。
+- **Autoload 单例**：`GameManager`（状态/场景/持有 Balance）、`EventManager`（信号总线）、`SaveManager`（步数存档）。
+- **通信解耦**：跨系统走 `EventManager.*`；资源/场景显式 `load()`（原型规模无缓存层）。
+- **关卡=场景直编**：每关一个 `Scenes/Levels/Level_<nn>.tscn`，在编辑器里摆 PlayerSpawn/Food/Goal/Mechanism 实体，障碍用 `Obstacles` TileMapLayer 涂格（非实体）。
+- **数值集中**：初始 L / ΔL / 生长步数在 `Resources/Config/Balance.tres`（@export，Inspector 直接调）；单关可用 Level 根节点 `*_override` 覆盖；脚本禁硬编码。
 - **网格判定**：走格子/BFS 全部基于数据（GridSystem），不使用物理碰撞。
+- **头/尾视觉**：玩家身体 = `PlayerCells` 电线瓦片；头/尾 = 独立 Sprite（32×32 贴图），运行期驱动。
 
 ## 许可
 见 [LICENSE](LICENSE)。

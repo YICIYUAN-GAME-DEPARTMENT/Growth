@@ -12,14 +12,13 @@
 1. **遵循编码规范：** [coding-rules.md](../rules/coding-rules.md)（命名 / 类型标注 / 信号 / 事件驱动等）。
 2. **权威先行：** 移动/身长/截断/机关生长/BFS 规则以 [功能需求文档](../../design/功能需求文档.md) §4 为准，数值取自 `Balance.tres`；**禁止在脚本中硬编码规则数值或关卡布局**。
 3. **分层归属：**
-   - 全局生命周期 → `Scripts/Autoload/`（GameManager/EventManager/ResourceManager/AudioManager/SaveManager；公共接口勿擅改）
+   - 全局生命周期 → `Scripts/Autoload/`（GameManager/EventManager/SaveManager；公共接口勿擅改）
    - 玩法系统 → `Scripts/Systems/`（Level.gd、GridSystem），由关卡场景使用，**不进 Autoload**
-   - 实体 → `Scripts/Entities/`（Player/Mechanism/Food/Goal）
+   - 实体 → `Scripts/Entities/`（CellEntity 基类 + PlayerSpawn/Mechanism/Food/Goal；障碍非实体，不在此列）
    - 数据类 → `Scripts/Data/`（Balance / MechanicShapes / GridMetrics）
 4. **通信纪律：**
    - 跨系统 → `EventManager.xxx.emit/connect`（信号见 [架构说明](../../architecture/架构说明.md) §3），**禁止** `get_node("/root/OtherSystem")`
-   - 取资源 → `ResourceManager.get_scene/get_resource(id)`，**禁止**裸 `load()`
-   - 播音频 → `AudioManager.play_sfx/play_music`，**禁止**自建 `AudioStreamPlayer`
+   - 取资源/场景 → 显式 `load()`（需要处缓存引用；路径写常量/调用处），**禁止**热路径反复 `load()`
    - 场景切换 → `GameManager.change_scene()`（关卡入口 `GameManager.start_level`）
 5. **输入：** 用 `Input.is_action_pressed("xxx")`，禁裸查键码；`restart`(R) 等新动作先在 `project.godot` `[input]` 登记。
 6. **错误处理：** 边界用 `push_warning/push_error`，不得静默吞掉；内部信任代码不冗余校验。

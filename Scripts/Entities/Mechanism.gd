@@ -1,21 +1,15 @@
 @tool
 class_name Mechanism
-extends Node2D
+extends CellEntity
 ## ============================================================================
 ## Mechanism — 生长机关（关卡中放置 1 个节点 = 机关核心 C）
 ## ----------------------------------------------------------------------------
-## 画面：本节点 Core(Sprite2D) 画核心；机关生长体由关卡同步到
-##       MechanismCells(TileMapLayer)。逻辑占格 = MechanicShapes + 占格冲突。
-## 本脚本只维护 cell / lv / claimed（不画图）。
+## 画面：机关生长体（含核心格）由关卡同步到 MechanismCells(TileMapLayer) 铺瓦；
+##       本节点 Core(Sprite2D) 用 z_index=1 浮在瓦片层之上画核心外观
+##       （MechanismCells 在场景树里位于 EntityRoot 之后，不抬层级会被瓦片盖住）。
+## 逻辑占格 = MechanicShapes + 占格冲突。本脚本只维护 level / claimed。
+## 格子吸附 / position 同步由基类 CellEntity 提供。
 ## ============================================================================
-
-## 中心格（C）；拖动即吸附格子
-@export var cell: Vector2i = Vector2i.ZERO:
-	set(v):
-		cell = v
-		if Engine.is_editor_hint() or is_inside_tree():
-			position = GridMetrics.cell_center(cell)
-		queue_redraw()
 
 ## 初始阶段（默认 0）
 @export var initial_level: int = 0
@@ -23,14 +17,16 @@ extends Node2D
 ## 当前阶段
 var level: int = 0
 
-## 实际占据的绝对格（Vector2i -> true），含中心；只增不减，跳过格待下次生长
+## 本关允许的最高阶段（关卡注入，默认 4）；到达后不再升级、但生长仍刷新
+var level_cap: int = MechanicShapes.max_level()
+
+## 实际占据的绝对格（Vector2i -> true），含中心；只增不减。
+## 被玩家身体挡住的格本次跳过，之后每次生长（含满级）都会重试补齐。
 var claimed: Dictionary = {}
 
 ## 地图逻辑范围（由 Level 启动时注入，用于丢弃越界占格）
 var _grid_min := Vector2i(-1000000, -1000000)
 var _grid_max := Vector2i(1000000, 1000000)
-
-var _last_pos := Vector2(-999999, -999999)
 
 
 func set_grid_bounds(map_origin: Vector2i, map_size: Vector2i) -> void:
@@ -39,24 +35,20 @@ func set_grid_bounds(map_origin: Vector2i, map_size: Vector2i) -> void:
 
 
 func _ready() -> void:
-	position = GridMetrics.cell_center(cell)
+	# 核心格也铺生长体瓦，Core Sprite 必须浮在 MechanismCells(TileMapLayer) 之上
+	z_index = 1
+	super._ready()
 	set_level(initial_level)
-	if Engine.is_editor_hint():
-		set_process(true)
-
-
-func _process(_delta: float) -> void:
-	if not Engine.is_editor_hint():
-		return
-	if position != _last_pos:
-		cell = GridMetrics.pos_to_cell(position)
-		position = GridMetrics.cell_center(cell)
-		_last_pos = position
-		queue_redraw()
 
 
 func set_level(v: int) -> void:
-	level = clampi(v, 0, MechanicShapes.max_level())
+	level = clampi(v, 0, level_cap)
+
+
+## 注入本关最高阶段；若当前已超则回落
+func set_level_cap(v: int) -> void:
+	level_cap = clampi(v, 0, MechanicShapes.max_level())
+	level = clampi(level, 0, level_cap)
 
 
 ## 补占：把 shape(level) 中尚未占据且未被 blocked 阻挡的格加入 claimed。
@@ -74,12 +66,3 @@ func claim_missing(blocked: Dictionary) -> int:
 		claimed[abs_cell] = true
 		added += 1
 	return added
-
-
-## 生长体格子 = claimed 去掉核心格 C（核心由 Core 贴图单独画）
-func body_cells() -> Array[Vector2i]:
-	var out: Array[Vector2i] = []
-	for abs_cell in claimed:
-		if abs_cell != cell:
-			out.append(abs_cell)
-	return out

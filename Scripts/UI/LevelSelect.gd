@@ -23,7 +23,8 @@ func _scan_levels() -> void:
 	dir.list_dir_begin()
 	var fname := dir.get_next()
 	while fname != "":
-		if not dir.current_is_dir() and fname.begins_with("Level_") and fname.ends_with(".tscn"):
+		if not dir.current_is_dir() and fname.begins_with("Level_") and fname.ends_with(".tscn") \
+				and fname != "LevelTemplate.tscn":
 			var scene := load(LEVELS_DIR.path_join(fname)) as PackedScene
 			if scene == null:
 				fname = dir.get_next()

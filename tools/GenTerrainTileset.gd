@@ -31,7 +31,14 @@ func _ready() -> void:
 
 
 func _build(terrain_name: String) -> void:
-	var tex: Texture2D = load(ATLAS)
+	var base: Texture2D = load(ATLAS)
+	var row: int = ROW[terrain_name]
+	# 每套只裁出自己的那一行作为图源，瓦片统一放行 0（(mask,0)），
+	# 这样场景数据/脚本写格与画格都只需用 (mask, 0)，与层无关。
+	var crop := AtlasTexture.new()
+	crop.atlas = base
+	crop.region = Rect2(0, row * 32, base.get_width(), 32)
+
 	var ts := TileSet.new()
 	ts.tile_size = Vector2i(32, 32)
 	# 每套独立 TerrainSet：互不连接
@@ -44,11 +51,10 @@ func _build(terrain_name: String) -> void:
 	ts.set_terrain_color(tset, terr, Color(0.4, 0.6, 0.4))
 
 	var src := TileSetAtlasSource.new()
-	src.texture = tex
+	src.texture = crop
 	src.texture_region_size = Vector2i(32, 32)
-	var row: int = ROW[terrain_name]
 	for mask in 16:
-		var coords := Vector2i(mask, row)
+		var coords := Vector2i(mask, 0)
 		src.create_tile(coords)
 		var td := src.get_tile_data(coords, 0)
 		td.terrain_set = tset

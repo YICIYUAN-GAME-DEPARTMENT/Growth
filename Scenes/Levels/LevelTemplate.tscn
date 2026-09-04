@@ -1,12 +1,13 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cga4xfbjrp1xt"]
 
-[ext_resource type="Script" path="res://Scripts/Systems/Level.gd" id="1_level"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainFloor.tres" id="2_n4ce2"]
-[ext_resource type="TileSet" path="res://Art/Tiles/GameTiles.tres" id="2_tileset"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainWall.tres" id="3_asxnk"]
-[ext_resource type="PackedScene" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
-[ext_resource type="TileSet" path="res://Art/Tiles/TerrainMech.tres" id="4_mm6ix"]
-[ext_resource type="Script" path="res://Scripts/UI/LevelHUD.gd" id="7_m4q6y"]
+[ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_level"]
+[ext_resource type="TileSet" uid="uid://dacmdx2iwbv7p" path="res://Art/Tiles/TerrainFloor.tres" id="2_n4ce2"]
+[ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_asxnk"]
+[ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
+[ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="4_mm6ix"]
+[ext_resource type="TileSet" path="res://Art/Tiles/PlayerSnek.tres" id="5_n4ce2"]
+[ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="6_mm6ix"]
+[ext_resource type="Texture2D" uid="uid://bt8cohaharnou" path="res://Art/Sprites/player_tail.svg" id="7_pj3xo"]
 
 [node name="Level" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_level")
@@ -26,10 +27,19 @@ tile_set = ExtResource("3_asxnk")
 tile_set = ExtResource("4_mm6ix")
 
 [node name="PlayerCells" type="TileMapLayer" parent="World" unique_id=1322017958]
-tile_set = ExtResource("2_tileset")
+tile_set = ExtResource("5_n4ce2")
 
-[node name="LevelHUD" type="CanvasLayer" parent="." unique_id=1443197510 instance=ExtResource("3_hud")]
-script = ExtResource("7_m4q6y")
+[node name="PlayerFx" type="Node2D" parent="World" unique_id=901787452]
+
+[node name="Head" type="Sprite2D" parent="World/PlayerFx" unique_id=1446686610]
+visible = false
+texture = ExtResource("6_mm6ix")
+
+[node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
+visible = false
+texture = ExtResource("7_pj3xo")
+
+[node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("3_hud")]
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
 position = Vector2(640, 360)

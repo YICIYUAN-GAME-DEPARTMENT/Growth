@@ -11,7 +11,7 @@
 
 ## 指令
 1. **权威先行：** 先读 [功能需求文档](../../design/功能需求文档.md)（规则/数值/验收）与 [开发文档](../../开发文档.md) §5.5（Balance 字段）、§4.4（关卡场景结构）。
-2. **关卡不做 `.tres`**：关卡 = 场景文件（`Scenes/Levels/Level_<nn>.tscn`），内容是实体节点（PlayerSpawn/Obstacle/Food/Goal/Mechanism），按 [开发文档](../../开发文档.md) §4.4 摆放。数据只有 `Balance.tres`。
+2. **关卡不做 `.tres`**：关卡 = 场景文件（`Scenes/Levels/Level_<nn>.tscn`），内容是 `Ground`/`Obstacles` 层涂格（障碍=被涂格，**非实体**）加实体节点（PlayerSpawn/Goal/Food/Mechanism），按 [开发文档](../../开发文档.md) §4.4 摆放。全局数值只有 `Balance.tres`。
 3. **目录职责：** 按 [开发文档](../../开发文档.md) §3.4 放置（`Resources/Config/`、`Art/*`、`Audio/*`），禁止散落根目录。
 4. **命名：** [开发文档](../../开发文档.md) §3.3 统一前缀（`CHR`/`TILE`/`UI`/`SFX`/`MUS`）+ 名称 + 序号。
 5. **数值调整：** 打开 `Resources/Config/Balance.tres` 在 Inspector 修改；初始 L / ΔL / 生长步数必须与功能需求文档 §7 一致，改后需走变更流程（同步文档）。

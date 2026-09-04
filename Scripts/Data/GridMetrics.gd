@@ -8,10 +8,6 @@ class_name GridMetrics
 const CELL_PX: int = 32
 
 
-static func cell_px() -> int:
-	return CELL_PX
-
-
 ## 格左上角世界坐标（TileMap set_cell 用）
 static func cell_to_pos(c: Vector2i) -> Vector2:
 	return Vector2(c) * CELL_PX

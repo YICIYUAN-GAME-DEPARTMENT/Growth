@@ -2,13 +2,13 @@ extends Node
 ## ============================================================================
 ## GameManager  —  全局游戏状态与场景流转 (Autoload)
 ## ----------------------------------------------------------------------------
-## 职责：持有顶层状态机、当前关卡信息、场景切换、暂停；玩法细节下沉到关卡。
+## 职责：持有顶层状态机、当前关卡信息、场景切换；玩法细节下沉到关卡。
 ## 数值配置：balance（Balance.tres）——实现层唯一读取处，脚本勿再硬编码。
 ## ============================================================================
 
 const BALANCE_PATH := "res://Resources/Config/Balance.tres"
 
-enum State { BOOT, MENU, PLAYING, PAUSED, LEVEL_COMPLETE }
+enum State { BOOT, MENU, PLAYING }
 
 var state: State = State.BOOT
 
@@ -21,8 +21,6 @@ var current_level_scene := ""
 var level_select_scene := "res://Scenes/UI/LevelSelect.tscn"
 ## 主菜单路径
 var main_menu_scene := "res://Scenes/UI/MainMenu.tscn"
-
-var _score: int = 0
 
 
 func _ready() -> void:
@@ -70,28 +68,3 @@ func back_to_main_menu() -> void:
 # ── 场景流转 ───────────────────────────────────────────────────
 func change_scene(target_path: String) -> void:
 	get_tree().change_scene_to_file(target_path)
-
-
-# ── 暂停 ───────────────────────────────────────────────────────
-func pause_game() -> void:
-	if state == State.PLAYING:
-		state = State.PAUSED
-		get_tree().paused = true
-		EventManager.game_paused.emit(true)
-
-
-func resume_game() -> void:
-	if state == State.PAUSED:
-		state = State.PLAYING
-		get_tree().paused = false
-		EventManager.game_paused.emit(false)
-
-
-# ── 分数（当前项目不使用，保留通用接口）──────────────────────
-func add_score(amount: int) -> void:
-	_score += amount
-	EventManager.score_changed.emit(_score)
-
-
-func get_score() -> int:
-	return _score

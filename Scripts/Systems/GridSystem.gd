@@ -13,7 +13,6 @@ var size: Vector2i = Vector2i(32, 32)
 var obstacles: Dictionary = {}    # Vector2i -> true（静态障碍）
 var mech_cells: Dictionary = {}   # Vector2i -> true（机关当前实际占据，含跳过逻辑）
 var goal_cell := Vector2i.ZERO
-var spawn_cell := Vector2i.ZERO
 
 
 func setup(map_origin: Vector2i, map_size: Vector2i) -> void:
