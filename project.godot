@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Growth"
-config/description="2026 GameJam project — theme: Grow. Built with Godot 4.7 + GDScript."
-run/main_scene="res://Scenes/Main.tscn"
+config/description="2026 GameJam project — theme: Grow. 2D grid puzzle (Godot 4.7 + GDScript)."
+run/main_scene="res://Scenes/UI/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -22,59 +22,50 @@ GameManager="*res://Scripts/Autoload/GameManager.gd"
 EventManager="*res://Scripts/Autoload/EventManager.gd"
 ResourceManager="*res://Scripts/Autoload/ResourceManager.gd"
 AudioManager="*res://Scripts/Autoload/AudioManager.gd"
+SaveManager="*res://Scripts/Autoload/SaveManager.gd"
 
 [display]
 
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
 [input]
 
-; Core movement / interaction (re-map in team settings as needed)
+; 主角移动（网格解谜，回合制：一次按键走一格）
 move_up={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":4194320)]
+"events": [Object(InputEventKey,"keycode":4194320), Object(InputEventKey,"keycode":87)]
 }
 move_down={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":4194322)]
+"events": [Object(InputEventKey,"keycode":4194322), Object(InputEventKey,"keycode":83)]
 }
 move_left={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":4194319)]
+"events": [Object(InputEventKey,"keycode":4194319), Object(InputEventKey,"keycode":65)]
 }
 move_right={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":4194321)]
+"events": [Object(InputEventKey,"keycode":4194321), Object(InputEventKey,"keycode":68)]
 }
-interact={
+restart={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":69)]
+"events": [Object(InputEventKey,"keycode":82)]
 }
 pause={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"keycode":4194305)]
 }
-ui_confirm={
+ui_accept={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":90), Object(InputEventKey,"keycode":4194309)]
+"events": [Object(InputEventKey,"keycode":4194309), Object(InputEventKey,"keycode":32)]
 }
 ui_cancel={
 "deadzone": 0.5,
-"events": [Object(InputEventKey,"keycode":88), Object(InputEventKey,"keycode":4194308)]
+"events": [Object(InputEventKey,"keycode":4194308)]
 }
-
-[layer_names]
-
-2d_physics/layer_1="World"
-2d_physics/layer_2="Player"
-2d_physics/layer_3="Enemy"
-2d_physics/layer_4="Projectile"
-2d_physics/layer_5="Trigger"
-
-[physics]
-
-3d/physics_engine="Jolt Physics"
 
 [rendering]
 

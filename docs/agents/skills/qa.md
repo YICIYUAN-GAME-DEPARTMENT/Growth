@@ -15,7 +15,7 @@
    - 信号是否走 `EventManager`、资源是否走 `ResourceManager`、音频是否走 `AudioManager`
    - 是否在脚本里硬编码了玩法数值（应来自 Balance/关卡 `.tres`）
 2. **运行验证：**
-   - 项目能 F5 启动到 `Main.tscn` 无报错
+   - 项目能 F5 启动到 `MainMenu.tscn` 无报错
    - Autoload 五件套（含 SaveManager）加载成功
    - 改动的场景能正常打开（无 `.tscn` 解析错误）
 3. **功能回归：** 逐条对照 [功能需求文档.md](../../design/功能需求文档.md) §8 验收标准（C-01..C-14 + C-Lnn）跑关卡；数值对照 §7。

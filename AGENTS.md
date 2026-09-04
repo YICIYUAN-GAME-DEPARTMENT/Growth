@@ -41,9 +41,9 @@
 
 ### 1.4 资源管理（Resource Manager）
 - **职责：** 美术/音频导入设置、关卡/平衡数据 `Resource`(.tres)、Git LFS 入库、资产登记。
-- **何时用：** 导入贴图/音频、制作 `LevelDefinition`/`Balance` 等 `.tres`。
+- **何时用：** 导入贴图/音频、制作关卡实体节点 / `Balance.tres` 数值。
 - **技能：** [skills/resource-mgmt.md](docs/agents/skills/resource-mgmt.md)（亦遵循全局 `godot-resource` 技能）
-- **规则要点：** 大资源走 LFS（[开发文档](docs/开发文档.md) §3.8）；数据 Schema 见 §5.2；新资源登记 §3.9。
+- **规则要点：** 大资源走 LFS（[开发文档](docs/开发文档.md) §3.8）；关卡=场景直编（实体节点+Balance，见开发文档 §4.4 / §5）；新资源登记 §3.9。
 
 ### 1.5 测试与质量（QA）
 - **职责：** 按 [功能需求文档](docs/design/功能需求文档.md) §8 验收标准回归、性能检查、规范符合性审查、导出验证。

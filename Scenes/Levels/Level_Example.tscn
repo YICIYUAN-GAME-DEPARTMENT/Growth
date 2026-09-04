@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Systems/Level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="2_spawn"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="3_goal"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="4_food"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Obstacle.tscn" id="5_obs"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="6_mech"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_level")
+level_id = 1
+level_name = "示例：吃食物，走向终点"
+map_size = Vector2i(10, 4)
+
+[node name="PlayerSpawn" parent="." instance=ExtResource("2_spawn")]
+position = Vector2(32, 32)
+cell = Vector2i(1, 1)
+
+[node name="Goal" parent="." instance=ExtResource("3_goal")]
+position = Vector2(224, 32)
+cell = Vector2i(7, 1)
+
+[node name="FoodA" parent="." instance=ExtResource("4_food")]
+position = Vector2(96, 32)
+cell = Vector2i(3, 1)
+
+[node name="FoodB" parent="." instance=ExtResource("4_food")]
+position = Vector2(160, 32)
+cell = Vector2i(5, 1)
+
+[node name="Obstacle1" parent="." instance=ExtResource("5_obs")]
+position = Vector2(256, 96)
+cell = Vector2i(8, 3)
+
+[node name="Obstacle2" parent="." instance=ExtResource("5_obs")]
+position = Vector2(288, 96)
+cell = Vector2i(9, 3)
+
+[node name="Mechanism1" parent="." instance=ExtResource("6_mech")]
+position = Vector2(160, 96)
+cell = Vector2i(5, 3)
+initial_level = 0

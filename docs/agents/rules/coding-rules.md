@@ -4,7 +4,7 @@
 > 工程结构与命名规则见 [开发文档（权威）](../../开发文档.md)；玩法数值见 [功能需求文档（权威）](../../design/功能需求文档.md)。
 
 ## 1. 文件与类
-- 脚本文件与 `class_name` 均用 **PascalCase**（`LevelDefinition.gd`、`GridSystem.gd`）；Autoload 脚本与其节点名一致（`GameManager.gd`）。
+- 脚本文件与 `class_name` 均用 **PascalCase**（`Balance.gd`、`GridSystem.gd`）；Autoload 脚本与其节点名一致（`GameManager.gd`）。
 - 文件顶部用 `##` 多行注释说明职责。
 - 单一职责：一个脚本只管一件事；超 300 行考虑拆分（System 拆到 `Scripts/Systems/`）。
 
@@ -12,7 +12,7 @@
 | 类别 | 风格 | 示例 |
 |------|------|------|
 | 变量 / 函数 / 参数 | snake_case | `world_root`、`try_move()` |
-| 类名 / class_name / 文件名 | PascalCase | `GridSystem`、`LevelDefinition` |
+| 类名 / class_name / 文件名 | PascalCase | `GridSystem`、`Balance` |
 | 节点名 | PascalCase | `EntityRoot`、`Mechanisms` |
 | 常量 | SCREAMING_SNAKE | `DIRS_4` |
 | 枚举 | PascalCase 值 / snake_case 名 | `Dir.UP` |
@@ -41,7 +41,7 @@
 
 ## 7. 网格玩法判定
 - 本作基于数据网格（GridSystem），**不使用物理碰撞**；障碍/机关/可走均由数据判定。
-- 关卡的 S/E/障碍/食物/机关全部来自 `LevelDefinition.tres`，**禁止在脚本里写关卡布局**。
+- 关卡的 S/E/障碍/食物/机关通过**场景摆放**（Level_*.tscn 实体节点 + `cell` 导出）定义，**禁止在脚本里硬编码关卡布局**。
 
 ## 8. 错误处理
 - 边界（外部输入、资源获取失败）用 `push_warning/push_error` + 早返回。
@@ -53,10 +53,10 @@
 - 不在 `_process` 做重分配、`load`、`get_node`。
 
 ## 10. 资源 / 音频 / 场景
-- 取资源走 `ResourceManager.get_scene/get_resource(id)`，禁止裸 `load()` 散落各处。
+- 场景与资源经显式 `load()`（或 ResourceManager 缓存）获取，**禁止**在热路径反复 `load()`；路径统一写在常量/调用处。
 - 播音频走 `AudioManager.play_sfx/play_music`，禁止业务代码自建 `AudioStreamPlayer`。
-- 切场景走 `GameManager.change_scene()` / `GameScene.exit_to()`，禁止裸 `change_scene`。
-- 数值一律来自 `Balance.tres` / 关卡 `.tres`；**禁止在代码里硬编码玩法数值**（如 6 步、+2、1/5/9/13/21 只可出现在数据或集中常量定义并注释权威出处）。
+- 切场景走 `GameManager.change_scene()`（选关进关卡用 `GameManager.start_level`），禁止裸 `change_scene`。
+- 数值一律来自 `Balance.tres`；**禁止在代码里硬编码玩法数值**（如 6 步、+2、1/5/9/13/21 只可出现在集中常量定义并注释权威出处）。
 
 ## 11. 注释
 - 只在"为什么"非显而易见处注释，**禁止**复述代码。

@@ -2,20 +2,66 @@ extends Node
 ## ============================================================================
 ## GameManager  —  全局游戏状态与场景流转 (Autoload)
 ## ----------------------------------------------------------------------------
-## 职责：持有顶层状态机、分数、场景切换；不负责具体玩法逻辑（玩法下沉到
-## GameScene 子类与各 System）。状态机可待团队锁定玩法后再细化。
+## 职责：持有顶层状态机、当前关卡信息、场景切换、暂停；玩法细节下沉到关卡。
+## 数值配置：balance（Balance.tres）——实现层唯一读取处，脚本勿再硬编码。
 ## ============================================================================
 
-enum State { BOOT, MENU, PLAYING, PAUSED, GAME_OVER }
+const BALANCE_PATH := "res://Resources/Config/Balance.tres"
 
-var state: GameManager.State = State.BOOT
-var score: int = 0
+enum State { BOOT, MENU, PLAYING, PAUSED, LEVEL_COMPLETE }
+
+var state: State = State.BOOT
+
+## 全局数值配置（只读使用）
+var balance: Balance = null
+
+## 当前运行的关卡（由 LevelSelect 写入；用于重开/结算返回选关）
+var current_level_scene := ""
+## 选关界面路径（结算"回选关"用）
+var level_select_scene := "res://Scenes/UI/LevelSelect.tscn"
+## 主菜单路径
+var main_menu_scene := "res://Scenes/UI/MainMenu.tscn"
+
+var _score: int = 0
+
+
+func _ready() -> void:
+	_load_balance()
+	state = State.MENU
+
+
+func _load_balance() -> void:
+	balance = load(BALANCE_PATH) as Balance
+	if balance == null:
+		push_error("GameManager: 无法加载 Balance.tres (%s)" % BALANCE_PATH)
+	# Balance.tres 为静态配置，运行时禁止修改实例
+
+
+# ── 关卡入口 ───────────────────────────────────────────────────
+## LevelSelect 调用：进入指定关卡场景文件
+func start_level(scene_path: String) -> void:
+	current_level_scene = scene_path
+	state = State.PLAYING
+	change_scene(scene_path)
+
+
+func restart_level() -> void:
+	if current_level_scene != "":
+		change_scene(current_level_scene)
+
+
+func back_to_level_select() -> void:
+	state = State.MENU
+	change_scene(level_select_scene)
+
+
+func back_to_main_menu() -> void:
+	state = State.MENU
+	change_scene(main_menu_scene)
 
 
 # ── 场景流转 ───────────────────────────────────────────────────
-func change_scene(target_path: String, fade: bool = true) -> void:
-	var transition := "fade" if fade else "cut"
-	EventManager.scene_change_requested.emit(target_path, transition)
+func change_scene(target_path: String) -> void:
 	get_tree().change_scene_to_file(target_path)
 
 
@@ -34,12 +80,11 @@ func resume_game() -> void:
 		EventManager.game_paused.emit(false)
 
 
-# ── 结算 ───────────────────────────────────────────────────────
-func end_game(result: Dictionary) -> void:
-	state = State.GAME_OVER
-	EventManager.game_over.emit(result)
-
-
+# ── 分数（当前项目不使用，保留通用接口）──────────────────────
 func add_score(amount: int) -> void:
-	score += amount
-	EventManager.score_changed.emit(score)
+	_score += amount
+	EventManager.score_changed.emit(_score)
+
+
+func get_score() -> int:
+	return _score

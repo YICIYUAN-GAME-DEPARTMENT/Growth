@@ -7,7 +7,7 @@
 - `feat/<topic>`：新功能 / 机制
 - `fix/<topic>`：修 bug
 - `art/<topic>`：纯资源入库（贴图/音频）
-- `lvl/<id>`：关卡数据（LevelDefinition `.tres`）改动
+- `lvl/<id>`：关卡场景（`Scenes/Levels/Level_*.tscn`）改动
 - `docs/<topic>`：仅文档
 
 > 分支名小写、连字符、简短（`feat/grid-system`）。
@@ -46,7 +46,7 @@ chore: 升级 .gitignore
 
 ## 4. 资源入库（Git LFS）
 1. 确认 `.gitattributes` 已追踪该扩展名（见 [开发文档.md](../../开发文档.md) §3.8）。
-2. 放入对应目录（`Art/` / `Audio/`；关卡数据走 `Resources/Levels/` 且不入 LFS）。
+2. 放入对应目录（`Art/` / `Audio/`；关卡是 `Scenes/Levels/Level_*.tscn` 文本，不入 LFS）。
 3. `git add <file>`（LFS 自动接管）→ 提交信息 `asset: ... (A-xx)`。
 4. 在 [开发文档.md](../../开发文档.md) §3.9 资产清单加行。
 5. 推送前本地 `git lfs ls-files` 确认已追踪。

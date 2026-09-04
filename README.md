@@ -15,27 +15,24 @@ git lfs install
 git lfs pull
 ```
 
-用 Godot 4.7 stable 打开 `project.godot`，按 **F5** 运行（入口 `Scenes/Main.tscn`）。详细环境配置见 [docs/development/环境搭建指南.md](docs/development/环境搭建指南.md)。
+用 Godot 4.7 stable 打开 `project.godot`，按 **F5** 运行（入口 `Scenes/UI/MainMenu.tscn`，主菜单→选关→关卡）。详细环境配置见 [docs/development/环境搭建指南.md](docs/development/环境搭建指南.md)。
 
 ## 项目结构
 
 ```
 Growth/
-├── project.godot            # 引擎配置（GDScript / Forward+ / Jolt / d3d12）
+├── project.godot            # 引擎配置（GDScript / Forward+ / 入口 MainMenu）
 ├── Scenes/
-│   ├── Main.tscn            # 根场景（WorldRoot + UIRoot）
-│   ├── Levels/              # 关卡通用场景 Level.tscn
-│   ├── UI/                  # MainMenu / LevelSelect / HUD / 结算
-│   └── Entities/            # Player / Mechanism / Food / Goal 预制
+│   ├── UI/                  # MainMenu（入口）/ LevelSelect
+│   ├── Levels/              # LevelTemplate + Level_<nn>.tscn（关卡即场景，直编）
+│   └── Entities/            # PlayerSpawn / Obstacle / Food / Goal / Mechanism(+5阶段)
 ├── Scripts/
-│   ├── Autoload/            # GameManager / EventManager / ResourceManager / AudioManager / SaveManager
-│   ├── Core/                # Main.gd / GameScene.gd / LevelScene.gd
-│   ├── Systems/             # GridSystem（网格+BFS）/ MechanismSystem
-│   ├── Entities/            # Player / Mechanism / Food / Goal
+│   ├── Autoload/            # GameManager(balance) / EventManager / AudioManager / SaveManager
+│   ├── Systems/             # Level.gd / GridSystem（网格+BFS）
+│   ├── Entities/            # CellEntity / PlayerSpawn / Obstacle / Food / Goal / Mechanism
 │   ├── UI/  Data/  Utils/   # UI 逻辑 / 数据类 / 工具
 ├── Resources/
-│   ├── Levels/              # LVL_*.tres（LevelDefinition 关卡数据）
-│   └── Config/              # Balance.tres（全局数值）
+│   └── Config/              # Balance.tres（全局数值，可 Inspector 直接调）
 ├── Art/  Audio/             # 美术 / 音频（Git LFS）
 ├── docs/                    # 开发文档 / 功能需求 / 架构 / 环境 / 技能 / 规则
 └── AGENTS.md                # AI 智能体角色与协作约定
@@ -50,15 +47,17 @@ Growth/
 | [docs/design/玩法说明.md](docs/design/玩法说明.md) | 设计推导与决策记录（追溯用） |
 | [docs/architecture/架构说明.md](docs/architecture/架构说明.md) | 分层 / Autoload / 事件总线 / 场景编排细节 |
 | [docs/development/环境搭建指南.md](docs/development/环境搭建指南.md) | 15 分钟配好开发环境 |
+| [docs/development/关卡制作指南.md](docs/development/关卡制作指南.md) | **设计者：新建/摆放关卡** |
 | [AGENTS.md](AGENTS.md) | AI 智能体角色与职责 |
 | [docs/agents/skills/](docs/agents/skills/) | 智能体技能模块 |
 | [docs/agents/rules/](docs/agents/rules/) | 编码规范 / 协作规范 |
 
 ## 架构要点
-- **Autoload 单例**：`GameManager`（状态/场景）、`EventManager`（信号总线）、`ResourceManager`（资源缓存）、`AudioManager`（音频）、`SaveManager`（解锁/步数存档）。
-- **通信解耦**：跨系统走 `EventManager.*`，取资源走 `ResourceManager.*`，播音频走 `AudioManager.*`。
-- **数据驱动关卡**：单一 `Level.tscn` + `Resources/Levels/LVL_*.tres`；规则数值来自 `Balance.tres`，脚本禁硬编码。
-- **网格判定**：走格子/BFS 全部基于数据，不使用物理碰撞。
+- **Autoload 单例**：`GameManager`（状态/场景/持有 Balance）、`EventManager`（信号总线）、`ResourceManager`（资源缓存）、`AudioManager`（音频）、`SaveManager`（步数存档）。
+- **通信解耦**：跨系统走 `EventManager.*`，播音频走 `AudioManager.*`。
+- **关卡=场景直编**：每关一个 `Scenes/Levels/Level_<nn>.tscn`，在编辑器里直接摆放 PlayerSpawn/Obstacle/Food/Goal/Mechanism 节点（拖动吸附格子）。
+- **数值集中**：初始 L / ΔL / 生长步数都在 `Resources/Config/Balance.tres`（@export，Inspector 直接调）；脚本禁硬编码。
+- **网格判定**：走格子/BFS 全部基于数据（GridSystem），不使用物理碰撞。
 
 ## 许可
 见 [LICENSE](LICENSE)。
