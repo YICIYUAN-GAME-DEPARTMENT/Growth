@@ -32,8 +32,8 @@ func _ready() -> void:
 		get_tree().quit(1)
 		return
 	var level := tmpl.instantiate()
-	var ground := level.get_node("Ground") as TileMapLayer
-	var obstacles := level.get_node("Obstacles") as TileMapLayer
+	var ground := level.get_node("World/Ground") as TileMapLayer
+	var obstacles := level.get_node("World/Obstacles") as TileMapLayer
 
 	# 地板整片涂满
 	for y in MAP_H:
@@ -44,12 +44,13 @@ func _ready() -> void:
 		obstacles.set_cell(c, TILE_SRC, ATL_WALL)
 
 	# 根导出
-	level.set("level_id", 1)
+	level.set("level_id", 0)
 	level.set("level_name", "示例：吃食物，走向终点")
 	level.set("map_size", Vector2i(MAP_W, MAP_H))
+	# World/Cam 保持模板默认：World(0,0)，Cam 作者自摆，脚本不再自动位移
 
 	# 实体（Food/Goal/Mechanism 场景实例直接做子节点）
-	var er := level.get_node("EntityRoot") as Node2D
+	var er := level.get_node("World/EntityRoot") as Node2D
 
 	var spawn_ps: PackedScene = load("res://Scenes/Entities/PlayerSpawn.tscn")
 	var spawn := spawn_ps.instantiate()

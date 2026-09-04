@@ -3,15 +3,16 @@ extends Node2D
 ## ============================================================================
 ## Level — 关卡场景（场景直编：Ground/Obstacles 用 TileMap 涂格，实体=子节点）
 ## ----------------------------------------------------------------------------
-## 场景树：
+## 场景树（纯作者驱动：World / Cam 摆哪就显示哪，脚本不做任何运行时位移）：
 ##   Level (本脚本，只做规则逻辑)
-##   ├─ Ground           (TileMapLayer)  手涂地板；没涂则运行时兜底铺满
-##   ├─ Obstacles        (TileMapLayer)  涂障碍（每个被涂的格=不可走）
-##   ├─ EntityRoot       (Node2D)        PlayerSpawn / Goal / Food ×N / Mechanism ×N
-##   ├─ MechanismCells   (TileMapLayer)  机关生长体（运行时同步实际占格）
-##   ├─ PlayerCells      (TileMapLayer)  玩家头/身（运行时按 trail 同步）
-##   ├─ LevelHUD         (instance)
-##   └─ (Camera2D 由本脚本运行时创建)
+##   ├─ World              (Node2D)  内容容器（位置随你摆；默认 (0,0)）
+##   │  ├─ Ground          (TileMapLayer)  手涂地板；地图范围=涂格包围盒
+##   │  ├─ Obstacles       (TileMapLayer)  涂障碍（每个被涂的格=不可走）
+##   │  ├─ EntityRoot      (Node2D)   PlayerSpawn / Goal / Food ×N / Mechanism ×N
+##   │  ├─ MechanismCells  (TileMapLayer)  机关生长体（运行时同步实际占格）
+##   │  └─ PlayerCells     (TileMapLayer)  玩家头/身（运行时按 trail 同步）
+##   ├─ LevelHUD           (instance)
+##   └─ Cam                (Camera2D)  运行时不移动、不缩放；作者自己摆放
 ## 规则权威：[docs/design/功能需求文档.md]；数值来自 GameManager.balance。
 ## ============================================================================
 
@@ -29,6 +30,7 @@ var input_locked := false
 var finished := false
 
 var grid := GridSystem.new()
+var _board_origin := Vector2i.ZERO
 var _board_size := Vector2i.ZERO
 
 var _mechanisms: Array = []
@@ -47,10 +49,10 @@ const TILE_PLAYER_HEAD := 3
 const TILE_PLAYER_BODY := 4
 const TILE_SOURCE := 0
 
-@onready var _ground: TileMapLayer = $Ground
-@onready var _obstacles: TileMapLayer = $Obstacles
-@onready var _mech_cells: TileMapLayer = $MechanismCells
-@onready var _player_cells: TileMapLayer = $PlayerCells
+@onready var _ground: TileMapLayer = $World/Ground
+@onready var _obstacles: TileMapLayer = $World/Obstacles
+@onready var _mech_cells: TileMapLayer = $World/MechanismCells
+@onready var _player_cells: TileMapLayer = $World/PlayerCells
 @onready var _hud: CanvasLayer = $LevelHUD
 
 
@@ -58,14 +60,13 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	_collect_entities()
-	_board_size = _compute_board_size()
-	grid.setup(_board_size)
+	_compute_board_rect()
+	grid.setup(_board_origin, _board_size)
 	for m in _mechanisms:
-		m.set_grid_size(_board_size)
+		m.set_grid_bounds(_board_origin, _board_size)
 	_fill_ground_fallback()
 	_place_player()
 	_sync_player_layer()
-	_fit_camera()
 	EventManager.level_loaded.emit(level_id)
 	_check_deadlock()
 
@@ -90,34 +91,41 @@ func _scan(node: Node) -> void:
 			_scan(child)
 
 
-## 自动地图范围：>= map_size，并覆盖障碍涂格/实体/机关最大扩展
-func _compute_board_size() -> Vector2i:
-	var need := map_size
-	# 背景涂格也参与定界
+## 自动地图范围 = Ground/Obstacles 涂格 + 实体格（Spawn/Goal/Food/Mechanism 核心）的外接矩形。
+## 完全空白时退回 map_size 默认区（0,0 起）。
+## 机关生长体只在"已涂地板范围"内生长；越界格会被 Mechanism.claim_missing 跳过（不铺新地板）。
+func _compute_board_rect() -> void:
+	var cells: Array[Vector2i] = []
 	for c in _ground.get_used_cells():
-		need.x = maxi(need.x, c.x + 1)
-		need.y = maxi(need.y, c.y + 1)
+		cells.append(c)
 	for c in _obstacles.get_used_cells():
-		need.x = maxi(need.x, c.x + 1)
-		need.y = maxi(need.y, c.y + 1)
-	var consider: Array[Vector2i] = []
-	if _spawn: consider.append(_spawn.cell)
-	if _goal: consider.append(_goal.cell)
-	for f in _foods: consider.append(f.cell)
+		cells.append(c)
+	if _spawn:
+		cells.append(_spawn.cell)
+	if _goal:
+		cells.append(_goal.cell)
+	for f in _foods:
+		cells.append(f.cell)
 	for m in _mechanisms:
-		for off in MechanicShapes.cells(MechanicShapes.max_level()):
-			consider.append(m.cell + off)
-	for c in consider:
-		need.x = maxi(need.x, c.x + 1)
-		need.y = maxi(need.y, c.y + 1)
-	return need
+		cells.append(m.cell)
+	if cells.is_empty():
+		_board_origin = Vector2i.ZERO
+		_board_size = map_size
+		return
+	var min_c := cells[0]
+	var max_c := cells[0]
+	for c in cells:
+		min_c = Vector2i(mini(min_c.x, c.x), mini(min_c.y, c.y))
+		max_c = Vector2i(maxi(max_c.x, c.x), maxi(max_c.y, c.y))
+	_board_origin = min_c
+	_board_size = max_c - min_c + Vector2i.ONE
 
 
-## 地板兜底：没涂 Ground 或留空的格，运行期铺一层默认地板
+## 地板兜底：地图矩形里留空的格，运行期铺一层默认地板（只在内容包围盒内）
 func _fill_ground_fallback() -> void:
 	for y in _board_size.y:
 		for x in _board_size.x:
-			var cell := Vector2i(x, y)
+			var cell := _board_origin + Vector2i(x, y)
 			if _ground.get_cell_source_id(cell) == -1:
 				_ground.set_cell(cell, TILE_SOURCE, Vector2i(TILE_FLOOR, 0))
 
@@ -159,6 +167,7 @@ func _claim_initial_mechanisms() -> void:
 	var blocked := _blocked_cells()
 	for m in _mechanisms:
 		m.claim_missing(blocked)
+	_rebuild_mech_grid()
 
 
 func _grow_all_mechanisms() -> void:
@@ -168,6 +177,16 @@ func _grow_all_mechanisms() -> void:
 			m.set_level(m.level + 1)
 			m.claim_missing(blocked)
 	_sync_mech_layer()
+	_rebuild_mech_grid()
+
+
+## 把机关实际占格写入 grid.mech_cells（BFS/可走判定用），含核心格
+func _rebuild_mech_grid() -> void:
+	grid.mech_cells.clear()
+	for m in _mechanisms:
+		for cell in m.claimed:
+			if grid.in_bounds(cell):
+				grid.mech_cells[cell] = true
 
 
 ## 把机关实际占格(去掉核心)画到 MechanismCells 层
@@ -188,16 +207,20 @@ func _sync_player_layer() -> void:
 
 # ── 输入（回合制单步）──────────────────────────────────────────
 func _unhandled_input(event: InputEvent) -> void:
+	# 节点已脱离场景树（切场景瞬间）时不再处理输入，避免空 Viewport
+	var vp := get_viewport()
+	if vp == null:
+		return
 	if event.is_action_pressed("restart") and not event.is_echo():
 		GameManager.restart_level()
-		get_viewport().set_input_as_handled()
+		vp.set_input_as_handled()
 		return
 	if finished or input_locked:
 		return
 	for dir in DIRS:
 		if event.is_action_pressed(_action_for(dir)) and not event.is_echo():
 			_step(dir)
-			get_viewport().set_input_as_handled()
+			vp.set_input_as_handled()
 			return
 
 
@@ -314,14 +337,3 @@ func _fail() -> void:
 
 func _update_hud() -> void:
 	_hud.update_stats(max_len, food_eaten, total_food, steps)
-
-
-func _fit_camera() -> void:
-	var cam := get_node_or_null("Cam") as Camera2D
-	if cam == null:
-		return
-	var view := get_viewport().get_visible_rect().size
-	var world := Vector2(_board_size) * GridMetrics.cell_px()
-	var zoom := minf(view.x / world.x, (view.y - 90.0) / world.y)
-	cam.zoom = Vector2(clampf(zoom, 0.2, 1.0), clampf(zoom, 0.2, 1.0))
-	cam.position = world * 0.5

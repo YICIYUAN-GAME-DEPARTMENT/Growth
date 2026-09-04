@@ -17,11 +17,11 @@
 5. **数值调整：** 打开 `Resources/Config/Balance.tres` 在 Inspector 修改；初始 L / ΔL / 生长步数必须与功能需求文档 §7 一致，改后需走变更流程（同步文档）。
 6. **Git LFS：** 大资源（png/wav/ogg 等）走 LFS（§3.8，`.gitattributes` 已按扩展名追踪）。提交用 `asset` 前缀并注明 A-xx；文本类永不入 LFS。
 7. **资产登记：** 美术/音频新资源登记到 [开发文档](../../开发文档.md) §3.9 资产清单，避免重复。
-8. **占位资源：** 美术未定稿时使用纯色/线框占位（实体由脚本 @tool 直接绘制，无需贴图即可布局）；贴图就绪后替换。
+8. **占位资源：** 美术未定稿时使用纯色贴图/单贴图占位；贴图就绪后替换。
 
 ## 示例
 新增正式关卡：
 1. 复制 `Scenes/Levels/LevelTemplate.tscn` → `Scenes/Levels/Level_02_X.tscn`。
 2. 打开场景：改根节点导出 `level_id`/`level_name`/`map_size`。
-3. 拖入/复制实体节点（Spawn/Obstacle/Food/Goal/Mechanism）并放到格子（自动吸附）。
+3. 在 `Ground`/`Obstacles` 层涂格（地图范围=涂格包围盒），拖入/复制实体节点（PlayerSpawn/Goal/Food/Mechanism）并吸附到格子上。
 4. 用功能需求 §6.3 / §8 校验（BFS 可走、食物链可达）。

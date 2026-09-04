@@ -27,13 +27,15 @@ var level: int = 0
 var claimed: Dictionary = {}
 
 ## 地图逻辑范围（由 Level 启动时注入，用于丢弃越界占格）
-var grid_size := Vector2i(1000, 1000)
+var _grid_min := Vector2i(-1000000, -1000000)
+var _grid_max := Vector2i(1000000, 1000000)
 
 var _last_pos := Vector2(-999999, -999999)
 
 
-func set_grid_size(v: Vector2i) -> void:
-	grid_size = v
+func set_grid_bounds(map_origin: Vector2i, map_size: Vector2i) -> void:
+	_grid_min = map_origin
+	_grid_max = map_origin + map_size
 
 
 func _ready() -> void:
@@ -67,7 +69,7 @@ func claim_missing(blocked: Dictionary) -> int:
 			continue
 		if blocked.has(abs_cell):
 			continue
-		if abs_cell.x < 0 or abs_cell.y < 0 or abs_cell.x >= grid_size.x or abs_cell.y >= grid_size.y:
+		if abs_cell.x < _grid_min.x or abs_cell.y < _grid_min.y or abs_cell.x >= _grid_max.x or abs_cell.y >= _grid_max.y:
 			continue  # 越界不占
 		claimed[abs_cell] = true
 		added += 1

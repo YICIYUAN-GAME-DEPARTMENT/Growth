@@ -3,10 +3,11 @@ extends RefCounted
 ## ============================================================================
 ## GridSystem — 关卡网格数据与判定（纯逻辑，不渲染）
 ## ----------------------------------------------------------------------------
-## 坐标一律用格子 Vector2i；(0,0) 为地图左上。地图范围由 size 决定，
+## 坐标一律用格子 Vector2i；地图为 [origin, origin+size) 的矩形区域，
 ## 越界一律不可走。提供：可走判定 + BFS 通路检测（死局判定用）。
 ## ============================================================================
 
+var origin := Vector2i.ZERO
 var size: Vector2i = Vector2i(32, 32)
 
 var obstacles: Dictionary = {}    # Vector2i -> true（静态障碍）
@@ -15,12 +16,13 @@ var goal_cell := Vector2i.ZERO
 var spawn_cell := Vector2i.ZERO
 
 
-func setup(map_size: Vector2i) -> void:
+func setup(map_origin: Vector2i, map_size: Vector2i) -> void:
+	origin = map_origin
 	size = map_size
 
 
 func in_bounds(c: Vector2i) -> bool:
-	return c.x >= 0 and c.y >= 0 and c.x < size.x and c.y < size.y
+	return c.x >= origin.x and c.y >= origin.y and c.x < origin.x + size.x and c.y < origin.y + size.y
 
 
 func add_obstacle(c: Vector2i) -> void:

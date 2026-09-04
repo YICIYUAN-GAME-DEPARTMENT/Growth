@@ -9,8 +9,8 @@ extends CanvasLayer
 @onready var _steps: Label = $Root/Top/Panel/HBox/LabelSteps
 @onready var _overlay: Control = $Root/Overlay
 @onready var _overlay_text: Label = $Root/Overlay/Center/Panel/VBox/Text
-@onready var _restart: Button = $Root/Top/Panel/HBox/RestartBtn
-@onready var _back: Button = $Root/Top/Panel/HBox/BackBtn
+@onready var _restart: Button = $Root/Top/Panel/RestartBtn
+@onready var _back: Button = $Root/Top/Panel/BackBtn
 @onready var _overlay_restart: Button = $Root/Overlay/Center/Panel/VBox/RestartBtn
 @onready var _overlay_back: Button = $Root/Overlay/Center/Panel/VBox/BackBtn
 

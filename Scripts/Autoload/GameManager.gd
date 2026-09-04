@@ -46,8 +46,15 @@ func start_level(scene_path: String) -> void:
 
 
 func restart_level() -> void:
-	if current_level_scene != "":
-		change_scene(current_level_scene)
+	# 经选关进入时重开指定关卡；若直接 F6 运行某关卡场景（无记录），
+	# 回退为重载当前场景自身，保证编辑器调试时按钮也可用。
+	var target := current_level_scene
+	if target == "":
+		var cs := get_tree().current_scene
+		if cs != null and cs.scene_file_path != "":
+			target = cs.scene_file_path
+	if target != "":
+		change_scene(target)
 
 
 func back_to_level_select() -> void:

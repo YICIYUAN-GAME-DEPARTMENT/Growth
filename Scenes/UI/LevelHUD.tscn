@@ -12,6 +12,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Top" type="Control" parent="Root" unique_id=1127884272]
 layout_mode = 1
@@ -19,6 +20,7 @@ anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 64.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="Panel" type="Control" parent="Root/Top" unique_id=396460168]
 layout_mode = 1
@@ -29,6 +31,7 @@ offset_top = 8.0
 offset_right = -12.0
 offset_bottom = 56.0
 grow_horizontal = 2
+mouse_filter = 2
 
 [node name="HBox" type="HBoxContainer" parent="Root/Top/Panel" unique_id=947862377]
 layout_mode = 1
@@ -39,6 +42,7 @@ offset_top = -24.0
 offset_right = 1256.0
 offset_bottom = 24.0
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 28
 
 [node name="LabelLen" type="Label" parent="Root/Top/Panel/HBox" unique_id=94688568]
