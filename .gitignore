@@ -1,17 +1,37 @@
-# Godot 4+ specific ignores
+# ── Godot 4+ generated / cache ────────────────────────────────
 .godot/
-.nomedia
+/imported/
 
-# Godot-specific ignores
-.import/
+# ── Platform build folders ────────────────────────────────────
+/android/
+/ios/
+/web-builds/
+/builds/
+
+# ── Export presets (machine-local, may contain keys) ─────────
+export_presets.cfg
 export.cfg
-export_credentials.cfg
-*.tmp
 
-# Imported translations (automatically generated from CSV files)
-*.translation
+# ── Editor user settings ─────────────────────────────────────
+*.editor
+editor_layout.cfg
+ide_communication.log
 
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
+# ── OS / IDE junk ────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ── VS Code workspace local ───────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# ── Logs / temp ───────────────────────────────────────────────
+*.log
+logs/
+tmp/
