@@ -1,43 +1,184 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene format=4]
 
-[ext_resource type="Script" path="res://Scripts/Systems/Level.gd" id="1_level"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="2_spawn"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="3_goal"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="4_food"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Obstacle.tscn" id="5_obs"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="6_mech"]
+[ext_resource type="Script" path="res://Scripts/Systems/Level.gd" id="1_h0rn4"]
+[ext_resource type="TileSet" path="res://Art/Tiles/GameTiles.tres" id="2_v2kvv"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="3_vch5u"]
+[ext_resource type="Script" path="res://Scripts/Entities/PlayerSpawn.gd" id="4_jcjun"]
+[ext_resource type="Texture2D" path="res://Art/Sprites/spawn.svg" id="5_u25ms"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="6_vuvn2"]
+[ext_resource type="Script" path="res://Scripts/Entities/Goal.gd" id="7_cogrn"]
+[ext_resource type="Texture2D" path="res://Art/Sprites/goal.svg" id="8_51pvv"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="9_yui36"]
+[ext_resource type="Script" path="res://Scripts/Entities/Food.gd" id="10_b8xkq"]
+[ext_resource type="Texture2D" path="res://Art/Sprites/food.svg" id="11_w5nrq"]
+[ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="12_2bikf"]
+[ext_resource type="Script" path="res://Scripts/Entities/Mechanism.gd" id="13_0r4ed"]
+[ext_resource type="Texture2D" path="res://Art/Sprites/mech_core.svg" id="14_l5ukk"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/LevelHUD.tscn" id="15_dv6cx"]
+[ext_resource type="Script" path="res://Scripts/UI/LevelHUD.gd" id="16_a55np"]
 
-[node name="Level" type="Node2D"]
-script = ExtResource("1_level")
-level_id = 1
+[node name="Level" type="Node2D" unique_id=1851191326]
+script = ExtResource("1_h0rn4")
 level_name = "示例：吃食物，走向终点"
 map_size = Vector2i(10, 4)
 
-[node name="PlayerSpawn" parent="." instance=ExtResource("2_spawn")]
-position = Vector2(32, 32)
+[node name="Ground" type="TileMapLayer" parent="." unique_id=122011578]
+tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAA=")
+tile_set = ExtResource("2_v2kvv")
+
+[node name="Obstacles" type="TileMapLayer" parent="." unique_id=683900537]
+tile_map_data = PackedByteArray("AAAIAAMAAAABAAAAAAAJAAMAAAABAAAAAAAEAAAAAAABAAAAAAAFAAAAAAABAAAAAAA=")
+tile_set = ExtResource("2_v2kvv")
+
+[node name="EntityRoot" type="Node2D" parent="." unique_id=531382554]
+
+[node name="PlayerSpawn" type="Node2D" parent="EntityRoot" unique_id=731778604 instance=ExtResource("3_vch5u")]
+position = Vector2(48, 48)
+script = ExtResource("4_jcjun")
 cell = Vector2i(1, 1)
 
-[node name="Goal" parent="." instance=ExtResource("3_goal")]
-position = Vector2(224, 32)
+[node name="Sprite2D" type="Sprite2D" parent="EntityRoot/PlayerSpawn" unique_id=127057166]
+texture = ExtResource("5_u25ms")
+
+[node name="Goal" type="Node2D" parent="EntityRoot" unique_id=897257754 instance=ExtResource("6_vuvn2")]
+position = Vector2(240, 48)
+script = ExtResource("7_cogrn")
 cell = Vector2i(7, 1)
 
-[node name="FoodA" parent="." instance=ExtResource("4_food")]
-position = Vector2(96, 32)
+[node name="Sprite2D" type="Sprite2D" parent="EntityRoot/Goal" unique_id=155950998]
+texture = ExtResource("8_51pvv")
+
+[node name="Food" type="Node2D" parent="EntityRoot" unique_id=1469416823 instance=ExtResource("9_yui36")]
+position = Vector2(112, 48)
+script = ExtResource("10_b8xkq")
 cell = Vector2i(3, 1)
 
-[node name="FoodB" parent="." instance=ExtResource("4_food")]
-position = Vector2(160, 32)
+[node name="Sprite2D" type="Sprite2D" parent="EntityRoot/Food" unique_id=467456442]
+texture = ExtResource("11_w5nrq")
+
+[node name="@Node2D@11" type="Node2D" parent="EntityRoot" unique_id=2029615917 instance=ExtResource("9_yui36")]
+position = Vector2(176, 48)
+script = ExtResource("10_b8xkq")
 cell = Vector2i(5, 1)
 
-[node name="Obstacle1" parent="." instance=ExtResource("5_obs")]
-position = Vector2(256, 96)
-cell = Vector2i(8, 3)
+[node name="Sprite2D" type="Sprite2D" parent="EntityRoot/@Node2D@11" unique_id=407621012]
+texture = ExtResource("11_w5nrq")
 
-[node name="Obstacle2" parent="." instance=ExtResource("5_obs")]
-position = Vector2(288, 96)
-cell = Vector2i(9, 3)
-
-[node name="Mechanism1" parent="." instance=ExtResource("6_mech")]
-position = Vector2(160, 96)
+[node name="Mechanism" type="Node2D" parent="EntityRoot" unique_id=36971491 instance=ExtResource("12_2bikf")]
+position = Vector2(176, 112)
+script = ExtResource("13_0r4ed")
 cell = Vector2i(5, 3)
-initial_level = 0
+
+[node name="Core" type="Sprite2D" parent="EntityRoot/Mechanism" unique_id=414111486]
+texture = ExtResource("14_l5ukk")
+
+[node name="MechanismCells" type="TileMapLayer" parent="." unique_id=1331005184]
+tile_set = ExtResource("2_v2kvv")
+
+[node name="PlayerCells" type="TileMapLayer" parent="." unique_id=1224669551]
+tile_set = ExtResource("2_v2kvv")
+
+[node name="LevelHUD" type="CanvasLayer" parent="." unique_id=1829993084 instance=ExtResource("15_dv6cx")]
+script = ExtResource("16_a55np")
+
+[node name="Root" type="Control" parent="LevelHUD" unique_id=1041352802]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="LevelHUD/Root" unique_id=1868835000]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 64.0
+grow_horizontal = 2
+
+[node name="Panel" type="PanelContainer" parent="LevelHUD/Root/Top" unique_id=881329102]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = 56.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="LevelHUD/Root/Top/Panel" unique_id=1028150598]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="LabelLen" type="Label" parent="LevelHUD/Root/Top/Panel/HBox" unique_id=1065042396]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "最大身长 L: 3"
+
+[node name="LabelFood" type="Label" parent="LevelHUD/Root/Top/Panel/HBox" unique_id=297785835]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "食物: 0/0"
+
+[node name="LabelSteps" type="Label" parent="LevelHUD/Root/Top/Panel/HBox" unique_id=1318074851]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "步数: 0"
+
+[node name="RestartBtn" type="Button" parent="LevelHUD/Root/Top/Panel/HBox" unique_id=1030916777]
+layout_mode = 2
+text = "重开 (R)"
+
+[node name="BackBtn" type="Button" parent="LevelHUD/Root/Top/Panel/HBox" unique_id=2078120876]
+layout_mode = 2
+text = "返回选关"
+
+[node name="Overlay" type="Control" parent="LevelHUD/Root" unique_id=1889921292]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="LevelHUD/Root/Overlay" unique_id=110304572]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="LevelHUD/Root/Overlay" unique_id=595741368]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="LevelHUD/Root/Overlay/Center" unique_id=513757823]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="LevelHUD/Root/Overlay/Center/Panel" unique_id=658663817]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Text" type="Label" parent="LevelHUD/Root/Overlay/Center/Panel/VBox" unique_id=1642402198]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "胜利！"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="LevelHUD/Root/Overlay/Center/Panel/VBox" unique_id=1262269224]
+layout_mode = 2
+text = "重开本关"
+
+[node name="BackBtn" type="Button" parent="LevelHUD/Root/Overlay/Center/Panel/VBox" unique_id=1570637469]
+layout_mode = 2
+text = "返回选关"
+
+[node name="Cam" type="Camera2D" parent="." unique_id=1680439236]
+position = Vector2(512, 512)

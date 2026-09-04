@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dd3mbxs2w5h0c"]
 
-[ext_resource type="Script" path="res://Scripts/UI/MainMenu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://cixd5fvjv8kyn" path="res://Scripts/UI/MainMenu.gd" id="1_menu"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1815779499]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,3 +10,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=870032837]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center" unique_id=664725098]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Center/VBox" unique_id=1912669242]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "Growth"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/VBox" unique_id=1437697415]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.7)
+theme_override_font_sizes/font_size = 24
+text = "绳蛇解谜 · 到达终点！"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Center/VBox" unique_id=2107278133]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="Center/VBox" unique_id=2046076656]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+text = "开始游戏"
+
+[node name="QuitButton" type="Button" parent="Center/VBox" unique_id=1309261712]
+custom_minimum_size = Vector2(280, 44)
+layout_mode = 2
+text = "退出"

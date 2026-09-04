@@ -1,9 +1,28 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://mbkwmriq5fhf"]
 
-[ext_resource type="Script" path="res://Scripts/Systems/Level.gd" id="1_level"]
+[ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_level"]
+[ext_resource type="TileSet" uid="uid://drdrm7hat51v7" path="res://Art/Tiles/GameTiles.tres" id="2_tileset"]
+[ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
 
-[node name="Level" type="Node2D"]
+[node name="Level" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_level")
-level_id = 1
-level_name = "示例关卡（直编模板）"
-map_size = Vector2i(14, 9)
+level_name = "新关卡"
+
+[node name="Ground" type="TileMapLayer" parent="." unique_id=620393186]
+tile_set = ExtResource("2_tileset")
+
+[node name="Obstacles" type="TileMapLayer" parent="." unique_id=1559005235]
+tile_set = ExtResource("2_tileset")
+
+[node name="EntityRoot" type="Node2D" parent="." unique_id=1535406282]
+
+[node name="MechanismCells" type="TileMapLayer" parent="." unique_id=1566093649]
+tile_set = ExtResource("2_tileset")
+
+[node name="PlayerCells" type="TileMapLayer" parent="." unique_id=1322017958]
+tile_set = ExtResource("2_tileset")
+
+[node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("3_hud")]
+
+[node name="Cam" type="Camera2D" parent="." unique_id=962089457]
+position = Vector2(640, 360)

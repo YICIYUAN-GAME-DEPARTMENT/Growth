@@ -15,7 +15,7 @@
    - 全局生命周期 → `Scripts/Autoload/`（GameManager/EventManager/ResourceManager/AudioManager/SaveManager；公共接口勿擅改）
    - 玩法系统 → `Scripts/Systems/`（Level.gd、GridSystem），由关卡场景使用，**不进 Autoload**
    - 实体 → `Scripts/Entities/`（Player/Mechanism/Food/Goal）
-   - 数据类 → `Scripts/Data/`（Balance / MechanicShapes / GridMetrics / Palette）
+   - 数据类 → `Scripts/Data/`（Balance / MechanicShapes / GridMetrics）
 4. **通信纪律：**
    - 跨系统 → `EventManager.xxx.emit/connect`（信号见 [架构说明](../../architecture/架构说明.md) §3），**禁止** `get_node("/root/OtherSystem")`
    - 取资源 → `ResourceManager.get_scene/get_resource(id)`，**禁止**裸 `load()`

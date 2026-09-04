@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://brrve022q1vwa"]
+
+[ext_resource type="Script" uid="uid://c60nbwqp4usbk" path="res://Scripts/UI/LevelHUD.gd" id="1_hud"]
+
+[node name="LevelHUD" type="CanvasLayer" unique_id=1331169913]
+script = ExtResource("1_hud")
+
+[node name="Root" type="Control" parent="." unique_id=341776479]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top" type="Control" parent="Root" unique_id=1127884272]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 64.0
+grow_horizontal = 2
+
+[node name="Panel" type="Control" parent="Root/Top" unique_id=396460168]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = -12.0
+offset_bottom = 56.0
+grow_horizontal = 2
+
+[node name="HBox" type="HBoxContainer" parent="Root/Top/Panel" unique_id=947862377]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -24.0
+offset_right = 1256.0
+offset_bottom = 24.0
+grow_vertical = 2
+theme_override_constants/separation = 28
+
+[node name="LabelLen" type="Label" parent="Root/Top/Panel/HBox" unique_id=94688568]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "最大身长 L: 3"
+
+[node name="LabelFood" type="Label" parent="Root/Top/Panel/HBox" unique_id=1672884974]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "食物: 0/0"
+
+[node name="LabelSteps" type="Label" parent="Root/Top/Panel/HBox" unique_id=571948753]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "步数: 0"
+
+[node name="BackBtn" type="Button" parent="Root/Top/Panel" unique_id=1700317559]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = -24.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "返回选关"
+
+[node name="RestartBtn" type="Button" parent="Root/Top/Panel" unique_id=1181101758]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -156.0
+offset_top = -24.0
+offset_right = -91.0
+offset_bottom = 24.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "重开 (R)"
+
+[node name="Overlay" type="Control" parent="Root" unique_id=1184759294]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Root/Overlay" unique_id=1344550370]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -360.0
+offset_right = 200.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="Root/Overlay" unique_id=1615853400]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Root/Overlay/Center" unique_id=28957463]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Root/Overlay/Center/Panel" unique_id=56166037]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Text" type="Label" parent="Root/Overlay/Center/Panel/VBox" unique_id=463298144]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "胜利！"
+horizontal_alignment = 1
+
+[node name="RestartBtn" type="Button" parent="Root/Overlay/Center/Panel/VBox" unique_id=2008155919]
+layout_mode = 2
+text = "重开本关"
+
+[node name="BackBtn" type="Button" parent="Root/Overlay/Center/Panel/VBox" unique_id=1879821970]
+layout_mode = 2
+text = "返回选关"
