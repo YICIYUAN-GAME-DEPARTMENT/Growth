@@ -41,10 +41,9 @@ var _head_cell := Vector2i.ZERO
 
 const DIRS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
 
-## TileSet 里 atlas 的 x 下标（对应 GameTiles.tres）
-const TILE_FLOOR := 0
-const TILE_OBSTACLE := 1
-const TILE_MECH := 2
+## 静态瓦片（PlayerCells 用 GameTiles.tres：头/身两块固定贴图）。
+## Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres，
+## 每套只有 1 个 terrain（terrain_set=0, terrain=0），画格用 terrain connect 自动贴边。
 const TILE_PLAYER_HEAD := 3
 const TILE_PLAYER_BODY := 4
 const TILE_SOURCE := 0
@@ -121,13 +120,21 @@ func _compute_board_rect() -> void:
 	_board_size = max_c - min_c + Vector2i.ONE
 
 
-## 地板兜底：地图矩形里留空的格，运行期铺一层默认地板（只在内容包围盒内）
+## 地板兜底 + terrain 重连：把地图矩形内整块涂成地板，
+## 用 set_cells_terrain_connect 让引擎按 4 角自动贴边（已涂格位置保持不变形）。
 func _fill_ground_fallback() -> void:
+	var cells: Array[Vector2i] = []
+	for c in _ground.get_used_cells():
+		cells.append(c)
 	for y in _board_size.y:
 		for x in _board_size.x:
 			var cell := _board_origin + Vector2i(x, y)
-			if _ground.get_cell_source_id(cell) == -1:
-				_ground.set_cell(cell, TILE_SOURCE, Vector2i(TILE_FLOOR, 0))
+			if not cells.has(cell):
+				cells.append(cell)
+	if cells.is_empty():
+		return
+	_ground.clear()
+	_ground.set_cells_terrain_connect(cells, 0, 0, true)
 
 
 func _place_player() -> void:
@@ -189,12 +196,16 @@ func _rebuild_mech_grid() -> void:
 				grid.mech_cells[cell] = true
 
 
-## 把机关实际占格(去掉核心)画到 MechanismCells 层
+## 把机关实际占格(去掉核心)画到 MechanismCells 层（terrain 自动贴边）
 func _sync_mech_layer() -> void:
 	_mech_cells.clear()
+	var cells: Array[Vector2i] = []
 	for m in _mechanisms:
 		for cell in m.body_cells():
-			_mech_cells.set_cell(cell, TILE_SOURCE, Vector2i(TILE_MECH, 0))
+			cells.append(cell)
+	if cells.is_empty():
+		return
+	_mech_cells.set_cells_terrain_connect(cells, 0, 0, true)
 
 
 ## 把玩家 trail 画到 PlayerCells 层（头=HEAD，其余=BODY）
