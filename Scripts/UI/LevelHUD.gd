@@ -19,6 +19,9 @@ extends CanvasLayer
 @onready var _pause_restart: Button = $Root/PauseOverlay/Center/Panel/Content/RestartButton
 @onready var _pause_exit: Button = $Root/PauseOverlay/Center/Panel/Content/ExitButton
 
+## 剧情演出期间由 Level 置位：忽略 Esc（交给剧情层做"跳过"），防误开暂停菜单
+var dialogue_active := false
+
 
 func _ready() -> void:
 	_restart.pressed.connect(_restart_level)
@@ -33,6 +36,8 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if dialogue_active:
+		return
 	if event.is_action_pressed("ui_cancel") and not event.is_echo() and not _overlay.visible:
 		if _pause_overlay.visible:
 			_close_pause_menu()
@@ -63,6 +68,10 @@ func show_result(text: String) -> void:
 
 func hide_result() -> void:
 	_overlay.visible = false
+
+
+func set_dialogue_active(value: bool) -> void:
+	dialogue_active = value
 
 
 func _open_pause_menu() -> void:

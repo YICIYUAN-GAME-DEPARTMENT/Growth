@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dprxeg350g0s0"]
 
-[ext_resource type="Script" path="res://Scripts/Entities/Goal.gd" id="1_goal"]
-[ext_resource type="Texture2D" path="res://Art/Sprites/goal.svg" id="2_tex"]
+[ext_resource type="Script" uid="uid://bbi8ne8xbftcb" path="res://Scripts/Entities/Goal.gd" id="1_goal"]
+[ext_resource type="Texture2D" uid="uid://s04hgakxrr4d" path="res://ImportArt/Goal-Flower.png" id="2_vs13i"]
 
-[node name="Goal" type="Node2D"]
+[node name="Goal" type="Node2D" unique_id=1654257061]
+position = Vector2(16, 16)
 script = ExtResource("1_goal")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_tex")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1696998561]
+position = Vector2(0, -8)
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_vs13i")

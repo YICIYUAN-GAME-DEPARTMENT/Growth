@@ -3,21 +3,25 @@
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_s0llq"]
 [ext_resource type="TileSet" uid="uid://dacmdx2iwbv7p" path="res://Art/Tiles/TerrainFloor.tres" id="2_c4yfg"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="3_0fwhh"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="3_0kjcf"]
+[ext_resource type="PackedScene" uid="uid://bn61nd5v2kny7" path="res://Scenes/Entities/Food.tscn" id="3_0kjcf"]
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_7lg6d"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="3_8873k"]
+[ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="3_8873k"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_fgguq"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="5_0fwhh"]
+[ext_resource type="PackedScene" uid="uid://dprxeg350g0s0" path="res://Scenes/Entities/Goal.tscn" id="5_0fwhh"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="11_2cao3"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="12_q58va"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="13_wrux4"]
 [ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="14_27klx"]
-[ext_resource type="Texture2D" uid="uid://bt8cohaharnou" path="res://Art/Sprites/player_tail.svg" id="15_eche3"]
 
 [node name="Level" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_s0llq")
 level_name = "第一关"
+story_start = "res://Resources/Dialogue/Story_Level01_Intro.json"
+story_win = "res://Resources/Dialogue/Story_Level01_Win.json"
+story_fail = "res://Resources/Dialogue/Story_Level01_Fail.json"
 
 [node name="World" type="Node2D" parent="." unique_id=458035856]
+position = Vector2(61, 52)
 
 [node name="Ground" type="TileMapLayer" parent="World" unique_id=620393186]
 tile_map_data = PackedByteArray("AAAOAAcAAAAIAAAAAAAPAAcAAAAMAAAAAAAQAAcAAAAMAAAAAAARAAcAAAAMAAAAAAASAAcAAAAMAAAAAAATAAcAAAAMAAAAAAAUAAcAAAAMAAAAAAAVAAcAAAAEAAAAAAAVAAgAAAAFAAAAAAAVAAkAAAAFAAAAAAAVAAoAAAAFAAAAAAAUAAoAAAAPAAAAAAATAAoAAAAPAAAAAAASAAoAAAAPAAAAAAARAAoAAAAPAAAAAAAQAAoAAAAPAAAAAAAPAAoAAAAPAAAAAAAOAAoAAAAKAAAAAAAOAAkAAAAKAAAAAAAOAAgAAAAKAAAAAAAPAAgAAAAPAAAAAAAPAAkAAAAPAAAAAAAQAAkAAAAPAAAAAAAQAAgAAAAPAAAAAAARAAgAAAAPAAAAAAARAAkAAAAPAAAAAAASAAkAAAAPAAAAAAASAAgAAAAPAAAAAAATAAkAAAAPAAAAAAATAAgAAAAPAAAAAAAUAAgAAAAPAAAAAAAUAAkAAAAPAAAAAAAOAAsAAAACAAAAAAAPAAsAAAADAAAAAAAQAAsAAAADAAAAAAARAAsAAAADAAAAAAASAAsAAAADAAAAAAATAAsAAAADAAAAAAAUAAsAAAADAAAAAAAVAAsAAAABAAAAAAA=")
@@ -68,10 +72,11 @@ vframes = 4
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=63143469]
 visible = false
-texture = ExtResource("15_eche3")
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("11_2cao3")
 
 [node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("3_fgguq")]
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
-position = Vector2(577, 305)
-zoom = Vector2(4.98, 4.495)
+position = Vector2(640, 360)
+zoom = Vector2(1.5, 1.5)

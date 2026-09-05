@@ -32,6 +32,14 @@ extends Node2D
 @export var growth_step_interval_override: int = 0
 ## 说明：grow_anim_sec（生长动画时长）只在全局 Balance.tres，不进关卡。
 
+@export_group("本关剧情（留空 = 该触发点不播剧情）")
+## 关卡开始剧情：进关即播，播完才可操作；重开/再次进入均重播
+@export_file("*.json") var story_start: String = ""
+## 胜利剧情：踏入 E 后先播，播完再弹结算面板
+@export_file("*.json") var story_win: String = ""
+## 失败剧情：判负后先播，播完再弹失败面板
+@export_file("*.json") var story_fail: String = ""
+
 ## 逻辑
 var trail: Array[Vector2i] = []
 var max_len: int = 3
@@ -40,6 +48,8 @@ var food_eaten := 0
 var total_food := 0
 var input_locked := false
 var finished := false
+## 开场剧情播放中：锁方向键输入（R 重开始终可用）
+var _story_active := false
 
 var grid := GridSystem.new()
 var _board_origin := Vector2i.ZERO
@@ -50,6 +60,8 @@ var _foods: Array = []
 var _goal: Goal = null
 var _spawn: PlayerSpawn = null
 var _head_cell := Vector2i.ZERO
+## 剧情覆盖层（运行时懒实例化的 DialogueOverlay）
+var _dialogue: DialogueOverlay = null
 ## 本关机关生长周期（_place_player 时解析 override/全局）
 var _growth_interval := 6
 
@@ -87,6 +99,8 @@ const MECH_FRAME_DONE := 2
 ## 帧列：0/1=移动两帧循环 2=停留固定；停留判定：HEAD_IDLE_SEC 秒内无新步
 const HEAD_IDLE_COL := 2
 const HEAD_IDLE_SEC := 0.35
+## 剧情覆盖层场景（运行时按需实例，场景树见 Scenes/Dialogue/DialogueOverlay.tscn）
+const DIALOGUE_SCENE_PATH := "res://Scenes/Dialogue/DialogueOverlay.tscn"
 
 @onready var _ground: TileMapLayer = $World/Ground
 @onready var _obstacles: TileMapLayer = $World/Obstacles
@@ -113,7 +127,13 @@ func _ready() -> void:
 	_player_fx.visible = true
 	_sync_player_layer()
 	EventManager.level_loaded.emit(level_id)
-	_check_deadlock()
+	# 开场剧情：先播完再解锁操作（await 期间场景可能被 R 重开，需判存活）
+	if not story_start.is_empty():
+		_story_active = true
+		await _play_story(story_start)
+		_story_active = false
+	if is_inside_tree():
+		_check_deadlock()
 
 
 # ── 实体收集（递归，任意层级都行）────────────────────────────────
@@ -429,7 +449,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		GameManager.restart_level()
 		vp.set_input_as_handled()
 		return
-	if finished or input_locked:
+	if finished or input_locked or _story_active:
 		return
 	for dir in DIRS:
 		if event.is_action_pressed(_action_for(dir)) and not event.is_echo():
@@ -557,7 +577,11 @@ func _win() -> void:
 	finished = true
 	SaveManager.record_result("level_%d" % level_id, steps)
 	EventManager.level_cleared.emit(level_id, steps)
-	_hud.show_result("胜利！ 步数 %d" % steps)
+	# 胜利剧情：先播完（含跳过）再弹结算面板；await 期间 R 重开则不再显示
+	if not story_win.is_empty():
+		await _play_story(story_win)
+	if is_instance_valid(_hud) and _hud.is_inside_tree():
+		_hud.show_result("胜利！ 步数 %d" % steps)
 
 
 func _fail(msg: String = "无路可走… 重开吧") -> void:
@@ -565,7 +589,39 @@ func _fail(msg: String = "无路可走… 重开吧") -> void:
 		return
 	finished = true
 	EventManager.level_failed.emit(level_id)
-	_hud.show_result(msg)
+	# 失败剧情：先播完（含跳过）再弹失败面板；await 期间 R 重开则不再显示
+	if not story_fail.is_empty():
+		await _play_story(story_fail)
+	if is_instance_valid(_hud) and _hud.is_inside_tree():
+		_hud.show_result(msg)
+
+
+## 播剧情统一入口：实例覆盖层 → 抑制 HUD 暂停 → 播放 → 等 finished（跳过同样结束）
+func _play_story(story_path: String) -> void:
+	var overlay := _ensure_dialogue()
+	if overlay == null:
+		return
+	if is_instance_valid(_hud):
+		_hud.set_dialogue_active(true)
+	overlay.finished.connect(_on_story_done, CONNECT_ONE_SHOT)
+	overlay.play(story_path)
+	await overlay.finished
+
+
+func _on_story_done(_completed: bool) -> void:
+	if is_instance_valid(_hud):
+		_hud.set_dialogue_active(false)
+
+
+func _ensure_dialogue() -> DialogueOverlay:
+	if _dialogue == null:
+		var scene := load(DIALOGUE_SCENE_PATH) as PackedScene
+		if scene == null:
+			push_error("Level %d: 无法加载剧情覆盖层 %s" % [level_id, DIALOGUE_SCENE_PATH])
+			return null
+		_dialogue = scene.instantiate() as DialogueOverlay
+		add_child(_dialogue)
+	return _dialogue
 
 
 func _update_hud() -> void:

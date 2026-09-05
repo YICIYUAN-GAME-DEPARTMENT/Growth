@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://bn61nd5v2kny7"]
 
-[ext_resource type="Script" path="res://Scripts/Entities/Food.gd" id="1_food"]
-[ext_resource type="Texture2D" path="res://Art/Sprites/food.svg" id="2_tex"]
+[ext_resource type="Script" uid="uid://sa81yp6afnl1" path="res://Scripts/Entities/Food.gd" id="1_food"]
+[ext_resource type="Texture2D" uid="uid://c2y6g3385okvd" path="res://ImportArt/pental.png" id="2_5aq7r"]
 
-[node name="Food" type="Node2D"]
+[node name="Food" type="Node2D" unique_id=2013670240]
+position = Vector2(16, 16)
 script = ExtResource("1_food")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_tex")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1425411707]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("2_5aq7r")

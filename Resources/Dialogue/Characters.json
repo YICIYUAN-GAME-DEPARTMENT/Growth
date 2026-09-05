@@ -1,0 +1,11 @@
+{
+  "characters": {
+    "guide": {
+      "name": "向导",
+      "poses": {
+        "normal": "res://Art/Portraits/portrait_guide_normal.svg",
+        "happy": "res://Art/Portraits/portrait_guide_happy.svg"
+      }
+    }
+  }
+}

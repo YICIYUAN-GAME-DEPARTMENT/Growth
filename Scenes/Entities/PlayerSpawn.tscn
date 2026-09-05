@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://h0x68v0j1hvl"]
 
-[ext_resource type="Script" path="res://Scripts/Entities/PlayerSpawn.gd" id="1_spawn"]
-[ext_resource type="Texture2D" path="res://Art/Sprites/spawn.svg" id="2_tex"]
+[ext_resource type="Script" uid="uid://fdakhcvcral5" path="res://Scripts/Entities/PlayerSpawn.gd" id="1_spawn"]
+[ext_resource type="Texture2D" uid="uid://2pt1gj6adtgc" path="res://Art/Sprites/spawn.svg" id="2_tex"]
 
-[node name="PlayerSpawn" type="Node2D"]
+[node name="PlayerSpawn" type="Node2D" unique_id=1658100739]
+position = Vector2(16, 16)
 script = ExtResource("1_spawn")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2143724163]
 texture = ExtResource("2_tex")

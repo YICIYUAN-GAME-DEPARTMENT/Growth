@@ -6,12 +6,12 @@
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="4_ahyue"]
 [ext_resource type="PackedScene" path="res://Scenes/Entities/Mechanism.tscn" id="4_yn44g"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="5_7q4nh"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Food.tscn" id="6_klagi"]
+[ext_resource type="PackedScene" uid="uid://bn61nd5v2kny7" path="res://Scenes/Entities/Food.tscn" id="6_klagi"]
 [ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="6_rsch0"]
-[ext_resource type="Texture2D" uid="uid://bt8cohaharnou" path="res://Art/Sprites/player_tail.svg" id="7_cvso7"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="8_fxysh"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/Goal.tscn" id="8_ipbd3"]
-[ext_resource type="PackedScene" path="res://Scenes/Entities/PlayerSpawn.tscn" id="10_3b8hw"]
+[ext_resource type="PackedScene" uid="uid://dprxeg350g0s0" path="res://Scenes/Entities/Goal.tscn" id="8_ipbd3"]
+[ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="10_3b8hw"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="11_7q4nh"]
 
 [node name="Level" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_l6yew")
@@ -22,6 +22,7 @@ initial_max_len_override = 7
 food_len_gain_override = 4
 
 [node name="World" type="Node2D" parent="." unique_id=2088720049]
+position = Vector2(388, 192)
 
 [node name="Ground" type="TileMapLayer" parent="World" unique_id=620393186]
 tile_map_data = PackedByteArray("AAAAAAAAAAAIAAAAAAABAAAAAAAMAAAAAAACAAAAAAAMAAAAAAADAAAAAAAMAAAAAAAEAAAAAAAMAAAAAAAFAAAAAAAMAAAAAAAGAAAAAAAMAAAAAAAHAAAAAAAMAAAAAAAIAAAAAAAMAAAAAAAJAAAAAAAMAAAAAAAKAAAAAAAMAAAAAAALAAAAAAAMAAAAAAAMAAAAAAAMAAAAAAANAAAAAAAMAAAAAAAOAAAAAAAMAAAAAAAPAAAAAAAEAAAAAAAAAAEAAAAKAAAAAAABAAEAAAAPAAAAAAACAAEAAAAPAAAAAAADAAEAAAAPAAAAAAAEAAEAAAAPAAAAAAAFAAEAAAAPAAAAAAAGAAEAAAAPAAAAAAAHAAEAAAAPAAAAAAAIAAEAAAAPAAAAAAAJAAEAAAAPAAAAAAAKAAEAAAAPAAAAAAALAAEAAAAPAAAAAAAMAAEAAAAPAAAAAAANAAEAAAAPAAAAAAAOAAEAAAAPAAAAAAAPAAEAAAAFAAAAAAAAAAIAAAAKAAAAAAABAAIAAAAPAAAAAAACAAIAAAAPAAAAAAADAAIAAAAPAAAAAAAEAAIAAAAPAAAAAAAFAAIAAAAPAAAAAAAGAAIAAAAPAAAAAAAHAAIAAAAPAAAAAAAIAAIAAAAPAAAAAAAJAAIAAAAPAAAAAAAKAAIAAAAPAAAAAAALAAIAAAAPAAAAAAAMAAIAAAAPAAAAAAANAAIAAAAPAAAAAAAOAAIAAAAPAAAAAAAPAAIAAAAFAAAAAAAAAAMAAAAKAAAAAAABAAMAAAAPAAAAAAACAAMAAAAPAAAAAAADAAMAAAAPAAAAAAAEAAMAAAAPAAAAAAAFAAMAAAAPAAAAAAAGAAMAAAAPAAAAAAAHAAMAAAAPAAAAAAAIAAMAAAAPAAAAAAAJAAMAAAAPAAAAAAAKAAMAAAAPAAAAAAALAAMAAAAPAAAAAAAMAAMAAAAPAAAAAAANAAMAAAAPAAAAAAAOAAMAAAAPAAAAAAAPAAMAAAAFAAAAAAAAAAQAAAAKAAAAAAABAAQAAAAPAAAAAAACAAQAAAAPAAAAAAADAAQAAAAPAAAAAAAEAAQAAAAPAAAAAAAFAAQAAAAPAAAAAAAGAAQAAAAPAAAAAAAHAAQAAAAPAAAAAAAIAAQAAAAPAAAAAAAJAAQAAAAPAAAAAAAKAAQAAAAPAAAAAAALAAQAAAAPAAAAAAAMAAQAAAAPAAAAAAANAAQAAAAPAAAAAAAOAAQAAAAPAAAAAAAPAAQAAAAFAAAAAAAAAAUAAAAKAAAAAAABAAUAAAAPAAAAAAACAAUAAAAPAAAAAAADAAUAAAAPAAAAAAAEAAUAAAAPAAAAAAAFAAUAAAAPAAAAAAAGAAUAAAAPAAAAAAAHAAUAAAAPAAAAAAAIAAUAAAAPAAAAAAAJAAUAAAAPAAAAAAAKAAUAAAAPAAAAAAALAAUAAAAPAAAAAAAMAAUAAAAPAAAAAAANAAUAAAAPAAAAAAAOAAUAAAAPAAAAAAAPAAUAAAAFAAAAAAAAAAYAAAAKAAAAAAABAAYAAAAPAAAAAAACAAYAAAAPAAAAAAADAAYAAAAPAAAAAAAEAAYAAAAPAAAAAAAFAAYAAAAPAAAAAAAGAAYAAAAPAAAAAAAHAAYAAAAPAAAAAAAIAAYAAAAPAAAAAAAJAAYAAAAPAAAAAAAKAAYAAAAPAAAAAAALAAYAAAAPAAAAAAAMAAYAAAAPAAAAAAANAAYAAAAPAAAAAAAOAAYAAAAPAAAAAAAPAAYAAAAFAAAAAAAAAAcAAAAKAAAAAAABAAcAAAAPAAAAAAACAAcAAAAPAAAAAAADAAcAAAAPAAAAAAAEAAcAAAAPAAAAAAAFAAcAAAAPAAAAAAAGAAcAAAAPAAAAAAAHAAcAAAAPAAAAAAAIAAcAAAAPAAAAAAAJAAcAAAAPAAAAAAAKAAcAAAAPAAAAAAALAAcAAAAPAAAAAAAMAAcAAAAPAAAAAAANAAcAAAAPAAAAAAAOAAcAAAAPAAAAAAAPAAcAAAAFAAAAAAAAAAgAAAAKAAAAAAABAAgAAAAPAAAAAAACAAgAAAAPAAAAAAADAAgAAAAPAAAAAAAEAAgAAAAPAAAAAAAFAAgAAAAPAAAAAAAGAAgAAAAPAAAAAAAHAAgAAAAPAAAAAAAIAAgAAAAPAAAAAAAJAAgAAAAPAAAAAAAKAAgAAAAPAAAAAAALAAgAAAAPAAAAAAAMAAgAAAAPAAAAAAANAAgAAAAPAAAAAAAOAAgAAAAPAAAAAAAPAAgAAAAFAAAAAAAAAAkAAAAKAAAAAAABAAkAAAAPAAAAAAACAAkAAAAPAAAAAAADAAkAAAAPAAAAAAAEAAkAAAAPAAAAAAAFAAkAAAAPAAAAAAAGAAkAAAAPAAAAAAAHAAkAAAAPAAAAAAAIAAkAAAAPAAAAAAAJAAkAAAAPAAAAAAAKAAkAAAAPAAAAAAALAAkAAAAPAAAAAAAMAAkAAAAPAAAAAAANAAkAAAAPAAAAAAAOAAkAAAAPAAAAAAAPAAkAAAAFAAAAAAAAAAoAAAACAAAAAAABAAoAAAADAAAAAAACAAoAAAADAAAAAAADAAoAAAADAAAAAAAEAAoAAAADAAAAAAAFAAoAAAADAAAAAAAGAAoAAAADAAAAAAAHAAoAAAADAAAAAAAIAAoAAAADAAAAAAAJAAoAAAADAAAAAAAKAAoAAAADAAAAAAALAAoAAAADAAAAAAAMAAoAAAADAAAAAAANAAoAAAADAAAAAAAOAAoAAAADAAAAAAAPAAoAAAABAAAAAAA=")
@@ -33,42 +34,42 @@ tile_set = ExtResource("3_jd3vc")
 
 [node name="EntityRoot" type="Node2D" parent="World" unique_id=1535406282]
 
-[node name="Mechanism" type="Node2D" parent="World/EntityRoot" unique_id=1217071822 instance=ExtResource("4_yn44g")]
+[node name="Mechanism" parent="World/EntityRoot" unique_id=1217071822 instance=ExtResource("4_yn44g")]
 z_index = 1
 position = Vector2(240, 144)
 cell = Vector2i(7, 4)
 
-[node name="Food" type="Node2D" parent="World/EntityRoot" unique_id=1336272921 instance=ExtResource("6_klagi")]
+[node name="Food" parent="World/EntityRoot" unique_id=1336272921 instance=ExtResource("6_klagi")]
 position = Vector2(176, 112)
 cell = Vector2i(5, 3)
 
-[node name="Food2" type="Node2D" parent="World/EntityRoot" unique_id=1339325304 instance=ExtResource("6_klagi")]
+[node name="Food2" parent="World/EntityRoot" unique_id=1339325304 instance=ExtResource("6_klagi")]
 position = Vector2(240, 208)
 cell = Vector2i(7, 6)
 
-[node name="Goal" type="Node2D" parent="World/EntityRoot" unique_id=927619885 instance=ExtResource("8_ipbd3")]
+[node name="Goal" parent="World/EntityRoot" unique_id=927619885 instance=ExtResource("8_ipbd3")]
 position = Vector2(432, 48)
 cell = Vector2i(13, 1)
 
-[node name="Mechanism2" type="Node2D" parent="World/EntityRoot" unique_id=1332886047 instance=ExtResource("4_yn44g")]
+[node name="Mechanism2" parent="World/EntityRoot" unique_id=1332886047 instance=ExtResource("4_yn44g")]
 z_index = 1
 position = Vector2(304, 272)
 cell = Vector2i(9, 8)
 
-[node name="Food3" type="Node2D" parent="World/EntityRoot" unique_id=701189814 instance=ExtResource("6_klagi")]
+[node name="Food3" parent="World/EntityRoot" unique_id=701189814 instance=ExtResource("6_klagi")]
 position = Vector2(304, 80)
 cell = Vector2i(9, 2)
 
-[node name="Mechanism3" type="Node2D" parent="World/EntityRoot" unique_id=118155382 instance=ExtResource("4_yn44g")]
+[node name="Mechanism3" parent="World/EntityRoot" unique_id=118155382 instance=ExtResource("4_yn44g")]
 z_index = 1
 position = Vector2(432, 144)
 cell = Vector2i(13, 4)
 
-[node name="PlayerSpawn" type="Node2D" parent="World/EntityRoot" unique_id=1794740813 instance=ExtResource("10_3b8hw")]
+[node name="PlayerSpawn" parent="World/EntityRoot" unique_id=1794740813 instance=ExtResource("10_3b8hw")]
 position = Vector2(144, 240)
 cell = Vector2i(4, 7)
 
-[node name="Food4" type="Node2D" parent="World/EntityRoot" unique_id=1706326017 instance=ExtResource("6_klagi")]
+[node name="Food4" parent="World/EntityRoot" unique_id=1706326017 instance=ExtResource("6_klagi")]
 position = Vector2(368, 208)
 cell = Vector2i(11, 6)
 
@@ -89,9 +90,11 @@ vframes = 4
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
 visible = false
-texture = ExtResource("7_cvso7")
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("11_7q4nh")
 
-[node name="LevelHUD" type="CanvasLayer" parent="." unique_id=1443197510 instance=ExtResource("8_fxysh")]
+[node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("8_fxysh")]
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
-position = Vector2(256, 176)
+position = Vector2(640, 360)
+zoom = Vector2(1.5, 1.5)
