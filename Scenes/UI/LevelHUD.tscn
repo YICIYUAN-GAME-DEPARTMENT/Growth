@@ -27,162 +27,22 @@ offset_bottom = 92.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Stats" type="HBoxContainer" parent="Root/TopArea"]
+[node name="RemainingCard" type="PanelContainer" parent="Root/TopArea"]
 layout_mode = 1
 offset_left = 20.0
-offset_top = 14.0
-offset_right = 912.0
-offset_bottom = 80.0
+offset_top = 10.0
+offset_right = 100.0
+offset_bottom = 90.0
 mouse_filter = 2
-theme_override_constants/separation = 10
+theme_type_variation = &"CounterCard"
 
-[node name="RemainingCard" type="PanelContainer" parent="Root/TopArea/Stats"]
-custom_minimum_size = Vector2(190, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"StatPill"
-
-[node name="Content" type="HBoxContainer" parent="Root/TopArea/Stats/RemainingCard"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Icon" type="Label" parent="Root/TopArea/Stats/RemainingCard/Content"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.827, 0.376, 0.196, 1)
-theme_override_font_sizes/font_size = 24
-text = "↗"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Text" type="VBoxContainer" parent="Root/TopArea/Stats/RemainingCard/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="Name" type="Label" parent="Root/TopArea/Stats/RemainingCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.337, 0.463, 0.365, 1)
-theme_override_font_sizes/font_size = 14
-text = "剩余步数"
-
-[node name="Value" type="Label" parent="Root/TopArea/Stats/RemainingCard/Content/Text"]
+[node name="RemainingValue" type="Label" parent="Root/TopArea/RemainingCard"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 40
 text = "2"
-
-[node name="LengthCard" type="PanelContainer" parent="Root/TopArea/Stats"]
-custom_minimum_size = Vector2(190, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"StatPill"
-
-[node name="Content" type="HBoxContainer" parent="Root/TopArea/Stats/LengthCard"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Icon" type="Label" parent="Root/TopArea/Stats/LengthCard/Content"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.263, 0.561, 0.376, 1)
-theme_override_font_sizes/font_size = 24
-text = "L"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Text" type="VBoxContainer" parent="Root/TopArea/Stats/LengthCard/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="Name" type="Label" parent="Root/TopArea/Stats/LengthCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.337, 0.463, 0.365, 1)
-theme_override_font_sizes/font_size = 14
-text = "最大身长"
-
-[node name="Value" type="Label" parent="Root/TopArea/Stats/LengthCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 23
-text = "3"
-
-[node name="FoodCard" type="PanelContainer" parent="Root/TopArea/Stats"]
-custom_minimum_size = Vector2(190, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"StatPill"
-
-[node name="Content" type="HBoxContainer" parent="Root/TopArea/Stats/FoodCard"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Icon" type="Label" parent="Root/TopArea/Stats/FoodCard/Content"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.875, 0.525, 0.161, 1)
-theme_override_font_sizes/font_size = 24
-text = "●"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Text" type="VBoxContainer" parent="Root/TopArea/Stats/FoodCard/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="Name" type="Label" parent="Root/TopArea/Stats/FoodCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.337, 0.463, 0.365, 1)
-theme_override_font_sizes/font_size = 14
-text = "食物"
-
-[node name="Value" type="Label" parent="Root/TopArea/Stats/FoodCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 23
-text = "0 / 0"
-
-[node name="StepsCard" type="PanelContainer" parent="Root/TopArea/Stats"]
-custom_minimum_size = Vector2(190, 66)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"StatPill"
-
-[node name="Content" type="HBoxContainer" parent="Root/TopArea/Stats/StepsCard"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="Icon" type="Label" parent="Root/TopArea/Stats/StepsCard/Content"]
-custom_minimum_size = Vector2(34, 34)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.353, 0.455, 0.722, 1)
-theme_override_font_sizes/font_size = 22
-text = "#"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Text" type="VBoxContainer" parent="Root/TopArea/Stats/StepsCard/Content"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = -3
-alignment = 1
-
-[node name="Name" type="Label" parent="Root/TopArea/Stats/StepsCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.337, 0.463, 0.365, 1)
-theme_override_font_sizes/font_size = 14
-text = "总步数"
-
-[node name="Value" type="Label" parent="Root/TopArea/Stats/StepsCard/Content/Text"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 23
-text = "0"
 
 [node name="ActionsPanel" type="PanelContainer" parent="Root/TopArea"]
 layout_mode = 1
@@ -204,13 +64,13 @@ theme_override_constants/separation = 10
 [node name="RestartBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
 custom_minimum_size = Vector2(140, 42)
 layout_mode = 2
-text = "重开 (R)"
+text = "重开"
 script = ExtResource("4_button")
 
 [node name="BackBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
 custom_minimum_size = Vector2(154, 42)
 layout_mode = 2
-text = "返回选关"
+text = "选关"
 script = ExtResource("4_button")
 vertical_alignment = 1
 
