@@ -531,6 +531,24 @@ func _check_deadlock() -> void:
 		return
 	if not grid.has_path(_head_cell, grid.goal_cell):
 		_fail()
+		return
+	# 身长可达判定（仅身长已达上限时触发）：尾部钉死 S，头可随时踏回身体
+	# 截断重规划——等效"从 S 重新出发、最多走 max_len-1 步"（身体不算阻挡，
+	# 可踏上即截断）。身长未满时玩家还能继续前进探索，不判定；伸到最长后若
+	# 终点与所有剩余食物都超出该范围，L 永不再增长（吃食物是唯一途径）且
+	# 可达范围只缩不增（机关不可逆）⇒ 必然死局。
+	if trail.size() < max_len:
+		return
+	if _spawn == null:
+		return
+	var reach := max_len - 1
+	var dist := grid.bfs_dist_map(_spawn.cell)
+	if dist.has(grid.goal_cell) and dist[grid.goal_cell] <= reach:
+		return  # 终点在当前身长可达范围内
+	for f in _foods:
+		if dist.has(f.cell) and dist[f.cell] <= reach:
+			return  # 还能吃到食物增大 L
+	_fail("身长不够… 够不着终点也吃不到食物")
 
 
 func _win() -> void:
@@ -542,12 +560,12 @@ func _win() -> void:
 	_hud.show_result("胜利！ 步数 %d" % steps)
 
 
-func _fail() -> void:
+func _fail(msg: String = "无路可走… 重开吧") -> void:
 	if finished:
 		return
 	finished = true
 	EventManager.level_failed.emit(level_id)
-	_hud.show_result("无路可走… 重开吧")
+	_hud.show_result(msg)
 
 
 func _update_hud() -> void:

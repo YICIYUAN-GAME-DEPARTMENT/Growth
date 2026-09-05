@@ -40,6 +40,26 @@ func can_step_into(c: Vector2i) -> bool:
 	return not is_blocked(c)
 
 
+## BFS：from 到全场各格的最短步数（可走格同 can_step，忽略自身身体）；
+## 不可达格不在返回字典中。
+func bfs_dist_map(from: Vector2i) -> Dictionary:
+	var dist := {}
+	if not in_bounds(from):
+		return dist
+	dist[from] = 0
+	var queue: Array[Vector2i] = [from]
+	var idx := 0
+	while idx < queue.size():
+		var cur: Vector2i = queue[idx]
+		idx += 1
+		for d in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			var n: Vector2i = cur + d
+			if not dist.has(n) and can_step_into(n):
+				dist[n] = dist[cur] + 1
+				queue.append(n)
+	return dist
+
+
 ## BFS 判定 from -> to 是否存在通路（忽略身长/自身身体，可走格同 can_step）
 func has_path(from: Vector2i, to: Vector2i) -> bool:
 	if not in_bounds(from) or not in_bounds(to):
