@@ -90,7 +90,6 @@ vframes = 4
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
 visible = false
-scale = Vector2(0.03, 0.03)
 texture = ExtResource("11_7q4nh")
 
 [node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("8_fxysh")]

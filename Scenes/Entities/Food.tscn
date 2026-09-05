@@ -8,5 +8,4 @@ position = Vector2(16, 16)
 script = ExtResource("1_food")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1425411707]
-scale = Vector2(0.03, 0.03)
 texture = ExtResource("2_5aq7r")

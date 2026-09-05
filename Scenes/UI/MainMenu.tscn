@@ -1,10 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://dd3mbxs2w5h0c"]
+[gd_scene format=3 uid="uid://dd3mbxs2w5h0c"]
 
 [ext_resource type="Script" uid="uid://cixd5fvjv8kyn" path="res://Scripts/UI/MainMenu.gd" id="1_menu"]
-[ext_resource type="Texture2D" path="res://Art/UI/UI_Garden_Backdrop_01.svg" id="2_backdrop"]
-[ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
-[ext_resource type="Script" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
-[node name="MainMenu" type="Control"]
+[ext_resource type="Texture2D" uid="uid://bq7jowfomnnco" path="res://ImportArt/MainMenu_Bg.png" id="3_t6w0q"]
+[ext_resource type="Theme" uid="uid://k3r1m0vyqv5q" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://dqob88e71yqmj" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
+
+[node name="MainMenu" type="Control" unique_id=1742837594]
 process_mode = 3
 layout_mode = 3
 anchors_preset = 15
@@ -15,7 +16,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_menu")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1009173156]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +24,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_backdrop")
+texture = ExtResource("3_t6w0q")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Atmosphere" type="ColorRect" parent="."]
+[node name="Atmosphere" type="ColorRect" parent="." unique_id=1161801403]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,8 +38,9 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.922, 0.745, 0.08)
 
-[node name="TitleStack" type="Control" parent="."]
+[node name="TitleStack" type="Control" parent="." unique_id=689379157]
 layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -390.0
@@ -48,7 +50,7 @@ offset_bottom = 250.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Back" type="Label" parent="TitleStack"]
+[node name="Back" type="Label" parent="TitleStack" unique_id=700103778]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -65,7 +67,7 @@ text = "阿吉与花海"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Depth" type="Label" parent="TitleStack"]
+[node name="Depth" type="Label" parent="TitleStack" unique_id=935583032]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -82,7 +84,7 @@ text = "阿吉与花海"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Front" type="Label" parent="TitleStack"]
+[node name="Front" type="Label" parent="TitleStack" unique_id=1219899723]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -97,8 +99,9 @@ text = "阿吉与花海"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Subtitle" type="Label" parent="."]
+[node name="Subtitle" type="Label" parent="." unique_id=536298349]
 layout_mode = 1
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -300.0
@@ -106,19 +109,18 @@ offset_top = 270.0
 offset_right = 300.0
 offset_bottom = 312.0
 grow_horizontal = 2
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.142, 0.314, 0.216, 0.94)
-theme_override_colors/font_outline_color = Color(1, 0.919, 0.706, 0.88)
 theme_override_colors/font_shadow_color = Color(0.329, 0.184, 0.11, 0.24)
-theme_override_constants/outline_size = 2
+theme_override_colors/font_outline_color = Color(1, 0.919, 0.706, 0.88)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 27
 text = "algee & blooms"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MenuFrame" type="PanelContainer" parent="."]
+[node name="MenuFrame" type="PanelContainer" parent="." unique_id=1662679705]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -133,37 +135,37 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"GardenPanel"
 
-[node name="Margin" type="MarginContainer" parent="MenuFrame"]
+[node name="Margin" type="MarginContainer" parent="MenuFrame" unique_id=1741120943]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 4
 
-[node name="Content" type="VBoxContainer" parent="MenuFrame/Margin"]
+[node name="Content" type="VBoxContainer" parent="MenuFrame/Margin" unique_id=911998848]
 layout_mode = 2
 theme_override_constants/separation = 13
 
-[node name="StartButton" type="Button" parent="MenuFrame/Margin/Content"]
+[node name="StartButton" type="Button" parent="MenuFrame/Margin/Content" unique_id=1316976107]
 custom_minimum_size = Vector2(470, 60)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
 text = "开始"
 script = ExtResource("4_button")
 
-[node name="SettingsButton" type="Button" parent="MenuFrame/Margin/Content"]
+[node name="SettingsButton" type="Button" parent="MenuFrame/Margin/Content" unique_id=1616432765]
 custom_minimum_size = Vector2(470, 60)
 layout_mode = 2
 text = "设置"
 script = ExtResource("4_button")
 
-[node name="QuitButton" type="Button" parent="MenuFrame/Margin/Content"]
+[node name="QuitButton" type="Button" parent="MenuFrame/Margin/Content" unique_id=684709758]
 custom_minimum_size = Vector2(470, 60)
 layout_mode = 2
 text = "退出"
 script = ExtResource("4_button")
 
-[node name="SettingsOverlay" type="Control" parent="."]
+[node name="SettingsOverlay" type="Control" parent="." unique_id=282495872]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -171,9 +173,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
-[node name="Dim" type="ColorRect" parent="SettingsOverlay"]
+[node name="Dim" type="ColorRect" parent="SettingsOverlay" unique_id=303446361]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -182,7 +183,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.075, 0.18, 0.118, 0.62)
 
-[node name="Center" type="CenterContainer" parent="SettingsOverlay"]
+[node name="Center" type="CenterContainer" parent="SettingsOverlay" unique_id=862025644]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -190,32 +191,32 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="SettingsOverlay/Center"]
+[node name="Panel" type="PanelContainer" parent="SettingsOverlay/Center" unique_id=893804645]
 custom_minimum_size = Vector2(520, 260)
 layout_mode = 2
 theme_type_variation = &"ResultPanel"
 
-[node name="Content" type="VBoxContainer" parent="SettingsOverlay/Center/Panel"]
+[node name="Content" type="VBoxContainer" parent="SettingsOverlay/Center/Panel" unique_id=972321016]
 layout_mode = 2
 theme_override_constants/separation = 14
 
-[node name="Title" type="Label" parent="SettingsOverlay/Center/Panel/Content"]
+[node name="Title" type="Label" parent="SettingsOverlay/Center/Panel/Content" unique_id=1053647233]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.169, 0.357, 0.243, 1)
 theme_override_font_sizes/font_size = 30
 text = "设置"
 horizontal_alignment = 1
 
-[node name="Divider" type="HSeparator" parent="SettingsOverlay/Center/Panel/Content"]
+[node name="Divider" type="HSeparator" parent="SettingsOverlay/Center/Panel/Content" unique_id=1460289908]
 layout_mode = 2
 
-[node name="FullscreenButton" type="Button" parent="SettingsOverlay/Center/Panel/Content"]
+[node name="FullscreenButton" type="Button" parent="SettingsOverlay/Center/Panel/Content" unique_id=247609520]
 custom_minimum_size = Vector2(350, 54)
 layout_mode = 2
 text = "全屏: 关"
 script = ExtResource("4_button")
 
-[node name="BackButton" type="Button" parent="SettingsOverlay/Center/Panel/Content"]
+[node name="BackButton" type="Button" parent="SettingsOverlay/Center/Panel/Content" unique_id=789259346]
 custom_minimum_size = Vector2(350, 54)
 layout_mode = 2
 text = "返回"

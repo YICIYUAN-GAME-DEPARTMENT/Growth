@@ -9,5 +9,4 @@ script = ExtResource("1_goal")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1696998561]
 position = Vector2(0, -8)
-scale = Vector2(0.03, 0.03)
 texture = ExtResource("2_vs13i")

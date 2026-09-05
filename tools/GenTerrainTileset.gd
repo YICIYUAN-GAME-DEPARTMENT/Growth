@@ -4,7 +4,7 @@ extends Node
 ## ----------------------------------------------------------------------------
 ## 图源（每类地形一张独立纹理，不再合用单图集）：
 ##   Art/Tiles/terrain_floor.svg（512×32）           → TerrainFloor.tres
-##   Art/Tiles/terrain_wall.svg （512×32）           → TerrainWall.tres
+##   ImportArt/Terrarin-wall.png（512×32，正式墙图）  → TerrainWall.tres
 ##   Art/Tiles/terrain_mech.svg （512×96，3 行=生长动画帧 0/1/2） → TerrainMech.tres
 ## 每行 16 列 = 4 角位掩码（bit0=TL,bit1=TR,bit2=BL,bit3=BR），实测与 engine 选择一致。
 ## 瓦片坐标 = (mask, row)：floor/wall 只有 row0；mech 的 3 行全建瓦，
@@ -14,7 +14,7 @@ extends Node
 
 const SRCS := {
 	"floor": { "tex": "res://Art/Tiles/terrain_floor.svg", "out": "res://Art/Tiles/TerrainFloor.tres", "rows": 1 },
-	"wall": { "tex": "res://Art/Tiles/terrain_wall.svg", "out": "res://Art/Tiles/TerrainWall.tres", "rows": 1 },
+	"wall": { "tex": "res://ImportArt/Terrarin-wall.png", "out": "res://Art/Tiles/TerrainWall.tres", "rows": 1 },
 	"mech": { "tex": "res://Art/Tiles/terrain_mech.svg", "out": "res://Art/Tiles/TerrainMech.tres", "rows": 3 },
 }
 

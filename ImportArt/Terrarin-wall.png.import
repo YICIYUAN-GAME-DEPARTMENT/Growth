@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7s3tn4mr0cak"
-path="res://.godot/imported/terrain_wall.svg-334d54f610373f4ed87cae55983dfffe.ctex"
+uid="uid://bfatkrrl8kgy6"
+path="res://.godot/imported/Terrarin-wall.png-e37b1f412763e0801ad172f51d83f5b5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/terrain_wall.svg"
-dest_files=["res://.godot/imported/terrain_wall.svg-334d54f610373f4ed87cae55983dfffe.ctex"]
+source_file="res://ImportArt/Terrarin-wall.png"
+dest_files=["res://.godot/imported/Terrarin-wall.png-e37b1f412763e0801ad172f51d83f5b5.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
