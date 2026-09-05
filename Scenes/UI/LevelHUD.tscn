@@ -1,11 +1,15 @@
-[gd_scene format=3 uid="uid://brrve022q1vwa"]
+[gd_scene load_steps=4 format=3 uid="uid://brrve022q1vwa"]
 
 [ext_resource type="Script" uid="uid://c60nbwqp4usbk" path="res://Scripts/UI/LevelHUD.gd" id="1_hud"]
+[ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
+[ext_resource type="Script" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
 
-[node name="LevelHUD" type="CanvasLayer" unique_id=1331169913]
+[node name="LevelHUD" type="CanvasLayer"]
+process_mode = 3
+layer = 10
 script = ExtResource("1_hud")
 
-[node name="Root" type="Control" parent="." unique_id=341776479]
+[node name="Root" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,83 +17,101 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("3_theme")
 
-[node name="Top" type="Control" parent="Root" unique_id=1127884272]
+[node name="TopArea" type="Control" parent="Root"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 64.0
+offset_bottom = 92.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="Panel" type="Control" parent="Root/Top" unique_id=396460168]
+[node name="StatsPanel" type="PanelContainer" parent="Root/TopArea"]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 12.0
-offset_top = 8.0
-offset_right = -12.0
-offset_bottom = 56.0
-grow_horizontal = 2
+offset_left = 20.0
+offset_top = 18.0
+offset_right = 672.0
+offset_bottom = 76.0
 mouse_filter = 2
+theme_type_variation = &"SoftPanel"
 
-[node name="HBox" type="HBoxContainer" parent="Root/Top/Panel" unique_id=947862377]
+[node name="Margin" type="MarginContainer" parent="Root/TopArea/StatsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_right = 2
+
+[node name="Stats" type="HBoxContainer" parent="Root/TopArea/StatsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LengthPill" type="PanelContainer" parent="Root/TopArea/StatsPanel/Margin/Stats"]
+layout_mode = 2
+theme_type_variation = &"StatPill"
+
+[node name="LabelLen" type="Label" parent="Root/TopArea/StatsPanel/Margin/Stats/LengthPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
+theme_override_font_sizes/font_size = 18
+text = "最大身长 L  ·  3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FoodPill" type="PanelContainer" parent="Root/TopArea/StatsPanel/Margin/Stats"]
+layout_mode = 2
+theme_type_variation = &"StatPill"
+
+[node name="LabelFood" type="Label" parent="Root/TopArea/StatsPanel/Margin/Stats/FoodPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
+theme_override_font_sizes/font_size = 18
+text = "食物  ·  0 / 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StepsPill" type="PanelContainer" parent="Root/TopArea/StatsPanel/Margin/Stats"]
+layout_mode = 2
+theme_type_variation = &"StatPill"
+
+[node name="LabelSteps" type="Label" parent="Root/TopArea/StatsPanel/Margin/Stats/StepsPill"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
+theme_override_font_sizes/font_size = 18
+text = "步数  ·  0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionsPanel" type="PanelContainer" parent="Root/TopArea"]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -24.0
-offset_right = 1256.0
-offset_bottom = 24.0
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 28
-
-[node name="LabelLen" type="Label" parent="Root/Top/Panel/HBox" unique_id=94688568]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "最大身长 L: 3"
-
-[node name="LabelFood" type="Label" parent="Root/Top/Panel/HBox" unique_id=1672884974]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "食物: 0/0"
-
-[node name="LabelSteps" type="Label" parent="Root/Top/Panel/HBox" unique_id=571948753]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-text = "步数: 0"
-
-[node name="BackBtn" type="Button" parent="Root/Top/Panel" unique_id=1700317559]
-layout_mode = 1
-anchors_preset = 6
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -24.0
-offset_bottom = 24.0
+offset_left = -348.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = 76.0
 grow_horizontal = 0
-grow_vertical = 2
-text = "返回选关"
+mouse_filter = 1
+theme_type_variation = &"SoftPanel"
 
-[node name="RestartBtn" type="Button" parent="Root/Top/Panel" unique_id=1181101758]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -156.0
-offset_top = -24.0
-offset_right = -91.0
-offset_bottom = 24.0
-grow_horizontal = 0
-grow_vertical = 2
+[node name="Actions" type="HBoxContainer" parent="Root/TopArea/ActionsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RestartBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
+custom_minimum_size = Vector2(140, 42)
+layout_mode = 2
 text = "重开 (R)"
+script = ExtResource("4_button")
 
-[node name="Overlay" type="Control" parent="Root" unique_id=1184759294]
+[node name="BackBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
+custom_minimum_size = Vector2(154, 42)
+layout_mode = 2
+text = "返回选关"
+script = ExtResource("4_button")
+vertical_alignment = 1
+
+[node name="Overlay" type="Control" parent="Root"]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -97,23 +119,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 0
 
-[node name="Dim" type="ColorRect" parent="Root/Overlay" unique_id=1344550370]
+[node name="Dim" type="ColorRect" parent="Root/Overlay"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -360.0
-offset_right = 200.0
-offset_bottom = 360.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.55)
+color = Color(0.075, 0.18, 0.118, 0.62)
 
-[node name="Center" type="CenterContainer" parent="Root/Overlay" unique_id=1615853400]
+[node name="Center" type="CenterContainer" parent="Root/Overlay"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -121,23 +138,101 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Root/Overlay/Center" unique_id=28957463]
+[node name="Panel" type="PanelContainer" parent="Root/Overlay/Center"]
+custom_minimum_size = Vector2(520, 244)
 layout_mode = 2
+theme_type_variation = &"ResultPanel"
 
-[node name="VBox" type="VBoxContainer" parent="Root/Overlay/Center/Panel" unique_id=56166037]
+[node name="Content" type="VBoxContainer" parent="Root/Overlay/Center/Panel"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 14
 
-[node name="Text" type="Label" parent="Root/Overlay/Center/Panel/VBox" unique_id=463298144]
+[node name="Text" type="Label" parent="Root/Overlay/Center/Panel/Content"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.169, 0.357, 0.243, 1)
+theme_override_font_sizes/font_size = 30
 text = "胜利！"
 horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
 
-[node name="RestartBtn" type="Button" parent="Root/Overlay/Center/Panel/VBox" unique_id=2008155919]
+[node name="Divider" type="HSeparator" parent="Root/Overlay/Center/Panel/Content"]
 layout_mode = 2
-text = "重开本关"
 
-[node name="BackBtn" type="Button" parent="Root/Overlay/Center/Panel/VBox" unique_id=1879821970]
+[node name="RestartBtn" type="Button" parent="Root/Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(350, 54)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "重开本关"
+script = ExtResource("4_button")
+
+[node name="BackBtn" type="Button" parent="Root/Overlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(350, 50)
 layout_mode = 2
 text = "返回选关"
+script = ExtResource("4_button")
+
+[node name="PauseOverlay" type="Control" parent="Root"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="Root/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.075, 0.18, 0.118, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Root/PauseOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Root/PauseOverlay/Center"]
+custom_minimum_size = Vector2(520, 326)
+layout_mode = 2
+theme_type_variation = &"ResultPanel"
+
+[node name="Content" type="VBoxContainer" parent="Root/PauseOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Root/PauseOverlay/Center/Panel/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.169, 0.357, 0.243, 1)
+theme_override_font_sizes/font_size = 30
+text = "暂停"
+horizontal_alignment = 1
+
+[node name="Divider" type="HSeparator" parent="Root/PauseOverlay/Center/Panel/Content"]
+layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(350, 54)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "继续"
+script = ExtResource("4_button")
+
+[node name="RestartButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(350, 54)
+layout_mode = 2
+text = "重开"
+script = ExtResource("4_button")
+
+[node name="ExitButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
+custom_minimum_size = Vector2(350, 54)
+layout_mode = 2
+text = "退出"
+script = ExtResource("4_button")

@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_asxnk"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="4_mm6ix"]
-[ext_resource type="TileSet" path="res://Art/Tiles/PlayerSnek.tres" id="5_n4ce2"]
+[ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="5_n4ce2"]
 [ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="6_mm6ix"]
 [ext_resource type="Texture2D" uid="uid://bt8cohaharnou" path="res://Art/Sprites/player_tail.svg" id="7_pj3xo"]
 
