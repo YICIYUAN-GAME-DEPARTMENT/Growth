@@ -569,4 +569,5 @@ func _fail(msg: String = "无路可走… 重开吧") -> void:
 
 
 func _update_hud() -> void:
-	_hud.update_stats(max_len, food_eaten, total_food, steps)
+	var remaining_steps := maxi(max_len - trail.size(), 0)
+	_hud.update_stats(max_len, food_eaten, total_food, steps, remaining_steps)
