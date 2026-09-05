@@ -1,10 +1,30 @@
 {
-  "title": "Level01-胜利",
+  "title": "Level01-胜利·第一朵蓝花",
   "lines": [
     {
-      "speaker": "guide",
-      "pose": "happy",
-      "text": "漂亮！你已经知道怎么让小家伙走到出口了。"
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "查理，看——我们够到了！那朵高能蓝花就在眼前。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "高能蓝花，确认接入。核心重校准开始……阿吉，我的运算，真的变快了。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "太好了……这一路的蓝花没白采。现在感觉怎么样？"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "思路清晰多了。原来花海记得这么多东西。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "那下一片花海，我们再一起去。走吧，查理。"
     }
   ]
 }

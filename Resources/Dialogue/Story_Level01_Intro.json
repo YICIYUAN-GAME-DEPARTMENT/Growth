@@ -1,20 +1,45 @@
 {
-  "title": "Level01-开场",
+  "title": "Level01-开场·花海入口",
   "lines": [
     {
-      "speaker": "guide",
+      "speaker": "algee",
       "pose": "normal",
-      "text": "你好，我是向导。你控制的小家伙吃掉食物会变长，但长得太快也可能卡住自己。"
+      "text": "查理，前面那一片蓝色就是花海了。你说的那朵花，真的在里面吗？"
     },
     {
-      "speaker": "",
-      "pose": "",
-      "text": "目标是到达闪着金光的出口；机关会随步数生长，小心别被堵住。"
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "扫描确认，阿吉。高能蓝花就在花海深处——摘下它，我的处理核心就能升级。"
     },
     {
-      "speaker": "guide",
-      "pose": "happy",
-      "text": "数着格子走吧。这一关里，中间的食物能帮你加长身长。"
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "但我不能碰那些花……防护服会护住我，摘花就只能拜托你了。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "嗯，只要维生管线够长，我就能跟在你身后一路采样。路上那些蓝色花瓣也别漏掉，吸收一片，管线就伸长一段。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "小心还在运转的旧机关，它们每隔几步就会伸出一截挡板；路一旦被堵死，我们就出不去了。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "我会绕开它们走。等够到花海尽头那朵高能蓝花，就算成功。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "……阿吉，摘下那朵花以后，我会变得更聪明一些吗？"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "会的。不过无论变成什么样，你永远是我最好的搭档。出发！"
     }
   ]
 }

@@ -1,10 +1,15 @@
 {
   "characters": {
-    "guide": {
-      "name": "向导",
+    "algee": {
+      "name": "阿吉",
       "poses": {
-        "normal": "res://Art/Portraits/portrait_guide_normal.svg",
-        "happy": "res://Art/Portraits/portrait_guide_happy.svg"
+        "normal": "res://ImportArt/Algee_illusitration.png"
+      }
+    },
+    "charlie": {
+      "name": "查理",
+      "poses": {
+        "normal": "res://ImportArt/Charlie_illusitration.png"
       }
     }
   }
