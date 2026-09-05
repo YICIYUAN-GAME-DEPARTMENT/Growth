@@ -1,12 +1,13 @@
 class_name LevelHUD
 extends CanvasLayer
 ## ============================================================================
-## LevelHUD — 局内顶栏 + 结算覆盖（全部场景树布局；脚本只更新文字/显隐）
+## LevelHUD — 局内顶栏 + 结算覆盖（全部场景树布局；脚本只更新数值/显隐）
 ## ============================================================================
 
-@onready var _max_len: Label = $Root/TopArea/StatsPanel/Margin/Stats/LengthPill/LabelLen
-@onready var _food: Label = $Root/TopArea/StatsPanel/Margin/Stats/FoodPill/LabelFood
-@onready var _steps: Label = $Root/TopArea/StatsPanel/Margin/Stats/StepsPill/LabelSteps
+@onready var _remaining_steps_value: Label = $Root/TopArea/Stats/RemainingCard/Content/Text/Value
+@onready var _max_len_value: Label = $Root/TopArea/Stats/LengthCard/Content/Text/Value
+@onready var _food_value: Label = $Root/TopArea/Stats/FoodCard/Content/Text/Value
+@onready var _steps_value: Label = $Root/TopArea/Stats/StepsCard/Content/Text/Value
 @onready var _overlay: Control = $Root/Overlay
 @onready var _overlay_text: Label = $Root/Overlay/Center/Panel/Content/Text
 @onready var _restart: Button = $Root/TopArea/ActionsPanel/Actions/RestartBtn
@@ -40,10 +41,17 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 
-func update_stats(max_len: int, food_eaten: int, total_food: int, steps: int) -> void:
-	_max_len.text = "最大身长 L  ·  %d" % max_len
-	_food.text = "食物  ·  %d / %d" % [food_eaten, total_food]
-	_steps.text = "步数  ·  %d" % steps
+func update_stats(
+	max_len: int,
+	food_eaten: int,
+	total_food: int,
+	steps: int,
+	remaining_steps: int
+) -> void:
+	_max_len_value.text = str(max_len)
+	_food_value.text = "%d / %d" % [food_eaten, total_food]
+	_steps_value.text = str(steps)
+	_remaining_steps_value.text = str(remaining_steps)
 
 
 func show_result(text: String) -> void:

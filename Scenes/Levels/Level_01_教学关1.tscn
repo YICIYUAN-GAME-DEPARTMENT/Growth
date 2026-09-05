@@ -71,4 +71,5 @@ texture = ExtResource("15_eche3")
 [node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("3_fgguq")]
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
-position = Vector2(640, 360)
+position = Vector2(577, 305)
+zoom = Vector2(4.98, 4.495)

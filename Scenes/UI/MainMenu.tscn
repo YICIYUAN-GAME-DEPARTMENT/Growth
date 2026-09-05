@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://dd3mbxs2w5h0c"]
+[gd_scene load_steps=6 format=3 uid="uid://dd3mbxs2w5h0c"]
 
 [ext_resource type="Script" uid="uid://cixd5fvjv8kyn" path="res://Scripts/UI/MainMenu.gd" id="1_menu"]
 [ext_resource type="Texture2D" path="res://Art/UI/UI_Garden_Backdrop_01.svg" id="2_backdrop"]
 [ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
 [ext_resource type="Script" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
+[sub_resource type="SystemFont" id="FontSubtitle"]
+font_names = PackedStringArray("Georgia", "Times New Roman", "Noto Serif")
+font_italic = true
+font_weight = 500
 
 [node name="MainMenu" type="Control"]
 process_mode = 3
@@ -62,7 +66,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.278, 0.447, 0.322, 0.5)
 theme_override_font_sizes/font_size = 104
-text = "GROWTH"
+text = "阿吉与花海"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -79,7 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 0.745, 0.443, 0.9)
 theme_override_font_sizes/font_size = 104
-text = "GROWTH"
+text = "阿吉与花海"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -94,7 +98,29 @@ theme_override_colors/font_color = Color(1, 0.966, 0.82, 1)
 theme_override_colors/font_outline_color = Color(0.188, 0.4, 0.278, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 104
-text = "GROWTH"
+text = "阿吉与花海"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 270.0
+offset_right = 300.0
+offset_bottom = 312.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.142, 0.314, 0.216, 0.94)
+theme_override_colors/font_outline_color = Color(1, 0.919, 0.706, 0.88)
+theme_override_colors/font_shadow_color = Color(0.329, 0.184, 0.11, 0.24)
+theme_override_constants/outline_size = 2
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = SubResource("FontSubtitle")
+theme_override_font_sizes/font_size = 27
+text = "algee & blooms"
 horizontal_alignment = 1
 vertical_alignment = 1
 
