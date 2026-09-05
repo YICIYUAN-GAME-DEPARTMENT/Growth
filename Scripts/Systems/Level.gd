@@ -547,8 +547,9 @@ func _fail() -> void:
 		return
 	finished = true
 	EventManager.level_failed.emit(level_id)
-	_hud.show_result("无路可走… 重开吧")
+	_hud.show_result("失败：无路可走")
 
 
 func _update_hud() -> void:
-	_hud.update_stats(max_len, food_eaten, total_food, steps)
+	var remaining_steps := maxi(max_len - trail.size(), 0)
+	_hud.update_stats(max_len, food_eaten, total_food, steps, remaining_steps)
