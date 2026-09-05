@@ -1,22 +1,27 @@
 [gd_scene format=3 uid="uid://cga4xfbjrp1xt"]
 
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_level"]
-[ext_resource type="TileSet" uid="uid://dacmdx2iwbv7p" path="res://Art/Tiles/TerrainFloor.tres" id="2_n4ce2"]
+[ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="2_floor"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://ImportArt/BG.png" id="2_mm6ix"]
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_asxnk"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="4_mm6ix"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="5_n4ce2"]
-[ext_resource type="Texture2D" uid="uid://1yeynhgj0rlb" path="res://Art/Sprites/player_head.svg" id="6_mm6ix"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://ImportArt/Algee-all.png" id="6_mm6ix"]
 [ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="7_asxnk"]
 
-[node name="Level" type="Node2D" unique_id=1958937689]
+[node name="Level2" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_level")
 level_name = "新关卡"
 
 [node name="World" type="Node2D" parent="." unique_id=2088720049]
 
+[node name="Bg" type="Sprite2D" parent="World" unique_id=1483216229]
+position = Vector2(640, 360)
+texture = ExtResource("2_mm6ix")
+
 [node name="Ground" type="TileMapLayer" parent="World" unique_id=620393186]
-tile_set = ExtResource("2_n4ce2")
+tile_set = ExtResource("2_floor")
 
 [node name="Obstacles" type="TileMapLayer" parent="World" unique_id=1559005235]
 tile_set = ExtResource("3_asxnk")
@@ -40,7 +45,6 @@ vframes = 4
 
 [node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
 visible = false
-scale = Vector2(0.03, 0.03)
 texture = ExtResource("7_asxnk")
 
 [node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("3_hud")]

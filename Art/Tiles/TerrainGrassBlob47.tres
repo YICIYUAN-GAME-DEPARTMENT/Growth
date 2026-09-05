@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" format=3 uid="uid://dbo1r0lej0lvf"]
+[gd_resource type="TileSet" format=3 uid="uid://7oycm5hew1qb"]
 
-[ext_resource type="Texture2D" uid="uid://3u0mjlasj55t" path="res://ImportArt/TILE_Wall_Blob47__01.png" id="1_5jwg1"]
+[ext_resource type="Texture2D" uid="uid://bxfklfrdt65md" path="res://Art/Tiles/TILE_Grass_Blob47_01.png" id="1_grass"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vaabj"]
-texture = ExtResource("1_5jwg1")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_grass47"]
+texture = ExtResource("1_grass")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -338,6 +338,6 @@ texture_region_size = Vector2i(32, 32)
 [resource]
 tile_size = Vector2i(32, 32)
 terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "wall_blob47"
-terrain_set_0/terrain_0/color = Color(0.5, 0.3, 0.3, 1)
-sources/0 = SubResource("TileSetAtlasSource_vaabj")
+terrain_set_0/terrain_0/name = "grass_blob47"
+terrain_set_0/terrain_0/color = Color(0.35, 0.72, 0.12, 1)
+sources/0 = SubResource("TileSetAtlasSource_grass47")

@@ -1,27 +1,25 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene format=3 uid="uid://cyavom0g7qlvu"]
 
-[ext_resource type="Script" path="res://Scripts/Systems/DialogueOverlay.gd" id="1_overlay"]
-[ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="2_theme"]
+[ext_resource type="Script" uid="uid://3kqjomjjvmx" path="res://Scripts/Systems/DialogueOverlay.gd" id="1_overlay"]
+[ext_resource type="Theme" uid="uid://k3r1m0vyqv5q" path="res://UI/Theme/GardenTheme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleEmptyCatch"]
 
-[node name="DialogueOverlay" type="CanvasLayer"]
+[node name="DialogueOverlay" type="CanvasLayer" unique_id=1169545058]
 process_mode = 3
 layer = 20
-visible = false
 script = ExtResource("1_overlay")
 
-[node name="Root" type="Control" parent="."]
+[node name="Root" type="Control" parent="." unique_id=431143701]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 theme = ExtResource("2_theme")
 
-[node name="CatchBtn" type="Button" parent="Root"]
+[node name="CatchBtn" type="Button" parent="Root" unique_id=1127267317]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,11 +28,11 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleEmptyCatch")
-theme_override_styles/hover = SubResource("StyleEmptyCatch")
 theme_override_styles/pressed = SubResource("StyleEmptyCatch")
+theme_override_styles/hover = SubResource("StyleEmptyCatch")
 theme_override_styles/focus = SubResource("StyleEmptyCatch")
 
-[node name="Dim" type="ColorRect" parent="Root"]
+[node name="Dim" type="ColorRect" parent="Root" unique_id=458671407]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,71 +40,75 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.043, 0.09, 0.063, 0.8)
+color = Color(0.982, 1, 0.94, 0.09803922)
 
-[node name="Portrait" type="TextureRect" parent="Root"]
-visible = false
+[node name="Portrait" type="TextureRect" parent="Root" unique_id=570378808]
 layout_mode = 1
-anchor_right = 1.0
-offset_bottom = 432.0
-grow_horizontal = 2
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 555.0
+offset_bottom = 186.1225
+grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DialogueBox" type="PanelContainer" parent="Root"]
+[node name="DialogueBox" type="PanelContainer" parent="Root" unique_id=1251770722]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 130.0
-offset_top = -300.0
-offset_right = -130.0
-offset_bottom = -28.0
+offset_left = 15.0
+offset_top = -285.0
+offset_right = -9.0
+offset_bottom = -37.0
 grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 theme_type_variation = &"GardenPanel"
 
-[node name="Content" type="VBoxContainer" parent="Root/DialogueBox"]
+[node name="Content" type="VBoxContainer" parent="Root/DialogueBox" unique_id=595666215]
+custom_minimum_size = Vector2(1200, 200)
 layout_mode = 2
-theme_override_constants/separation = 8
+size_flags_horizontal = 4
+size_flags_vertical = 4
 mouse_filter = 2
+theme_override_constants/separation = 8
 
-[node name="Name" type="Label" parent="Root/DialogueBox/Content"]
-visible = false
+[node name="Name" type="Label" parent="Root/DialogueBox/Content" unique_id=340030909]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.929, 0.561, 0.345, 1)
-theme_override_font_sizes/font_size = 30
-mouse_filter = 2
+theme_override_font_sizes/font_size = 34
 vertical_alignment = 1
 
-[node name="Text" type="Label" parent="Root/DialogueBox/Content"]
+[node name="Text" type="Label" parent="Root/DialogueBox/Content" unique_id=440234231]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
 theme_override_font_sizes/font_size = 25
-mouse_filter = 2
 autowrap_mode = 2
 
-[node name="ContinueHint" type="Label" parent="Root/DialogueBox/Content"]
+[node name="ContinueHint" type="Label" parent="Root/DialogueBox/Content" unique_id=1706676535]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.929, 0.561, 0.345, 1)
 theme_override_font_sizes/font_size = 22
-mouse_filter = 2
 text = "▼"
 horizontal_alignment = 2
 
-[node name="SkipBtn" type="Button" parent="Root"]
+[node name="SkipBtn" type="Button" parent="Root" unique_id=241743490]
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 3
 anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_left = -150.0
-offset_top = 20.0
-offset_right = -24.0
-offset_bottom = 76.0
+anchor_bottom = 1.0
+offset_left = -148.0
+offset_top = -363.0
+offset_right = -22.0
+offset_bottom = -307.0
 grow_horizontal = 0
+grow_vertical = 0
 focus_mode = 0
 text = "跳过"

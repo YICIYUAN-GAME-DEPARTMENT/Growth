@@ -1,15 +1,64 @@
-[gd_scene load_steps=4 format=3 uid="uid://brrve022q1vwa"]
+[gd_scene format=3 uid="uid://brrve022q1vwa"]
 
 [ext_resource type="Script" uid="uid://c60nbwqp4usbk" path="res://Scripts/UI/LevelHUD.gd" id="1_hud"]
-[ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
-[ext_resource type="Script" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
+[ext_resource type="Theme" uid="uid://k3r1m0vyqv5q" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://dqob88e71yqmj" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
 
-[node name="LevelHUD" type="CanvasLayer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ig1k"]
+bg_color = Color(0.972549, 0.9490196, 0.8627451, 1)
+border_color = Color(0.972549, 0.9490196, 0.8627451, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8yrgd"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(1, 0.976, 0.886, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.314, 0.514, 0.365, 0.82)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+shadow_color = Color(0.18, 0.31, 0.22, 0.2)
+shadow_size = 7
+shadow_offset = Vector2(0, 5)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_8yrgd"]
+thickness = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8mpj"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.9490196, 0.61960787, 0.37254903, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.314, 0.514, 0.365, 0.7)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.18, 0.31, 0.22, 0.16)
+shadow_size = 5
+shadow_offset = Vector2(0, 4)
+
+[node name="LevelHUD" type="CanvasLayer" unique_id=1149394797]
 process_mode = 3
 layer = 10
 script = ExtResource("1_hud")
 
-[node name="Root" type="Control" parent="."]
+[node name="Root" type="Control" parent="." unique_id=162793811]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +68,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("3_theme")
 
-[node name="TopArea" type="Control" parent="Root"]
+[node name="TopArea" type="Control" parent="Root" unique_id=774789840]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -27,16 +76,31 @@ offset_bottom = 92.0
 grow_horizontal = 2
 mouse_filter = 2
 
-[node name="RemainingCard" type="PanelContainer" parent="Root/TopArea"]
-layout_mode = 1
-offset_left = 20.0
-offset_top = 10.0
-offset_right = 100.0
-offset_bottom = 90.0
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/TopArea" unique_id=27681162]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 17.0
+offset_right = 640.0
+offset_bottom = 97.0
+
+[node name="Label" type="Label" parent="Root/TopArea/HBoxContainer" unique_id=1633810609]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_7ig1k")
+text = "剩余步数"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RemainingCard" type="PanelContainer" parent="Root/TopArea/HBoxContainer" unique_id=1005584410]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"CounterCard"
+theme_override_styles/panel = SubResource("StyleBoxFlat_8yrgd")
 
-[node name="RemainingValue" type="Label" parent="Root/TopArea/RemainingCard"]
+[node name="RemainingValue" type="Label" parent="Root/TopArea/HBoxContainer/RemainingCard" unique_id=1074521201]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
 theme_override_font_sizes/font_size = 40
@@ -44,7 +108,36 @@ text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActionsPanel" type="PanelContainer" parent="Root/TopArea"]
+[node name="Control" type="Control" parent="Root/TopArea/HBoxContainer" unique_id=1655944570]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="PetalLabel" type="Label" parent="Root/TopArea/HBoxContainer" unique_id=1633810610]
+custom_minimum_size = Vector2(180, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_7ig1k")
+text = "花瓣效益"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PetalCard" type="PanelContainer" parent="Root/TopArea/HBoxContainer" unique_id=1005584411]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CounterCard"
+theme_override_styles/panel = SubResource("StyleBoxFlat_8yrgd")
+
+[node name="PetalValue" type="Label" parent="Root/TopArea/HBoxContainer/PetalCard" unique_id=1074521202]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
+theme_override_font_sizes/font_size = 40
+text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionsPanel" type="PanelContainer" parent="Root/TopArea" unique_id=1118754327]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -57,24 +150,23 @@ grow_horizontal = 0
 mouse_filter = 1
 theme_type_variation = &"SoftPanel"
 
-[node name="Actions" type="HBoxContainer" parent="Root/TopArea/ActionsPanel"]
+[node name="Actions" type="HBoxContainer" parent="Root/TopArea/ActionsPanel" unique_id=43556367]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RestartBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
+[node name="RestartBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions" unique_id=216658123]
 custom_minimum_size = Vector2(140, 42)
 layout_mode = 2
-text = "重开"
+text = "重新开始"
 script = ExtResource("4_button")
 
-[node name="BackBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions"]
+[node name="BackBtn" type="Button" parent="Root/TopArea/ActionsPanel/Actions" unique_id=1375779957]
 custom_minimum_size = Vector2(154, 42)
 layout_mode = 2
 text = "选关"
 script = ExtResource("4_button")
-vertical_alignment = 1
 
-[node name="Overlay" type="Control" parent="Root"]
+[node name="Overlay" type="Control" parent="Root" unique_id=1751804261]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -82,18 +174,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
-[node name="Dim" type="ColorRect" parent="Root/Overlay"]
+[node name="Dim" type="ColorRect" parent="Root/Overlay" unique_id=134560667]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.075, 0.18, 0.118, 0.62)
+color = Color(1, 1, 1, 0)
 
-[node name="Center" type="CenterContainer" parent="Root/Overlay"]
+[node name="Center" type="CenterContainer" parent="Root/Overlay" unique_id=1930914322]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,41 +192,60 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Root/Overlay/Center"]
-custom_minimum_size = Vector2(520, 244)
+[node name="Panel" type="PanelContainer" parent="Root/Overlay/Center" unique_id=1407226050]
+custom_minimum_size = Vector2(300, 480)
 layout_mode = 2
 theme_type_variation = &"ResultPanel"
 
-[node name="Content" type="VBoxContainer" parent="Root/Overlay/Center/Panel"]
+[node name="Content" type="VBoxContainer" parent="Root/Overlay/Center/Panel" unique_id=56322919]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 14
 
-[node name="Text" type="Label" parent="Root/Overlay/Center/Panel/Content"]
+[node name="Text" type="Label" parent="Root/Overlay/Center/Panel/Content" unique_id=1058861317]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.169, 0.357, 0.243, 1)
+theme_override_colors/font_color = Color(0.4, 0.5019608, 0.41568628, 1)
 theme_override_font_sizes/font_size = 30
 text = "胜利！"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Divider" type="HSeparator" parent="Root/Overlay/Center/Panel/Content"]
+[node name="Divider" type="HSeparator" parent="Root/Overlay/Center/Panel/Content" unique_id=374173490]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/separator = SubResource("StyleBoxLine_8yrgd")
+
+[node name="space" type="Control" parent="Root/Overlay/Center/Panel/Content" unique_id=1836656232]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="RestartBtn" type="Button" parent="Root/Overlay/Center/Panel/Content"]
-custom_minimum_size = Vector2(350, 54)
+[node name="NextBtn" type="Button" parent="Root/Overlay/Center/Panel/Content" unique_id=1028032292]
+custom_minimum_size = Vector2(200, 54)
 layout_mode = 2
-theme_type_variation = &"PrimaryButton"
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_g8mpj")
+text = "下一关"
+script = ExtResource("4_button")
+
+[node name="RestartBtn" type="Button" parent="Root/Overlay/Center/Panel/Content" unique_id=1038022291]
+custom_minimum_size = Vector2(200, 54)
+layout_mode = 2
+size_flags_horizontal = 4
 text = "重开本关"
 script = ExtResource("4_button")
 
-[node name="BackBtn" type="Button" parent="Root/Overlay/Center/Panel/Content"]
-custom_minimum_size = Vector2(350, 50)
+[node name="BackBtn" type="Button" parent="Root/Overlay/Center/Panel/Content" unique_id=2144155438]
+custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "返回选关"
 script = ExtResource("4_button")
 
-[node name="PauseOverlay" type="Control" parent="Root"]
+[node name="PauseOverlay" type="Control" parent="Root" unique_id=117280899]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -143,18 +253,17 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 0
 
-[node name="Dim" type="ColorRect" parent="Root/PauseOverlay"]
+[node name="Dim" type="ColorRect" parent="Root/PauseOverlay" unique_id=1460346851]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.075, 0.18, 0.118, 0.62)
+color = Color(0.075600006, 0.18, 0.11910002, 0)
 
-[node name="Center" type="CenterContainer" parent="Root/PauseOverlay"]
+[node name="Center" type="CenterContainer" parent="Root/PauseOverlay" unique_id=2036692061]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -162,40 +271,49 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Root/PauseOverlay/Center"]
-custom_minimum_size = Vector2(520, 326)
+[node name="Panel" type="PanelContainer" parent="Root/PauseOverlay/Center" unique_id=869937838]
+custom_minimum_size = Vector2(420, 500)
 layout_mode = 2
 theme_type_variation = &"ResultPanel"
 
-[node name="Content" type="VBoxContainer" parent="Root/PauseOverlay/Center/Panel"]
+[node name="Content" type="VBoxContainer" parent="Root/PauseOverlay/Center/Panel" unique_id=417648455]
 layout_mode = 2
 theme_override_constants/separation = 14
+alignment = 1
 
-[node name="Title" type="Label" parent="Root/PauseOverlay/Center/Panel/Content"]
+[node name="Title" type="Label" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=1460466687]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.169, 0.357, 0.243, 1)
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
 theme_override_font_sizes/font_size = 30
 text = "暂停"
 horizontal_alignment = 1
 
-[node name="Divider" type="HSeparator" parent="Root/PauseOverlay/Center/Panel/Content"]
+[node name="Divider" type="HSeparator" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=1254748910]
 layout_mode = 2
 
-[node name="ContinueButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
-custom_minimum_size = Vector2(350, 54)
+[node name="space" type="Control" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=166202613]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+
+[node name="ContinueButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=1372207752]
+custom_minimum_size = Vector2(200, 54)
+layout_mode = 2
+size_flags_horizontal = 4
 theme_type_variation = &"PrimaryButton"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "继续"
 script = ExtResource("4_button")
 
-[node name="RestartButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
-custom_minimum_size = Vector2(350, 54)
+[node name="RestartButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=1255128981]
+custom_minimum_size = Vector2(200, 54)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "重开"
 script = ExtResource("4_button")
 
-[node name="ExitButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content"]
-custom_minimum_size = Vector2(350, 54)
+[node name="ExitButton" type="Button" parent="Root/PauseOverlay/Center/Panel/Content" unique_id=1595939876]
+custom_minimum_size = Vector2(200, 54)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "退出"
 script = ExtResource("4_button")

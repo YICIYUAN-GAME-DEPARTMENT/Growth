@@ -8,4 +8,4 @@ initial_max_len = 3
 food_len_gain = 2
 mechanism_max_level = 4
 growth_step_interval = 6
-grow_anim_sec = 0.3
+grow_anim_sec = 0.1

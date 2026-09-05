@@ -24,11 +24,11 @@ svg 未经 `--import` 前 `load()` 会失败，**.tres 生成必须分两步**�
 
 ## 3. TileMap / Terrain 铁律（每条都出过 bug）
 
-- **禁 `set_cells_terrain_connect` 批量重涂**：会外扩（地板 40→70 格案例）。重铺一律**确定性直写**：按格集对角邻居算掩码，`layer.set_cell(c, 0, Vector2i(mask, 0))`，绝不外扩。可参考 `Level._paint_auto` 与 `tools/MigrateTerrain.gd` / `RebuildLevelTiles.gd`。
-- 三套地形 .tres 引用**三张独立纹理**：`terrain_floor.svg`（占位）/ 正式墙 `ImportArt/Terrarin-wall.png`（各 512×32，16 列 4 角掩码，瓦片 `(mask,0)`）、`terrain_mech.svg`（512×96，3 帧行 0=冒出/1=生长中/2=完成，瓦片 `(mask,0..2)`）。**瓦片必须建在脚本写格的那个行**——建在非 0 行而场景按 `(mask,0)` 写格会**静默不显示**（mech 停留格写 row2）。角序 bit0=左上 bit1=右上 bit2=左下 bit3=右下。
+- **禁 `set_cells_terrain_connect` 批量重涂**：会外扩（地板 40→70 格案例）。重铺一律**确定性直写**：按格集几何算掩码，`layer.set_cell(c, 0, coords)`，绝不外扩。可参考 `Level._paint_auto`（corners+sides 瓦片集走 `_paint_blob_auto`：按 8 邻接规范掩码查瓦，角位需两侧都涂；**地板/墙/机关三套 blob47 都走这条**，仅旧 `TerrainFloor.tres` 走 4 角掩码 `Vector2i(mask,0)`）与 `tools/MigrateTerrain.gd` / `RebuildLevelTiles.gd`。
+- 地形瓦片集（三套 blob47 的瓦片=ascending canonical blob 列序）：地板 `TerrainGrassBlob47.tres`（正式 `Art/Tiles/TILE_Grass_Blob47_01.png`，1504×32 单行 47 瓦）、**墙 `TerrainWall.tres`（正式 `ImportArt/TILE_Wall_Blob47__01.png`，1504×32 单行 47 瓦）**、**机关 `TerrainMech.tres`（正式 `ImportArt/TILE_Flower_Blob47_Animated_01.png`，1504×96，47 列 × 3 帧行 0=冒出/1=生长中/2=完成）**，三套 peering 逐列一致；墙/机关 .tres 由 `tools/GenBlob47MechWall.tscn` 就地重写。旧 `TerrainFloor.tres`（16 列 4 角，角序 bit0=左上…bit3=右下）仅给未迁移旧关。**瓦片必须建在脚本写格的那个行**——建在非 0 行而场景按 `(mask,0)` 写格会**静默不显示**（机关停留格写 row2）。
 - **工具重存 .tres 会丢 uid 头**（ResourceSaver.save 在该会话未注册 path→uid 时直接省略）：重生成 Terrain*.tres 后必须把原 `uid="uid://…"` 补回 gd_resource 首行，否则场景按 uid 引用 TileSet 会全部失联。
 - 机关生长体铺瓦集合=全部 `claimed` 格**含核心格**（掩码才把核心当邻居，角点不缺瓦）；核心由 Core Sprite 画，Mechanism 根节点 `z_index=1` 浮瓦片层之上（MechanismCells 层在场景树里位于 EntityRoot 之后）。
-- 头/尾是独立 Sprite（非瓦片），贴图**可大于单格**，按"接口点"锚定：默认接口点=纹理中心=格中心（Sprite 居中定位）；内容不在画布中心的正式美术用 `Sprite2D.offset` 把接口点移到格中心（旋转绕该点）。教训：192×32 图集画布、内容只画最左 32px → 整体左移 80px"不显示"。
+- 头/尾是独立 Sprite（非瓦片），贴图**可大于单格**，按"接口点"锚定：默认接口点=纹理中心=格中心（Sprite 居中定位）；内容不在画布中心的正式美术用 `Sprite2D.offset` 把接口点移到格中心（旋转绕该点）。教训：192×32 图集画布、内容只画最左 32px → 整体左移 80px"不显示"。**正式头（Algee-all）锚点=贴图垂直 3/4（下半部分中点）**：Level 运行期 `_set_head_anchor` 按帧高自动 `offset.y = -帧高/4`。
 
 ## 4. 场景脚本注入 / 保存
 
@@ -53,4 +53,4 @@ svg 未经 `--import` 前 `load()` 会失败，**.tres 生成必须分两步**�
 ## 7. 产出收尾
 
 - 新贴图/图集登记进 [开发文档](../../开发文档.md) §3.9（A-xx）。
-- 替换占位（`terrain_floor.svg`/`terrain_mech.svg` / `player_snek.svg`；墙占位 `terrain_wall.svg` 已删、正式图 `ImportArt/Terrarin-wall.png`）保持「行列+角序 / 瓦片列号」等结构契约，否则已画地图/已绑 Sprite 错位。`player_snek.svg` 现为 320×32（col0..5 连接件 + col6..9 端点半截瓦）；头部贴图为**精灵表 132×176**（4 行方向 × 3 列帧，Head Sprite 用 hframes=3/vframes=4 选片、不旋转），替换后须复查 Sprite2D.offset 接口点是否仍对齐帧中心。
+- 替换占位 / 更新正式美术：地板/墙/机关已全是正式 47-blob（三套 peering 列序一致，替换美术须保持 ascending canonical 列序）；玩家身体=`ImportArt/path.png`（10 列：col0..5 连接件 + col6..9 端点半截瓦）；头=`ImportArt/Algee-all.png`（**96×256 精灵表**，4 行方向 × 3 列帧，Head Sprite 用 hframes=3/vframes=4 选片、不旋转，每步播 0→1 两帧停回帧 2），替换后须复查 Sprite2D.offset 接口点是否仍对齐帧中心。

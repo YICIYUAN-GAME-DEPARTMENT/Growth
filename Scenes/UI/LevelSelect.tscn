@@ -1,11 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://cw2ymgbtftnjj"]
+[gd_scene format=3 uid="uid://cw2ymgbtftnjj"]
 
 [ext_resource type="Script" uid="uid://c6e74qx4sa736" path="res://Scripts/UI/LevelSelect.gd" id="1_select"]
-[ext_resource type="Texture2D" path="res://Art/UI/UI_Garden_Backdrop_01.svg" id="2_backdrop"]
-[ext_resource type="Theme" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
-[ext_resource type="Script" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
+[ext_resource type="Texture2D" uid="uid://bq7jowfomnnco" path="res://ImportArt/MainMenu_Bg.png" id="3_sctym"]
+[ext_resource type="Theme" uid="uid://k3r1m0vyqv5q" path="res://UI/Theme/GardenTheme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://dqob88e71yqmj" path="res://Scripts/UI/JuicyButton.gd" id="4_button"]
 
-[node name="LevelSelect" type="Control"]
+[node name="LevelSelect" type="Control" unique_id=1709874659]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +15,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_select")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=1992983163]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,11 +23,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_backdrop")
+texture = ExtResource("3_sctym")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Atmosphere" type="ColorRect" parent="."]
+[node name="Atmosphere" type="ColorRect" parent="." unique_id=1052785156]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,7 +37,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.96, 1, 0.91, 0.12)
 
-[node name="Frame" type="PanelContainer" parent="."]
+[node name="Frame" type="PanelContainer" parent="." unique_id=268063328]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -52,43 +52,43 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_type_variation = &"GardenPanel"
 
-[node name="Margin" type="MarginContainer" parent="Frame"]
+[node name="Margin" type="MarginContainer" parent="Frame" unique_id=1430646110]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 6
 
-[node name="Layout" type="VBoxContainer" parent="Frame/Margin"]
+[node name="Layout" type="VBoxContainer" parent="Frame/Margin" unique_id=1176828330]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Header" type="HBoxContainer" parent="Frame/Margin/Layout"]
+[node name="Header" type="HBoxContainer" parent="Frame/Margin/Layout" unique_id=894887668]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="Frame/Margin/Layout/Header"]
+[node name="Title" type="Label" parent="Frame/Margin/Layout/Header" unique_id=2010795768]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.176, 0.369, 0.255, 1)
 theme_override_font_sizes/font_size = 42
 text = "选择关卡"
 
-[node name="BackButton" type="Button" parent="Frame/Margin/Layout/Header"]
+[node name="BackButton" type="Button" parent="Frame/Margin/Layout/Header" unique_id=882637967]
 custom_minimum_size = Vector2(166, 52)
 layout_mode = 2
 text = "返回主菜单"
 script = ExtResource("4_button")
 
-[node name="Divider" type="HSeparator" parent="Frame/Margin/Layout"]
+[node name="Divider" type="HSeparator" parent="Frame/Margin/Layout" unique_id=1904312665]
 layout_mode = 2
 
-[node name="Scroll" type="ScrollContainer" parent="Frame/Margin/Layout"]
+[node name="Scroll" type="ScrollContainer" parent="Frame/Margin/Layout" unique_id=1235021236]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="CardMargin" type="MarginContainer" parent="Frame/Margin/Layout/Scroll"]
+[node name="CardMargin" type="MarginContainer" parent="Frame/Margin/Layout/Scroll" unique_id=698367786]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 18
@@ -96,14 +96,12 @@ theme_override_constants/margin_top = 18
 theme_override_constants/margin_right = 18
 theme_override_constants/margin_bottom = 18
 
-[node name="List" type="GridContainer" parent="Frame/Margin/Layout/Scroll/CardMargin"]
+[node name="List" type="VBoxContainer" parent="Frame/Margin/Layout/Scroll/CardMargin" unique_id=1537397723]
 layout_mode = 2
-size_flags_horizontal = 4
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 18
-columns = 6
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
 
-[node name="EmptyState" type="Label" parent="Frame/Margin/Layout"]
+[node name="EmptyState" type="Label" parent="Frame/Margin/Layout" unique_id=1538850052]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3

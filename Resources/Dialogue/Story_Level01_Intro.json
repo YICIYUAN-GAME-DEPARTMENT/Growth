@@ -1,45 +1,30 @@
 {
-  "title": "Level01-开场·花海入口",
+  "title": "Level01-移动",
   "lines": [
     {
       "speaker": "algee",
       "pose": "normal",
-      "text": "查理，前面那一片蓝色就是花海了。你说的那朵花，真的在里面吗？"
+      "text": "查理，看！那里有一朵蓝色的花！"
     },
     {
       "speaker": "charlie",
       "pose": "normal",
-      "text": "扫描确认，阿吉。高能蓝花就在花海深处——摘下它，我的处理核心就能升级。"
+      "text": "看到了。"
     },
     {
       "speaker": "algee",
       "pose": "normal",
-      "text": "但我不能碰那些花……防护服会护住我，摘花就只能拜托你了。"
-    },
-    {
-      "speaker": "charlie",
-      "pose": "normal",
-      "text": "嗯，只要维生管线够长，我就能跟在你身后一路采样。路上那些蓝色花瓣也别漏掉，吸收一片，管线就伸长一段。"
-    },
-    {
-      "speaker": "charlie",
-      "pose": "normal",
-      "text": "小心还在运转的旧机关，它们每隔几步就会伸出一截挡板；路一旦被堵死，我们就出不去了。"
+      "text": "那就是你所说的“那个东西”吧？"
     },
     {
       "speaker": "algee",
       "pose": "normal",
-      "text": "我会绕开它们走。等够到花海尽头那朵高能蓝花，就算成功。"
+      "text": "可是该怎么过去呢？"
     },
     {
       "speaker": "charlie",
       "pose": "normal",
-      "text": "……阿吉，摘下那朵花以后，我会变得更聪明一些吗？"
-    },
-    {
-      "speaker": "algee",
-      "pose": "normal",
-      "text": "会的。不过无论变成什么样，你永远是我最好的搭档。出发！"
+      "text": "试一试WASD或者←↑↓→吧。"
     }
   ]
 }

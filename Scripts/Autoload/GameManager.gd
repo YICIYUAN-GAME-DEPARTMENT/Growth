@@ -7,6 +7,8 @@ extends Node
 ## ============================================================================
 
 const BALANCE_PATH := "res://Resources/Config/Balance.tres"
+## 关卡目录（与 LevelSelect 一致；LevelTemplate 不算可玩关）
+const LEVELS_DIR := "res://Scenes/Levels"
 
 enum State { BOOT, MENU, PLAYING }
 
@@ -63,6 +65,56 @@ func back_to_level_select() -> void:
 func back_to_main_menu() -> void:
 	state = State.MENU
 	change_scene(main_menu_scene)
+
+
+# ── 关卡列表 / 下一关 ─────────────────────────────────────────
+## 扫描 Scenes/Levels 下的可玩关卡，按 level_id 升序。每项 = {id, name, path}
+## （LevelSelect 列表、"下一关"跳转共用同一来源）。
+func list_levels() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	var dir := DirAccess.open(LEVELS_DIR)
+	if dir == null:
+		return out
+	dir.list_dir_begin()
+	var fname := dir.get_next()
+	while fname != "":
+		if not dir.current_is_dir() and fname.begins_with("Level_") and fname.ends_with(".tscn") \
+				and fname != "LevelTemplate.tscn":
+			var path := LEVELS_DIR.path_join(fname)
+			var ps := load(path) as PackedScene
+			if ps != null:
+				var root := ps.instantiate()
+				var id := int(root.get("level_id")) if root.get("level_id") != null else 0
+				var name := str(root.get("level_name")) if root.get("level_name") != null else ""
+				root.free()
+				if name.is_empty():
+					name = fname.get_basename().trim_prefix("Level_")
+				out.append({"id": id, "name": name, "path": path})
+		fname = dir.get_next()
+	dir.list_dir_end()
+	out.sort_custom(func(a, b): return a.id < b.id)
+	return out
+
+
+## "下一关"：进入关卡列表中当前关的下一位；已是最后一关（或当前关不在列表）则回选关界面
+func start_next_level() -> void:
+	var levels := list_levels()
+	if levels.is_empty():
+		back_to_level_select()
+		return
+	var cur := ""
+	var cs := get_tree().current_scene
+	if cs != null:
+		cur = cs.scene_file_path
+	var idx := -1
+	for i in levels.size():
+		if levels[i].path == cur:
+			idx = i
+			break
+	if idx >= 0 and idx < levels.size() - 1:
+		start_level(levels[idx + 1].path)
+	else:
+		back_to_level_select()
 
 
 # ── 场景流转 ───────────────────────────────────────────────────

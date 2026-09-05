@@ -27,11 +27,17 @@ var claimed: Dictionary = {}
 ## 地图逻辑范围（由 Level 启动时注入，用于丢弃越界占格）
 var _grid_min := Vector2i(-1000000, -1000000)
 var _grid_max := Vector2i(1000000, 1000000)
+## 地板（可走区）集合；机关只在已涂地板上占格（空 = 不限地板）
+var _floor_cells: Dictionary = {}
 
 
 func set_grid_bounds(map_origin: Vector2i, map_size: Vector2i) -> void:
 	_grid_min = map_origin
 	_grid_max = map_origin + map_size
+
+
+func set_floor_cells(cells: Dictionary) -> void:
+	_floor_cells = cells
 
 
 func _ready() -> void:
@@ -53,6 +59,7 @@ func set_level_cap(v: int) -> void:
 
 ## 补占：把 shape(level) 中尚未占据且未被 blocked 阻挡的格加入 claimed。
 ## blocked = 玩家身体当前占用的绝对格 + 起点/终点保护格。返回本次新增数。
+## 只在地板（可走区）集合内占格；越界 / 无地板格不占。
 func claim_missing(blocked: Dictionary) -> int:
 	var added := 0
 	for off in MechanicShapes.cells(level):
@@ -63,6 +70,8 @@ func claim_missing(blocked: Dictionary) -> int:
 			continue
 		if abs_cell.x < _grid_min.x or abs_cell.y < _grid_min.y or abs_cell.x >= _grid_max.x or abs_cell.y >= _grid_max.y:
 			continue  # 越界不占
+		if not _floor_cells.is_empty() and not _floor_cells.has(abs_cell):
+			continue  # 不在已涂地板（可走区）不占
 		claimed[abs_cell] = true
 		added += 1
 	return added

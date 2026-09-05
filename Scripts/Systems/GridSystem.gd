@@ -13,11 +13,19 @@ var size: Vector2i = Vector2i(32, 32)
 var obstacles: Dictionary = {}    # Vector2i -> true（静态障碍）
 var mech_cells: Dictionary = {}   # Vector2i -> true（机关当前实际占据，含跳过逻辑）
 var goal_cell := Vector2i.ZERO
+## 地板=可走区集合（Vector2i -> true，来自 Ground 层实际涂格）；空 = 未启用地板限制
+var floor_cells: Dictionary = {}
 
 
 func setup(map_origin: Vector2i, map_size: Vector2i) -> void:
 	origin = map_origin
 	size = map_size
+
+
+func set_floor_cells(cells: Array) -> void:
+	floor_cells.clear()
+	for c: Vector2i in cells:
+		floor_cells[c] = true
 
 
 func in_bounds(c: Vector2i) -> bool:
@@ -28,9 +36,11 @@ func add_obstacle(c: Vector2i) -> void:
 	obstacles[c] = true
 
 
-## 该格是否被静态障碍或机关占据（越界视为不可走）
+## 该格是否被静态障碍或机关占据（越界视为不可走；若启用地板集合，非地板格也不可走）
 func is_blocked(c: Vector2i) -> bool:
 	if not in_bounds(c):
+		return true
+	if not floor_cells.is_empty() and not floor_cells.has(c):
 		return true
 	return obstacles.has(c) or mech_cells.has(c)
 

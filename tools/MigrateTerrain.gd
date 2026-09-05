@@ -6,6 +6,7 @@ extends Node
 ##   1. 记录已涂格子位置（来自旧数据）
 ##   2. 换成对应 TerrainFloor/Wall/Mech/PlayerSnek.tres 并清空
 ##   3. 逐格写瓦片：列号 = 4 角掩码（按"同层格集"对角邻居计算），绝不外扩
+## 注：已是 blob47 地板（corners+sides）的层整层保留，不做 4 角重涂。
 ## 之后用 PackedScene.pack+save 保存（已验证会保留子场景 instance 引用）。
 ## 运行：godot --headless res://tools/MigrateTerrain.tscn
 ## ============================================================================
@@ -41,6 +42,10 @@ func _ready() -> void:
 			if layer == null:
 				notes.append("%s=无节点" % name)
 				continue
+			# blob47 地板（corners+sides）已是新目标布局：整层保留，不做 4 角重涂
+			if _is_blob(layer):
+				notes.append("%s=blob保留" % name)
+				continue
 			var cells := layer.get_used_cells()
 			var in_set := {}
 			for c in cells:
@@ -61,6 +66,13 @@ func _ready() -> void:
 		root.free()
 		print("%s → %s 保存err=%d" % [scene_path, " ".join(notes), err])
 	get_tree().quit(0)
+
+
+func _is_blob(layer: TileMapLayer) -> bool:
+	var ts := layer.tile_set
+	if ts == null or ts.get_terrain_sets_count() <= 0:
+		return false
+	return ts.get_terrain_set_mode(0) == TileSet.TERRAIN_MODE_MATCH_CORNERS_AND_SIDES
 
 
 ## PlayerFx：头/尾独立 Sprite 的容器（Level.gd 运行时驱动位置/帧/可见性，

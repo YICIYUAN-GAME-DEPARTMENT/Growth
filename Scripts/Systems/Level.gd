@@ -64,11 +64,13 @@ var _head_cell := Vector2i.ZERO
 var _dialogue: DialogueOverlay = null
 ## 本关机关生长周期（_place_player 时解析 override/全局）
 var _growth_interval := 6
+## 本关每片花瓣（食物）提供的身长增量（_place_player 时解析 override/全局）
+var _food_len_gain := 2
 
-## 头部动画状态：方向行（0=E 1=W 2=S 3=N）与帧列（0/1=移动循环 2=停留）
+## 头部动画状态：方向行（0=E 1=W 2=S 3=N）与帧列（0/1=移动两帧序列 2=停留）
 var _head_dir_row := 0
 var _head_col := HEAD_IDLE_COL
-var _head_walk_flip := false
+var _head_tween: Tween = null
 var _head_idle_seq := 0
 
 const DIRS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
@@ -77,28 +79,56 @@ const CORNER_OFFS := [
 	Vector2i(-1, -1), Vector2i(1, -1),
 	Vector2i(-1, 1), Vector2i(1, 1),
 ]
+## blob47 地板（TerrainGrassBlob47.tres，corners+sides 模式）的 8 邻接：
+## 每个元素 = [格子偏移, TileData.get_terrain_peering_bit 的方向常量]。
+## 位序与下面 BLOB_CORNER_GATES 一致：0=TL 1=T 2=TR 3=L 4=R 5=BL 6=B 7=BR。
+const BLOB_DIRS := [
+	[Vector2i(-1, -1), TileSet.CELL_NEIGHBOR_TOP_LEFT_CORNER],
+	[Vector2i(0, -1), TileSet.CELL_NEIGHBOR_TOP_SIDE],
+	[Vector2i(1, -1), TileSet.CELL_NEIGHBOR_TOP_RIGHT_CORNER],
+	[Vector2i(-1, 0), TileSet.CELL_NEIGHBOR_LEFT_SIDE],
+	[Vector2i(1, 0), TileSet.CELL_NEIGHBOR_RIGHT_SIDE],
+	[Vector2i(-1, 1), TileSet.CELL_NEIGHBOR_BOTTOM_LEFT_CORNER],
+	[Vector2i(0, 1), TileSet.CELL_NEIGHBOR_BOTTOM_SIDE],
+	[Vector2i(1, 1), TileSet.CELL_NEIGHBOR_BOTTOM_RIGHT_CORNER],
+]
+## blob 规范规则：角位只有在其相邻两侧位都涂时才有意义（Godot 引擎同规则）。
+## 每项 = [角位, 相邻侧位1, 相邻侧位2]。
+const BLOB_CORNER_GATES := [
+	[0, 1, 3],   # TL 需要 T+L
+	[2, 1, 4],   # TR 需要 T+R
+	[5, 3, 6],   # BL 需要 L+B
+	[7, 4, 6],   # BR 需要 R+B
+]
 
-## 地形层：Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres
-## （三张独立纹理），每套只有 1 个 terrain（terrain_set=0, terrain=0）；运行期用
-## _paint_auto 按格集几何直写 4 角掩码瓦片（确定性贴边，绝不外扩）。
+## 地形层（都在 Art/Tiles/）：运行期 _paint_auto 按层瓦片集模式自适应贴边
+## （corners+sides blob47 走 8 邻接规范 _paint_blob_auto，其余 4 角掩码 _paint_auto），
+## 确定性直写只写给定格、绝不外扩。每套只有 1 个 terrain（terrain_set=0, terrain=0）：
+##   · Ground          TerrainGrassBlob47.tres  地板（47 列草）
+##   · Obstacles       TerrainWall.tres         阻挡墙（47 列，TILE_Wall_Blob47__01.png）
+##   · MechanismCells  TerrainMech.tres         机关生长体·花（47 列 × 3 帧行 0=冒出/1=生长中/2=完成，
+##                                               TILE_Flower_Blob47_Animated_01.png）
+##   · TerrainFloor.tres（4 角 16 列旧地板）仅保留给未迁移旧关，运行期走 4 角掩码。
 ## 玩家视觉：
-##   · PlayerCells 画身体"管道"（PlayerSnek.tres row0）：
+##   · PlayerCells 画身体"管道"（PlayerSnek.tres = ImportArt/path.png row0）：
 ##     · 中间格（前后都有格）用连接件 0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE，
 ##       每格连接前格与后格，相邻瓦片拼成连续管道；
 ##     · 头格/尾格垫"端点"半截瓦 6=E 7=W 8=S 9=N（中心→边），把管道接进头/尾底下。
 ##   · 头/尾是独立 Sprite 贴图（非瓦片，画布可大于单格）：头位于 head 格，方向用
-##     贴图行选片（player_head.svg = 4 行方向 × 3 列帧精灵表，E/W/S/N 各画各的、
-##     不旋转），移动时帧列 0/1 两帧循环，停下 HEAD_IDLE_SEC 秒后固定停留帧 2；
-##     尾固定在出生点 S 格（起步即显示），朝身体延伸方向旋转。Head 在场景里
-##     z_index=1，起步/回到起点（n=1）时"头叠放在尾之上"。二者挂在 World/PlayerFx
-##     下，贴图与 hframes/vframes 由场景直接绑定。
+##     贴图行选片（Algee-all.png = 4 行方向 × 3 列帧精灵表，E/W/S/N 各画各的、
+##     不旋转），每有效步播放一次 帧0→帧1 两帧序列，停下 HEAD_IDLE_SEC 秒后
+##     固定停留帧 2；尾固定在出生点 S 格（起步即显示），朝身体延伸方向旋转。
+##     Head 在场景里 z_index=1，起步/回到起点（n=1）时"头叠放在尾之上"。
+##     二者挂在 World/PlayerFx 下，贴图与 hframes/vframes 由场景直接绑定。
 const TILE_SOURCE := 0
-## 机关生长体动画帧行（terrain_mech.svg 3 行：0=冒出 1=生长中 2=完成）
+## 机关生长体动画帧行（TerrainMech 3 帧行：0=冒出 1=生长中 2=完成）
 const MECH_FRAME_DONE := 2
-## 头部动画规格（player_head.svg 4 行方向 × 3 列帧）
-## 帧列：0/1=移动两帧循环 2=停留固定；停留判定：HEAD_IDLE_SEC 秒内无新步
+## 头部动画规格（Algee-all.png 4 行方向 × 3 列帧，场景 hframes=3 / vframes=4）
+## 帧列：0/1=每步内播一次的两帧序列；2=停留固定帧
 const HEAD_IDLE_COL := 2
 const HEAD_IDLE_SEC := 0.35
+## 每步内两帧（0→1）各停留时长
+const HEAD_FRAME_HOLD_SEC := 0.18
 ## 剧情覆盖层场景（运行时按需实例，场景树见 Scenes/Dialogue/DialogueOverlay.tscn）
 const DIALOGUE_SCENE_PATH := "res://Scenes/Dialogue/DialogueOverlay.tscn"
 
@@ -121,10 +151,20 @@ func _ready() -> void:
 	for m in _mechanisms:
 		m.set_grid_bounds(_board_origin, _board_size)
 	_fill_ground_fallback()
+	# 阻挡墙 blob47（TerrainWall.tres 就地换源为 47 blob 图集）：用实际涂格几何
+	# 确定性重涂贴边，旧场景里按 4 角掩码存的瓦片坐标运行时自动换成 blob 列号
+	_resync_obstacle_blob()
+	# 地板=可走区：机关只在地板格上占位（_fill_ground_fallback 内已灌入 grid.floor_cells）
+	for m in _mechanisms:
+		m.set_floor_cells(grid.floor_cells)
 	_place_player()
 	# PlayerFx 容器在场景里可能被作者隐藏（编辑器不挡眼）；运行时必须打开，
 	# 否则 Head/Tail 各自 visible=true 也不会渲染（父节点不可见）。
 	_player_fx.visible = true
+	# LevelHUD 同理：作者可能整层隐藏便于编辑；运行时必须显示，否则顶栏/
+	# 结算面板/暂停菜单全部不可见（剧情播完后"弹不出胜利/失败界面"的根因之一）。
+	_hud.visible = true
+	_set_head_anchor()
 	_sync_player_layer()
 	EventManager.level_loaded.emit(level_id)
 	# 开场剧情：先播完再解锁操作（await 期间场景可能被 R 重开，需判存活）
@@ -186,10 +226,14 @@ func _compute_board_rect() -> void:
 	_board_size = max_c - min_c + Vector2i.ONE
 
 
-## 确定性贴边：给整层清空后，按"格集"几何写瓦片（列号=4 角掩码，行号=frame），
-## 只写给定格、绝不外扩。floor/wall 单行图（frame 恒 0）；mech 3 帧行，
-## 停留外观=MECH_FRAME_DONE（完成帧）。
+## 确定性贴边：给整层清空后，按"格集"几何写瓦片。
+## - blob47（corners+sides 图集：草/墙/机关花）：按 8 邻接规范掩码在瓦片集里找对应瓦
+##   （_paint_blob_auto；表中同列多行时取最后一行=机关完成帧行）。
+## - 旧 TerrainFloor 等 4 角掩码图集：列号 = 4 角掩码，行号 = frame（floor 单行 frame 恒 0）。
 func _paint_auto(layer: TileMapLayer, cells: Array, frame: int = 0) -> void:
+	if _is_corners_and_sides(layer):
+		_paint_blob_auto(layer, cells)
+		return
 	layer.clear()
 	var set := {}
 	for c: Vector2i in cells:
@@ -202,19 +246,105 @@ func _paint_auto(layer: TileMapLayer, cells: Array, frame: int = 0) -> void:
 		layer.set_cell(c, TILE_SOURCE, Vector2i(mask, frame))
 
 
-## 地板兜底：把地图矩形内整块涂成地板（已涂格位置不变，整层按几何重贴边）
+## 判断层瓦片集是否为 corners+sides（blob47）模式
+func _is_corners_and_sides(layer: TileMapLayer) -> bool:
+	var ts := layer.tile_set
+	if ts == null or ts.get_terrain_sets_count() <= 0:
+		return false
+	return ts.get_terrain_set_mode(0) == TileSet.TERRAIN_MODE_MATCH_CORNERS_AND_SIDES
+
+
+## blob47 地板确定性贴边：按 8 邻接规范掩码（角位需两侧都涂）匹配瓦片集里的瓦，
+## 列号直接从图集读出（与引擎 terrain 选择一致），只写给定格、绝不外扩。
+func _paint_blob_auto(layer: TileMapLayer, cells: Array) -> void:
+	layer.clear()
+	var ts := layer.tile_set
+	var src := ts.get_source(TILE_SOURCE) as TileSetAtlasSource
+	if src == null:
+		return
+	# 建 mask→图集坐标 表：按纹理网格扫描每个瓦，读取其 terrain peering bit
+	var grid_w := (src.texture.get_width() + src.texture_region_size.x - 1) / src.texture_region_size.x
+	var grid_h := (src.texture.get_height() + src.texture_region_size.y - 1) / src.texture_region_size.y
+	var table := {}
+	for gy in grid_h:
+		for gx in grid_w:
+			var anchor := src.get_tile_at_coords(Vector2i(gx, gy))
+			if anchor.x < 0:
+				continue
+			var td := src.get_tile_data(anchor, 0)
+			if td == null or td.terrain_set < 0:
+				continue
+			var mask := 0
+			for b in 8:
+				if td.get_terrain_peering_bit(BLOB_DIRS[b][1]) >= 0:
+					mask |= 1 << b
+			table[mask] = anchor
+	var set := {}
+	for c: Vector2i in cells:
+		set[c] = true
+	for c: Vector2i in cells:
+		var raw := 0
+		for i in 8:
+			if set.has(c + BLOB_DIRS[i][0]):
+				raw |= 1 << i
+		var mask := _canonical_blob_mask(raw)
+		if table.has(mask):
+			layer.set_cell(c, TILE_SOURCE, table[mask])
+		else:
+			push_warning("blob47: mask=%d 无对应瓦片 @ %s" % [mask, c])
+
+
+## blob 规范规则（与 Godot 引擎一致）：角位只有在其相邻两侧位都涂时才保留
+func _canonical_blob_mask(raw: int) -> int:
+	var mask := raw
+	for gate: Array in BLOB_CORNER_GATES:
+		var corner_bit: int = 1 << (gate[0] as int)
+		var side_a: int = gate[1] as int
+		var side_b: int = gate[2] as int
+		if mask & corner_bit:
+			if (mask & (1 << side_a)) == 0 or (mask & (1 << side_b)) == 0:
+				mask &= ~corner_bit
+	return mask
+
+
+## 地板同步 + 地板（可走区）集合灌入 GridSystem：
+## - **blob47 地板（corners+sides）= 可走区即实际涂格**：运行时只重涂画师涂的格子，
+##   不再把包围盒内空格外扩成矩形（异形岛/房间自由形状）。
+## - **旧 16 列地板（TerrainFloor 4 角）保持旧语义**：包围盒内空格兜底补地板（矩形房间），
+##   地板集合=整块矩形（等价不限地板），保证已有关卡运行时行为不变。
+## - 完全没涂格时兜底铺整块地图矩形（空地图保底，避免误判全不可走）。
+## - 贴边=确定性直写 _paint_auto（blob 走 8 邻接、其余 4 角掩码），只写给定格、绝不外扩。
 func _fill_ground_fallback() -> void:
+	var blob := _is_corners_and_sides(_ground)
 	var cells: Array = []
 	for c: Vector2i in _ground.get_used_cells():
 		cells.append(c)
-	for y in _board_size.y:
-		for x in _board_size.x:
-			var cell := _board_origin + Vector2i(x, y)
-			if not cells.has(cell):
-				cells.append(cell)
+	if not blob or cells.is_empty():
+		# 旧地板语义 / 空白兜底：矩形区域整涂
+		for y in _board_size.y:
+			for x in _board_size.x:
+				var cell := _board_origin + Vector2i(x, y)
+				if not cells.has(cell):
+					cells.append(cell)
 	if cells.is_empty():
 		return
 	_paint_auto(_ground, cells)
+	# 地板=可走区集合：blob 地板取实际涂格；旧地板取整块矩形（等价不限）
+	grid.set_floor_cells(_ground.get_used_cells())
+
+
+## 阻挡墙 blob47（TerrainWall.tres 就地换源为 47 blob 图集）：用"实际涂格"几何
+## 确定性重涂贴边——旧场景按 4 角掩码存的瓦片坐标，运行时自动换成本集 blob 列；
+## 仍是 4 角旧墙集（未迁移旧关）则跳过，保持原样。只写给定格、绝不外扩。
+func _resync_obstacle_blob() -> void:
+	if not _is_corners_and_sides(_obstacles):
+		return
+	var cells: Array = []
+	for c: Vector2i in _obstacles.get_used_cells():
+		cells.append(c)
+	if cells.is_empty():
+		return
+	_paint_auto(_obstacles, cells)
 
 
 ## override 为 0 时沿用全局 Balance 数值
@@ -236,6 +366,7 @@ func _place_player() -> void:
 	_head_cell = _spawn.cell
 	max_len = _resolve(initial_max_len_override, GameManager.balance.initial_max_len)
 	_growth_interval = _resolve(growth_step_interval_override, GameManager.balance.growth_step_interval)
+	_food_len_gain = _resolve(food_len_gain_override, GameManager.balance.food_len_gain)
 	steps = 0
 	food_eaten = 0
 	finished = false
@@ -396,7 +527,7 @@ func _update_end_sprites(n: int) -> void:
 	_tail_sprite.rotation = Vector2(out_dir).angle()
 
 
-## 方向 -> 头贴图行（player_head.svg 4 行：0=E右 1=W左 2=S下 3=N上）
+## 方向 -> 头贴图行（Algee-all.png 4 行：0=E右 1=W左 2=S下 3=N上）
 func _head_row_for(face: Vector2i) -> int:
 	match face:
 		Vector2i.LEFT: return 1
@@ -410,14 +541,33 @@ func _apply_head_frame() -> void:
 	_head_sprite.frame = _head_dir_row * 3 + _head_col
 
 
-## 每次有效步推进头部"两帧循环"，并重置停留计时：
-## HEAD_IDLE_SEC 秒内无新步 -> 固定到停留帧（列 2）。
+## 头锚点=贴图垂直 3/4 处（贴图下半部分中间），而非默认帧中心 1/2：
+## 把"帧中心=格中心"上移 帧高/4，使格中心对齐贴图 3/4 高度的水平中点。
+## 帧高 = 贴图高 / vframes（Algee-all.png = 256/4 = 64 → offset.y = -16）。
+func _set_head_anchor() -> void:
+	var tex: Texture2D = _head_sprite.texture
+	if tex == null:
+		return
+	var frame_h := float(tex.get_height()) / float(maxi(_head_sprite.vframes, 1))
+	_head_sprite.offset = Vector2(_head_sprite.offset.x, -frame_h * 0.25)
+
+
+## 每次有效步"播放一次两帧序列"：先显示帧 0，HEAD_FRAME_HOLD_SEC 后切到帧 1，
+## 并重置停留计时——HEAD_IDLE_SEC 秒内无新步 -> 固定到停留帧（列 2）。
 func _advance_head_walk() -> void:
-	_head_walk_flip = not _head_walk_flip
-	_head_col = 1 if _head_walk_flip else 0
-	_apply_head_frame()
+	if _head_tween != null and _head_tween.is_valid():
+		_head_tween.kill()
+	_head_tween = create_tween()
+	_set_head_col(0)
+	_head_tween.tween_interval(HEAD_FRAME_HOLD_SEC)
+	_head_tween.tween_callback(_set_head_col.bind(1))
 	_head_idle_seq += 1
 	get_tree().create_timer(HEAD_IDLE_SEC).timeout.connect(_on_head_idle.bind(_head_idle_seq))
+
+
+func _set_head_col(col: int) -> void:
+	_head_col = col
+	_apply_head_frame()
 
 
 func _on_head_idle(seq: int) -> void:
@@ -500,7 +650,7 @@ func _consume_food_at(cell: Vector2i) -> void:
 			_foods.erase(f)
 			f.queue_free()
 			food_eaten += 1
-			max_len += _resolve(food_len_gain_override, GameManager.balance.food_len_gain)
+			max_len += _food_len_gain
 			EventManager.max_length_changed.emit(max_len)
 			EventManager.food_eaten.emit(cell)
 			return
@@ -568,7 +718,7 @@ func _check_deadlock() -> void:
 	for f in _foods:
 		if dist.has(f.cell) and dist[f.cell] <= reach:
 			return  # 还能吃到食物增大 L
-	_fail("身长不够… 够不着终点也吃不到食物")
+	_fail("管道不够长啊… 摘不到蓝花也捡不到花瓣")
 
 
 func _win() -> void:
@@ -581,7 +731,7 @@ func _win() -> void:
 	if not story_win.is_empty():
 		await _play_story(story_win)
 	if is_instance_valid(_hud) and _hud.is_inside_tree():
-		_hud.show_result("胜利！ 步数 %d" % steps)
+		_hud.show_result("胜利！ 步数 %d" % steps, true)
 
 
 func _fail(msg: String = "无路可走… 重开吧") -> void:
@@ -627,3 +777,4 @@ func _ensure_dialogue() -> DialogueOverlay:
 func _update_hud() -> void:
 	var remaining_steps := maxi(max_len - trail.size(), 0)
 	_hud.update_remaining_steps(remaining_steps)
+	_hud.set_petal_gain(_food_len_gain)

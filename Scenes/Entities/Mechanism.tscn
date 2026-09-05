@@ -1,10 +1,12 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://csejctbgwl6k5"]
 
-[ext_resource type="Script" path="res://Scripts/Entities/Mechanism.gd" id="1_mech"]
-[ext_resource type="Texture2D" path="res://Art/Sprites/mech_core.svg" id="2_tex"]
+[ext_resource type="Script" uid="uid://chjvqa26tqhew" path="res://Scripts/Entities/Mechanism.gd" id="1_mech"]
+[ext_resource type="Texture2D" uid="uid://c207c3ppkcmes" path="res://ImportArt/core.png" id="2_km0j3"]
 
-[node name="Mechanism" type="Node2D"]
+[node name="Mechanism" type="Node2D" unique_id=2091959493]
+z_index = 1
+position = Vector2(16, 16)
 script = ExtResource("1_mech")
 
-[node name="Core" type="Sprite2D" parent="."]
-texture = ExtResource("2_tex")
+[node name="Core" type="Sprite2D" parent="." unique_id=1747632892]
+texture = ExtResource("2_km0j3")

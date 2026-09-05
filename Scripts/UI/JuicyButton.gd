@@ -17,7 +17,19 @@ func _ready() -> void:
 
 
 func _refresh_hover() -> void:
-	button_hover(self, is_hovered() or has_focus())
+	var on := is_hovered() or has_focus()
+	if is_instance_valid(_scale_tween):
+		_scale_tween.kill()
+	# 被容器拉伸成全宽（如选关整行按钮、HUD 全宽项）：放大必然超出父级
+	# 可视区被裁掉左右两侧 → 用提亮代替缩放；独立尺寸按钮保留缩放动效。
+	if size.x > custom_minimum_size.x + 1.0:
+		z_index = 0
+		scale = Vector2.ONE
+		modulate = Color(1.12, 1.08, 0.96, 1) if on else Color.WHITE
+	else:
+		z_index = 5 if on else 0
+		modulate = Color.WHITE
+		button_hover(self, on)
 
 
 ## CC0 · Godot 4.5+ · Easy Juicy Buttons
