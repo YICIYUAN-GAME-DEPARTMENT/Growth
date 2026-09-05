@@ -12,9 +12,10 @@ config_version=5
 
 config/name="Growth"
 config/description="2026 GameJam project — theme: Grow. 2D grid puzzle (Godot 4.7 + GDScript)."
+config/version="v0.1"
 run/main_scene="res://Scenes/UI/MainMenu.tscn"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="uid://cee85f84ttd1e"
 
 [autoload]
 
