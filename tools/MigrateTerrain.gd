@@ -63,7 +63,8 @@ func _ready() -> void:
 	get_tree().quit(0)
 
 
-## PlayerFx：头/尾独立 Sprite 的容器（Level.gd 运行时驱动位置/旋转/可见性）
+## PlayerFx：头/尾独立 Sprite 的容器（Level.gd 运行时驱动位置/帧/可见性，
+## 头按方向行选片不旋转、尾按方向旋转）
 func _ensure_player_fx(world: Node, root: Node) -> void:
 	if world.get_node_or_null("PlayerFx") != null:
 		return
@@ -74,6 +75,9 @@ func _ensure_player_fx(world: Node, root: Node) -> void:
 	var head := Sprite2D.new()
 	head.name = "Head"
 	head.texture = load("res://Art/Sprites/player_head.svg")
+	# 头精灵表：4 行方向 × 3 列帧（0/1=移动循环 2=停留帧），行选片不旋转
+	head.hframes = 3
+	head.vframes = 4
 	head.visible = false
 	fx.add_child(head)
 	head.owner = root

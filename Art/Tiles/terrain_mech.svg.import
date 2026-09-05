@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b38jfip27de81"
-path="res://.godot/imported/terrain_placeholder.svg-3d200002bf11cc178e40dcf391be9404.ctex"
+uid="uid://bwwxvd0ce7vyd"
+path="res://.godot/imported/terrain_mech.svg-c044d2fdbe32992ce736aaaae70b5928.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/terrain_placeholder.svg"
-dest_files=["res://.godot/imported/terrain_placeholder.svg-3d200002bf11cc178e40dcf391be9404.ctex"]
+source_file="res://Art/Tiles/terrain_mech.svg"
+dest_files=["res://.godot/imported/terrain_mech.svg-c044d2fdbe32992ce736aaaae70b5928.ctex"]
 
 [params]
 

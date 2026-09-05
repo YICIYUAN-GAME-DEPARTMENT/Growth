@@ -1,13 +1,9 @@
 [gd_resource type="TileSet" format=3 uid="uid://dbo1r0lej0lvf"]
 
-[ext_resource type="Texture2D" uid="uid://b38jfip27de81" path="res://Art/Tiles/terrain_placeholder.svg" id="1_5jwg1"]
+[ext_resource type="Texture2D" uid="uid://b7s3tn4mr0cak" path="res://Art/Tiles/terrain_wall.svg" id="1_5jwg1"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vaabj"]
-atlas = ExtResource("1_5jwg1")
-region = Rect2(0, 32, 512, 32)
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x6dgo"]
-texture = SubResource("AtlasTexture_vaabj")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vaabj"]
+texture = ExtResource("1_5jwg1")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -95,4 +91,4 @@ tile_size = Vector2i(32, 32)
 terrain_set_0/mode = 1
 terrain_set_0/terrain_0/name = "wall"
 terrain_set_0/terrain_0/color = Color(0.4, 0.6, 0.4, 1)
-sources/0 = SubResource("TileSetAtlasSource_x6dgo")
+sources/0 = SubResource("TileSetAtlasSource_vaabj")

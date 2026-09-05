@@ -53,6 +53,12 @@ var _head_cell := Vector2i.ZERO
 ## 本关机关生长周期（_place_player 时解析 override/全局）
 var _growth_interval := 6
 
+## 头部动画状态：方向行（0=E 1=W 2=S 3=N）与帧列（0/1=移动循环 2=停留）
+var _head_dir_row := 0
+var _head_col := HEAD_IDLE_COL
+var _head_walk_flip := false
+var _head_idle_seq := 0
+
 const DIRS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
 ## 4 个对角邻格（列号掩码位：bit0=TL bit1=TR bit2=BL bit3=BR，与 Terrain* 瓦片集一致）
 const CORNER_OFFS := [
@@ -60,18 +66,27 @@ const CORNER_OFFS := [
 	Vector2i(-1, 1), Vector2i(1, 1),
 ]
 
-## 地形层：Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres，
-## 每套只有 1 个 terrain（terrain_set=0, terrain=0）；运行期用 _paint_auto 按格集
-## 几何直写 4 角掩码瓦片（确定性贴边，绝不外扩）。
+## 地形层：Ground/Obstacles/MechanismCells 各自使用 TerrainFloor/Wall/Mech.tres
+## （三张独立纹理），每套只有 1 个 terrain（terrain_set=0, terrain=0）；运行期用
+## _paint_auto 按格集几何直写 4 角掩码瓦片（确定性贴边，绝不外扩）。
 ## 玩家视觉：
 ##   · PlayerCells 画身体"管道"（PlayerSnek.tres row0）：
 ##     · 中间格（前后都有格）用连接件 0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE，
 ##       每格连接前格与后格，相邻瓦片拼成连续管道；
 ##     · 头格/尾格垫"端点"半截瓦 6=E 7=W 8=S 9=N（中心→边），把管道接进头/尾底下。
-##   · 头/尾是独立 Sprite 贴图（非瓦片，画布可大于单格）：头位于 head 格、朝行进方向
-##     旋转；尾固定在出生点 S 格（起步即显示）。Head 在场景里 z_index=1，起步/回到
-##     起点（n=1）时"头叠放在尾之上"。二者挂在 World/PlayerFx 下，贴图由场景直接绑定。
+##   · 头/尾是独立 Sprite 贴图（非瓦片，画布可大于单格）：头位于 head 格，方向用
+##     贴图行选片（player_head.svg = 4 行方向 × 3 列帧精灵表，E/W/S/N 各画各的、
+##     不旋转），移动时帧列 0/1 两帧循环，停下 HEAD_IDLE_SEC 秒后固定停留帧 2；
+##     尾固定在出生点 S 格（起步即显示），朝身体延伸方向旋转。Head 在场景里
+##     z_index=1，起步/回到起点（n=1）时"头叠放在尾之上"。二者挂在 World/PlayerFx
+##     下，贴图与 hframes/vframes 由场景直接绑定。
 const TILE_SOURCE := 0
+## 机关生长体动画帧行（terrain_mech.svg 3 行：0=冒出 1=生长中 2=完成）
+const MECH_FRAME_DONE := 2
+## 头部动画规格（player_head.svg 4 行方向 × 3 列帧）
+## 帧列：0/1=移动两帧循环 2=停留固定；停留判定：HEAD_IDLE_SEC 秒内无新步
+const HEAD_IDLE_COL := 2
+const HEAD_IDLE_SEC := 0.35
 
 @onready var _ground: TileMapLayer = $World/Ground
 @onready var _obstacles: TileMapLayer = $World/Obstacles
@@ -151,9 +166,10 @@ func _compute_board_rect() -> void:
 	_board_size = max_c - min_c + Vector2i.ONE
 
 
-## 确定性贴边：给整层清空后，按"格集"几何写瓦片列号=4 角掩码（row0 为地形类），
-## 只写给定格、绝不外扩，结果与 terrain 自动贴边语义一致。
-func _paint_auto(layer: TileMapLayer, cells: Array) -> void:
+## 确定性贴边：给整层清空后，按"格集"几何写瓦片（列号=4 角掩码，行号=frame），
+## 只写给定格、绝不外扩。floor/wall 单行图（frame 恒 0）；mech 3 帧行，
+## 停留外观=MECH_FRAME_DONE（完成帧）。
+func _paint_auto(layer: TileMapLayer, cells: Array, frame: int = 0) -> void:
 	layer.clear()
 	var set := {}
 	for c: Vector2i in cells:
@@ -163,7 +179,7 @@ func _paint_auto(layer: TileMapLayer, cells: Array) -> void:
 		for b in 4:
 			if set.has(c + CORNER_OFFS[b]):
 				mask |= 1 << b
-		layer.set_cell(c, TILE_SOURCE, Vector2i(mask, 0))
+		layer.set_cell(c, TILE_SOURCE, Vector2i(mask, frame))
 
 
 ## 地板兜底：把地图矩形内整块涂成地板（已涂格位置不变，整层按几何重贴边）
@@ -208,9 +224,10 @@ func _place_player() -> void:
 	var cap := _resolve(mechanism_max_level_override, GameManager.balance.mechanism_max_level)
 	for m in _mechanisms:
 		m.set_level_cap(cap)
-	_claim_initial_mechanisms()
+	var added := _claim_initial_mechanisms()
 	_update_hud()
 	_sync_mech_layer()
+	_pop_mech_cells(added)  # 范围初建同样播一次出场动画
 
 
 # ── 机关占格（身体/保护格挡住→跳过；lv 照升，下次生长重试）────────
@@ -223,23 +240,63 @@ func _blocked_cells() -> Dictionary:
 	return blocked
 
 
-func _claim_initial_mechanisms() -> void:
+## 首次占格：把 shape(level) 中未占的格加入 claimed。返回本次新增占格
+## （= 范围初建"更新的部分"，供出场动画播放）。
+func _claim_initial_mechanisms() -> Array:
 	var blocked := _blocked_cells()
+	var added: Array = []
 	for m in _mechanisms:
 		m.claim_missing(blocked)
+		for c in m.claimed:
+			added.append(c)
 	_rebuild_mech_grid()
+	return added
 
 
 ## 机关生长：未满级则 +1 阶段；满级后每次生长仍刷新——把此前被玩家身体
 ## 挡住、现已空出的 shape 格补齐（阶段维持在本关最高 level_cap）。
+## 新增占格 = "范围更新的部分"，同步铺瓦后播一次出场动画。
 func _grow_all_mechanisms() -> void:
+	var before := {}
+	for m in _mechanisms:
+		for c in m.claimed:
+			before[c] = true
 	var blocked := _blocked_cells()
 	for m in _mechanisms:
 		if m.level < m.level_cap:
 			m.set_level(m.level + 1)
 		m.claim_missing(blocked)
+	var added: Array = []
+	for m in _mechanisms:
+		for c in m.claimed:
+			if not before.has(c):
+				added.append(c)
 	_sync_mech_layer()
 	_rebuild_mech_grid()
+	_pop_mech_cells(added)
+
+
+## 出场动画：新增占格按 3 帧行（0=冒出 1=生长中 2=完成）随 grow_anim_sec
+## 播放一次，之后停在完成帧（与既有格外观一致）。
+func _pop_mech_cells(cells: Array) -> void:
+	if cells.is_empty():
+		return
+	_set_mech_frame(cells, 0)
+	var dur: float = maxf(GameManager.balance.grow_anim_sec, 0.01)
+	var tw := create_tween()
+	tw.tween_interval(dur / 3.0)
+	tw.tween_callback(_set_mech_frame.bind(cells, 1))
+	tw.tween_interval(dur / 3.0)
+	tw.tween_callback(_set_mech_frame.bind(cells, MECH_FRAME_DONE))
+
+
+## 批量改机关生长体瓦片的帧行（列 = 4 角掩码不变）
+func _set_mech_frame(cells: Array, frame: int) -> void:
+	for c: Vector2i in cells:
+		var cur := _mech_cells.get_cell_atlas_coords(c)
+		if cur.x < 0:
+			continue  # 格已不存在（层被重建），跳过
+		_mech_cells.set_cell(c, TILE_SOURCE, Vector2i(cur.x, frame))
 
 
 ## 把机关实际占格写入 grid.mech_cells（BFS/可走判定用），含核心格
@@ -252,8 +309,9 @@ func _rebuild_mech_grid() -> void:
 
 
 ## 把机关实际占格（含核心格）画到 MechanismCells 层（确定性贴边）。
-## 核心格同样铺瓦：贴边掩码天然把核心算作生长体的一部分，核心与生长体
-## 相邻角点不缺瓦；核心外观由 Core Sprite（z_index=1）浮在瓦片上层绘制。
+## 统一铺在完成帧（MECH_FRAME_DONE）——新增格由 _pop_mech_cells 覆盖播放
+## 出场动画。核心格同样铺瓦：贴边掩码天然把核心算作生长体的一部分，核心与
+## 生长体相邻角点不缺瓦；核心外观由 Core Sprite（z_index=1）浮在瓦片上层绘制。
 func _sync_mech_layer() -> void:
 	var cells: Array = []
 	for m in _mechanisms:
@@ -262,7 +320,7 @@ func _sync_mech_layer() -> void:
 	if cells.is_empty():
 		_mech_cells.clear()
 		return
-	_paint_auto(_mech_cells, cells)
+	_paint_auto(_mech_cells, cells, MECH_FRAME_DONE)
 
 
 ## 同步玩家视觉：
@@ -302,17 +360,51 @@ func _endpoint_col(d: Vector2i) -> Vector2i:
 
 
 func _update_end_sprites(n: int) -> void:
-	# 头：位于 head 格，朝向"进入该格的方向"（未移动时默认朝右）
+	# 头：位于 head 格；方向用贴图行选片（E/W/S/N 各画各的，不旋转），
+	# 帧列由 _head_col 决定（移动循环/停留帧，_advance_head_walk 推进）。
 	_head_sprite.visible = n > 0
 	var face := trail[n - 1] - trail[n - 2] if n > 1 else Vector2i.RIGHT
+	_head_dir_row = _head_row_for(face)
 	_head_sprite.position = GridMetrics.cell_center(trail[n - 1])
-	_head_sprite.rotation = Vector2(face).angle()
+	_head_sprite.rotation = 0.0
+	_apply_head_frame()
 	# 尾（机器）：固定在出生点 S，从开局（n=1）就显示——起步/回到起点时头叠放在其上；
 	# 朝向"身体延伸方向"，n=1 无身段时默认朝右。
 	_tail_sprite.visible = n > 0
 	var out_dir := trail[1] - trail[0] if n > 1 else Vector2i.RIGHT
 	_tail_sprite.position = GridMetrics.cell_center(trail[0])
 	_tail_sprite.rotation = Vector2(out_dir).angle()
+
+
+## 方向 -> 头贴图行（player_head.svg 4 行：0=E右 1=W左 2=S下 3=N上）
+func _head_row_for(face: Vector2i) -> int:
+	match face:
+		Vector2i.LEFT: return 1
+		Vector2i.DOWN: return 2
+		Vector2i.UP: return 3
+	return 0  # E 右
+
+
+## 头帧号 = 方向行 × 3 + 帧列（hframes=3 由场景绑定）
+func _apply_head_frame() -> void:
+	_head_sprite.frame = _head_dir_row * 3 + _head_col
+
+
+## 每次有效步推进头部"两帧循环"，并重置停留计时：
+## HEAD_IDLE_SEC 秒内无新步 -> 固定到停留帧（列 2）。
+func _advance_head_walk() -> void:
+	_head_walk_flip = not _head_walk_flip
+	_head_col = 1 if _head_walk_flip else 0
+	_apply_head_frame()
+	_head_idle_seq += 1
+	get_tree().create_timer(HEAD_IDLE_SEC).timeout.connect(_on_head_idle.bind(_head_idle_seq))
+
+
+func _on_head_idle(seq: int) -> void:
+	if seq != _head_idle_seq:
+		return  # 期间又有新步，该计时器已过期
+	_head_col = HEAD_IDLE_COL
+	_apply_head_frame()
 
 
 ## 弯角瓦片列号：按入口边与出口边围出的外侧拐角（b - a）定 4 种朝向
@@ -395,6 +487,7 @@ func _consume_food_at(cell: Vector2i) -> void:
 
 
 func _after_action() -> void:
+	_advance_head_walk()  # 头部移动两帧循环 + 停留计时
 	EventManager.player_moved.emit(_head_cell)
 	EventManager.move_count_changed.emit(steps)
 	_sync_player_layer()

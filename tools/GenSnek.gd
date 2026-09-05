@@ -9,11 +9,13 @@ extends Node
 ##       "前后都有格子"的格，相邻瓦片拼起来是连续"管道"。
 ##     端点瓦片（col 6..9，中心→边 半截带身）：
 ##       6=E 7=W 8=S 9=N —— 垫在头/尾所在格底下，把管道平滑接进头/尾底部。
-##   Art/Sprites/player_head.svg（44×44，人物占位圆，无内嵌带身；基准朝右）
+##   Art/Sprites/player_head.svg（132×176 精灵表：4 行方向 × 3 列帧，每格 44×44）
+##     行 = 方向（0=E右 1=W左 2=S下 3=N上，四个方向各画各的、互不旋转）
+##     列 = 帧（0/1=移动两帧循环，2=停留固定帧）
 ##   Art/Sprites/player_tail.svg（48×48，机器占位圆，无内嵌带身；接端朝右）
-## 注意：头/尾是 Sprite2D 按纹理中心定位，接口点（默认=纹理中心）对齐格中心；
-##       画布可大于单格（纹理中心=格中心即居中溢出）。若正式美术的接口点不在
-##       纹理中心，用 Sprite2D 的 offset 属性把接口点挪到格中心（旋转绕该点）。
+## 注意：头是 Sprite2D（hframes=3, vframes=4）按帧选片，不旋转；接口点=每帧
+##       画布中心=格中心（Sprite 居中定位即对齐）。尾仍按方向旋转。若正式美术
+##       的接口点不在帧中心，用 Sprite2D 的 offset 校正。
 ##       不要再在头/尾贴图内画接线带身——带身已收敛为 PlayerSnek 端点瓦片。
 ## 运行：godot --headless res://tools/GenSnek.tscn            （生成 svg）
 ##       godot --headless --import
@@ -58,7 +60,7 @@ func _ready() -> void:
 		get_tree().quit(0)
 		return
 	_write_svg(TILE_SVG, _body_svg(), CELL * 10, CELL)
-	_write_svg(HEAD_SVG, _head_svg(), HEAD_PX, HEAD_PX)
+	_write_svg(HEAD_SVG, _head_svg(), HEAD_PX * 3, HEAD_PX * 4)
 	_write_svg(TAIL_SVG, _tail_svg(), TAIL_PX, TAIL_PX)
 	print("已生成 player_snek.svg / player_head.svg / player_tail.svg")
 	get_tree().quit(0)
@@ -121,19 +123,52 @@ func _bar(sb: PackedStringArray, ox: int, d: Vector2i) -> void:
 		_rect(sb, ox, 0, 16 - HW, y0, HW * 2, 16, COL_BODY)
 
 
-# ── 头（人物占位圆，基准朝右 = 行进方向；接口点=圆心=格中心）────────
+# ── 头（人物占位圆精灵表：4 行方向 × 3 列帧；接口点=每帧画布中心=格中心）──
 func _head_svg() -> String:
-	var c := HEAD_PX * 0.5
 	var sb := PackedStringArray()
-	# 金色圆形"人"
-	_circle(sb, c, c, HEAD_R, COL_HEAD_FILL, COL_HEAD_STROKE, 2.0)
-	# 中心接口点（管道在此接入圆下，占位提示）
-	_circle(sb, c, c, 4.5, COL_BODY, COL_HEAD_STROKE, 1.0)
-	# 面朝 +x（眼睛在行进侧）
-	_circle(sb, c + HEAD_R * 0.5, c - 7.0, 1.9, COL_FACE, "", 0.0)
-	_circle(sb, c + HEAD_R * 0.5, c + 7.0, 1.9, COL_FACE, "", 0.0)
-	_circle(sb, c + HEAD_R * 0.78, c, 2.4, COL_FACE, "", 0.0)
+	for row in 4:    # 行=方向：0=E右 1=W左 2=S下 3=N上（四个方向各画各的，不旋转）
+		for col in 3:  # 列=帧：0/1=移动循环 2=停留固定
+			_head_frame(sb, row, col)
 	return "\n".join(sb)
+
+
+## 一帧：人物圆（col0 压扁 / col1 拉伸 / col2 中性）+ 按方向画脸（N=背面无脸画发旋）
+func _head_frame(sb: PackedStringArray, row: int, col: int) -> void:
+	var ox := col * HEAD_PX
+	var oy := row * HEAD_PX
+	var cx := HEAD_PX * 0.5
+	var cy := HEAD_PX * 0.5
+	var sx := 1.0
+	var sy := 1.0
+	if col == 0:
+		sx = 1.05
+		sy = 0.94   # 移动帧A：横向压扁
+	elif col == 1:
+		sx = 0.94
+		sy = 1.06   # 移动帧B：纵向拉伸
+	var rx := HEAD_R * sx
+	var ry := HEAD_R * sy
+	# 金色圆形"人"
+	sb.append("<ellipse cx=\"%s\" cy=\"%s\" rx=\"%s\" ry=\"%s\" fill=\"%s\" stroke=\"%s\" stroke-width=\"2\"/>"
+			% [fnum(ox + cx), fnum(oy + cy), fnum(rx), fnum(ry), COL_HEAD_FILL, COL_HEAD_STROKE])
+	# 中心接口点（管道在此接入圆下）
+	_circle(sb, ox + cx, oy + cy, 4.5, COL_BODY, COL_HEAD_STROKE, 1.0)
+	match row:
+		0:  # E 右：脸在右侧
+			_circle(sb, ox + cx + rx * 0.45, oy + cy - 7.0 * sy, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx + rx * 0.45, oy + cy + 7.0 * sy, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx + rx * 0.78, oy + cy, 2.4, COL_FACE, "", 0.0)
+		1:  # W 左：脸在左侧
+			_circle(sb, ox + cx - rx * 0.45, oy + cy - 7.0 * sy, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx - rx * 0.45, oy + cy + 7.0 * sy, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx - rx * 0.78, oy + cy, 2.4, COL_FACE, "", 0.0)
+		2:  # S 下：脸在下缘
+			_circle(sb, ox + cx - 7.0 * sx, oy + cy + ry * 0.45, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx + 7.0 * sx, oy + cy + ry * 0.45, 1.9, COL_FACE, "", 0.0)
+			_circle(sb, ox + cx, oy + cy + ry * 0.78, 2.4, COL_FACE, "", 0.0)
+		_:  # N 上：背面，无五官，画发旋
+			sb.append("<ellipse cx=\"%s\" cy=\"%s\" rx=\"6\" ry=\"4\" fill=\"none\" stroke=\"%s\" stroke-width=\"1.5\"/>"
+					% [fnum(ox + cx), fnum(oy + cy - ry * 0.45), COL_FACE])
 
 
 # ── 尾（机器占位圆，接端朝右；接口点=圆心=格中心）───────────────────
