@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s04hgakxrr4d"
-path="res://.godot/imported/Goal-Flower.png-f8b848d16df626ddb6c19510dc416043.ctex"
+uid="uid://c2y6g3385okvd"
+path="res://.godot/imported/pental.png-f4a1dd1d487b80bc61ed4b758ec14b3c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Goal-Flower.png"
-dest_files=["res://.godot/imported/Goal-Flower.png-f8b848d16df626ddb6c19510dc416043.ctex"]
+source_file="res://Art/Sprites/pental.png"
+dest_files=["res://.godot/imported/pental.png-f4a1dd1d487b80bc61ed4b758ec14b3c.ctex"]
 
 [params]
 

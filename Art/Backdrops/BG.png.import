@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqxqt4nt73060"
-path="res://.godot/imported/Algee-up.png-d1522c21881230aa4d54640abdea2afd.ctex"
+uid="uid://buqsecenef4xu"
+path="res://.godot/imported/BG.png-37c18d4b1d34b6045a8e44d72119af49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Algee-up.png"
-dest_files=["res://.godot/imported/Algee-up.png-d1522c21881230aa4d54640abdea2afd.ctex"]
+source_file="res://Art/Backdrops/BG.png"
+dest_files=["res://.godot/imported/BG.png-37c18d4b1d34b6045a8e44d72119af49.ctex"]
 
 [params]
 

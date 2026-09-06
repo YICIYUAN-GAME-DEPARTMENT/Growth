@@ -1,15 +1,15 @@
 [gd_scene format=4 uid="uid://d13i3ek0xpad7"]
 
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_2p1io"]
-[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://ImportArt/BG.png" id="2_6lbqr"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://Art/Backdrops/BG.png" id="2_6lbqr"]
 [ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="3_6lbqr"]
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="4_jnxuw"]
 [ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="5_6lbqr"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="5_75amg"]
 [ext_resource type="PackedScene" uid="uid://dprxeg350g0s0" path="res://Scenes/Entities/Goal.tscn" id="6_jnxuw"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="6_nniqf"]
-[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://ImportArt/Algee-all.png" id="7_vyftb"]
-[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="8_q7hd7"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://Art/Sprites/Algee-all.png" id="7_vyftb"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://Art/Sprites/Charlie-Default.png" id="8_q7hd7"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="9_df346"]
 
 [node name="Level" type="Node2D" unique_id=1958937689]
@@ -63,11 +63,28 @@ texture = ExtResource("8_q7hd7")
 
 [node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("9_df346")]
 
-[node name="PetalLabel" parent="LevelHUD/Root/TopArea/HBoxContainer" parent_id_path=PackedInt32Array(1443197510, 27681162) index="3" unique_id=1633810610]
+[node name="TopArea" parent="LevelHUD/Root" parent_id_path=PackedInt32Array(1443197510, 162793811) index="0" unique_id=774789840]
+offset_bottom = 92.0
+
+[node name="HBoxContainer" parent="LevelHUD/Root/TopArea" index="0" unique_id=27681162]
+offset_top = 17.0
+offset_bottom = 97.0
+
+[node name="PetalLabel" parent="LevelHUD/Root/TopArea/HBoxContainer" index="3" unique_id=1633810610]
 visible = false
 
-[node name="PetalCard" parent="LevelHUD/Root/TopArea/HBoxContainer" parent_id_path=PackedInt32Array(1443197510, 27681162) index="4" unique_id=1005584411]
+[node name="PetalCard" parent="LevelHUD/Root/TopArea/HBoxContainer" index="4" unique_id=1005584411]
 visible = false
+
+[node name="GrowLabel" parent="LevelHUD/Root/TopArea/HBoxContainer" index="6" unique_id=1368424989]
+visible = false
+
+[node name="GrowCard" parent="LevelHUD/Root/TopArea/HBoxContainer" index="7" unique_id=1715908551]
+visible = false
+
+[node name="ActionsPanel" parent="LevelHUD/Root/TopArea" index="1" unique_id=1118754327]
+offset_top = 18.0
+offset_bottom = 76.0
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
 position = Vector2(640, 360)

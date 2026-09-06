@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqo2j3v0oy4j6"
-path="res://.godot/imported/Terrarin-mech.png-09b742d994ab64549d69a16fa11ce805.ctex"
+uid="uid://c101km362fno0"
+path="res://.godot/imported/TILE_Flower_Blob47_Animated_01.png-029b3ddd32f481cc45950c4b4edbf5d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Terrarin-mech.png"
-dest_files=["res://.godot/imported/Terrarin-mech.png-09b742d994ab64549d69a16fa11ce805.ctex"]
+source_file="res://Art/Tiles/TILE_Flower_Blob47_Animated_01.png"
+dest_files=["res://.godot/imported/TILE_Flower_Blob47_Animated_01.png-029b3ddd32f481cc45950c4b4edbf5d1.ctex"]
 
 [params]
 

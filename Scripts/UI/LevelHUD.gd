@@ -6,6 +6,10 @@ extends CanvasLayer
 
 @onready var _remaining_steps_value: Label = $Root/TopArea/HBoxContainer/RemainingCard/RemainingValue
 @onready var _petal_value: Label = $Root/TopArea/HBoxContainer/PetalCard/PetalValue
+@onready var _grow_label: Label = $Root/TopArea/HBoxContainer/GrowLabel
+@onready var _grow_card: PanelContainer = $Root/TopArea/HBoxContainer/GrowCard
+@onready var _grow_value: Label = $Root/TopArea/HBoxContainer/GrowCard/GrowValue
+@onready var _level_title: Label = $Root/TopArea/LevelTitle
 @onready var _overlay: Control = $Root/Overlay
 @onready var _overlay_text: Label = $Root/Overlay/Center/Panel/Content/Text
 @onready var _restart: Button = $Root/TopArea/ActionsPanel/Actions/RestartBtn
@@ -53,6 +57,22 @@ func update_remaining_steps(remaining_steps: int) -> void:
 ## 花瓣提供的步长：每片食物给最大身长增加的格数（Level 解析 override/全局后传入）
 func set_petal_gain(gain: int) -> void:
 	_petal_value.text = str(gain)
+
+
+## 花丛（机关）距下次生长的剩余有效步数；每步后由 Level 传入
+func set_growth_countdown(steps_left: int) -> void:
+	_grow_value.text = str(steps_left)
+
+
+## 本关无机关时隐藏整个计数项
+func set_growth_visible(show: bool) -> void:
+	_grow_label.visible = show
+	_grow_card.visible = show
+
+
+## 顶栏关卡标题：第 N 关 · 关卡名（N = 场景 Level 根节点 level_id）
+func set_level_title(title: String) -> void:
+	_level_title.text = title
 
 
 ## 结算面板：victory=true 时显示"下一关"按钮；失败隐藏。

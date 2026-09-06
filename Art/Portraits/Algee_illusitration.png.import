@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ucu4yny62pq4"
-path="res://.godot/imported/Charlie-Default.png-dad24cc2ef5cc684505494c23eed1254.ctex"
+uid="uid://dbbkhwnjvuv1x"
+path="res://.godot/imported/Algee_illusitration.png-3091c614bd1826f535225dfdfef46a7a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Charlie-Default.png"
-dest_files=["res://.godot/imported/Charlie-Default.png-dad24cc2ef5cc684505494c23eed1254.ctex"]
+source_file="res://Art/Portraits/Algee_illusitration.png"
+dest_files=["res://.godot/imported/Algee_illusitration.png-3091c614bd1826f535225dfdfef46a7a.ctex"]
 
 [params]
 

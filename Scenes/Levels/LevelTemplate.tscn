@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_level"]
 [ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="2_floor"]
-[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://ImportArt/BG.png" id="2_mm6ix"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://Art/Backdrops/BG.png" id="2_mm6ix"]
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_asxnk"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="3_hud"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="4_mm6ix"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="5_n4ce2"]
-[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://ImportArt/Algee-all.png" id="6_mm6ix"]
-[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="7_asxnk"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://Art/Sprites/Algee-all.png" id="6_mm6ix"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://Art/Sprites/Charlie-Default.png" id="7_asxnk"]
 
 [node name="Level2" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_level")

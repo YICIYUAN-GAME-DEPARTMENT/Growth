@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6srrrv5yftn0"
-path="res://.godot/imported/Charlie_illusitration.png-f731e5617c1fe50efa20cda25892b086.ctex"
+uid="uid://ucu4yny62pq4"
+path="res://.godot/imported/Charlie-Default.png-7ec190843b0e50b3079842c07e7ab92a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Charlie_illusitration.png"
-dest_files=["res://.godot/imported/Charlie_illusitration.png-f731e5617c1fe50efa20cda25892b086.ctex"]
+source_file="res://Art/Sprites/Charlie-Default.png"
+dest_files=["res://.godot/imported/Charlie-Default.png-7ec190843b0e50b3079842c07e7ab92a.ctex"]
 
 [params]
 

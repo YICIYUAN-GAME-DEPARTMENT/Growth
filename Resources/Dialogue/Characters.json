@@ -3,13 +3,13 @@
     "algee": {
       "name": "阿吉",
       "poses": {
-        "normal": "res://ImportArt/Algee_illusitration.png"
+        "normal": "res://Art/Portraits/Algee_illusitration.png"
       }
     },
     "charlie": {
       "name": "查理",
       "poses": {
-        "normal": "res://ImportArt/Charlie_illusitration.png"
+        "normal": "res://Art/Portraits/Charlie_illusitration.png"
       }
     }
   }

@@ -72,19 +72,19 @@ theme = ExtResource("3_theme")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 92.0
+offset_bottom = 128.0
 grow_horizontal = 2
 mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Root/TopArea" unique_id=27681162]
 layout_mode = 0
 offset_left = 25.0
-offset_top = 17.0
+offset_top = 48.0
 offset_right = 640.0
-offset_bottom = 97.0
+offset_bottom = 128.0
 
 [node name="Label" type="Label" parent="Root/TopArea/HBoxContainer" unique_id=1633810609]
-custom_minimum_size = Vector2(180, 80)
+custom_minimum_size = Vector2(160, 76)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
 theme_override_font_sizes/font_size = 34
@@ -103,17 +103,17 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8yrgd")
 [node name="RemainingValue" type="Label" parent="Root/TopArea/HBoxContainer/RemainingCard" unique_id=1074521201]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 34
 text = "2"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Control" type="Control" parent="Root/TopArea/HBoxContainer" unique_id=1655944570]
-custom_minimum_size = Vector2(20, 0)
+[node name="space" type="Control" parent="Root/TopArea/HBoxContainer" unique_id=1655944570]
+custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
 [node name="PetalLabel" type="Label" parent="Root/TopArea/HBoxContainer" unique_id=1633810610]
-custom_minimum_size = Vector2(180, 80)
+custom_minimum_size = Vector2(160, 75)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
 theme_override_font_sizes/font_size = 34
@@ -132,8 +132,37 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8yrgd")
 [node name="PetalValue" type="Label" parent="Root/TopArea/HBoxContainer/PetalCard" unique_id=1074521202]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 34
 text = "2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="space2" type="Control" parent="Root/TopArea/HBoxContainer" unique_id=1001643856]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="GrowLabel" type="Label" parent="Root/TopArea/HBoxContainer" unique_id=1368424989]
+custom_minimum_size = Vector2(180, 75)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleBoxFlat_7ig1k")
+text = "距花丛生长"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GrowCard" type="PanelContainer" parent="Root/TopArea/HBoxContainer" unique_id=1715908551]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"CounterCard"
+theme_override_styles/panel = SubResource("StyleBoxFlat_8yrgd")
+
+[node name="GrowValue" type="Label" parent="Root/TopArea/HBoxContainer/GrowCard" unique_id=1291812189]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.157, 0.345, 0.231, 1)
+theme_override_font_sizes/font_size = 34
+text = "6"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -143,9 +172,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -348.0
-offset_top = 18.0
+offset_top = 58.0
 offset_right = -20.0
-offset_bottom = 76.0
+offset_bottom = 116.0
 grow_horizontal = 0
 mouse_filter = 1
 theme_type_variation = &"SoftPanel"
@@ -165,6 +194,20 @@ custom_minimum_size = Vector2(154, 42)
 layout_mode = 2
 text = "选关"
 script = ExtResource("4_button")
+
+[node name="LevelTitle" type="Label" parent="Root/TopArea" unique_id=1229292185]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 4.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.15294118, 0.30980393, 0.22352941, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 0.9)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Overlay" type="Control" parent="Root" unique_id=1751804261]
 visible = false

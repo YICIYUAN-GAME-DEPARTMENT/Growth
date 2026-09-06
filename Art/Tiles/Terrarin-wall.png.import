@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cey5g3guyr364"
-path="res://.godot/imported/food.svg-f6d03ad2b1a8ad941b5a0f88967d05e7.ctex"
+uid="uid://bfatkrrl8kgy6"
+path="res://.godot/imported/Terrarin-wall.png-ca420427edfa0040f4abb4d86b289b98.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Sprites/food.svg"
-dest_files=["res://.godot/imported/food.svg-f6d03ad2b1a8ad941b5a0f88967d05e7.ctex"]
+source_file="res://Art/Tiles/Terrarin-wall.png"
+dest_files=["res://.godot/imported/Terrarin-wall.png-ca420427edfa0040f4abb4d86b289b98.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

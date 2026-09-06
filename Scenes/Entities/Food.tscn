@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bn61nd5v2kny7"]
 
 [ext_resource type="Script" uid="uid://sa81yp6afnl1" path="res://Scripts/Entities/Food.gd" id="1_food"]
-[ext_resource type="Texture2D" uid="uid://c2y6g3385okvd" path="res://ImportArt/pental.png" id="2_5aq7r"]
+[ext_resource type="Texture2D" uid="uid://c2y6g3385okvd" path="res://Art/Sprites/pental.png" id="2_5aq7r"]
 
 [node name="Food" type="Node2D" unique_id=2013670240]
 position = Vector2(16, 16)

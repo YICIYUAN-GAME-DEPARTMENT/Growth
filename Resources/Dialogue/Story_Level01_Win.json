@@ -4,7 +4,12 @@
     {
       "speaker": "algee",
       "pose": "normal",
-      "text": "哇，这朵花真漂亮！"
+      "text": "噢！我摘到了！"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "这朵花真漂亮！"
     },
     {
       "speaker": "charlie",

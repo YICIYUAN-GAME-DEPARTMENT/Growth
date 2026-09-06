@@ -110,7 +110,7 @@ const BLOB_CORNER_GATES := [
 ##                                               TILE_Flower_Blob47_Animated_01.png）
 ##   · TerrainFloor.tres（4 角 16 列旧地板）仅保留给未迁移旧关，运行期走 4 角掩码。
 ## 玩家视觉：
-##   · PlayerCells 画身体"管道"（PlayerSnek.tres = ImportArt/path.png row0）：
+##   · PlayerCells 画身体"管道"（PlayerSnek.tres = Art/Tiles/path.png row0）：
 ##     · 中间格（前后都有格）用连接件 0=横直 1=竖直 2=弯NE 3=弯NW 4=弯SW 5=弯SE，
 ##       每格连接前格与后格，相邻瓦片拼成连续管道；
 ##     · 头格/尾格垫"端点"半截瓦 6=E 7=W 8=S 9=N（中心→边），把管道接进头/尾底下。
@@ -164,6 +164,7 @@ func _ready() -> void:
 	# LevelHUD 同理：作者可能整层隐藏便于编辑；运行时必须显示，否则顶栏/
 	# 结算面板/暂停菜单全部不可见（剧情播完后"弹不出胜利/失败界面"的根因之一）。
 	_hud.visible = true
+	_hud.set_level_title("第 %d 关 · %s" % [level_id, level_name])
 	_set_head_anchor()
 	_sync_player_layer()
 	EventManager.level_loaded.emit(level_id)
@@ -376,6 +377,7 @@ func _place_player() -> void:
 	for m in _mechanisms:
 		m.set_level_cap(cap)
 	var added := _claim_initial_mechanisms()
+	_hud.set_growth_visible(not _mechanisms.is_empty())
 	_update_hud()
 	_sync_mech_layer()
 	_pop_mech_cells(added)  # 范围初建同样播一次出场动画
@@ -777,4 +779,5 @@ func _ensure_dialogue() -> DialogueOverlay:
 func _update_hud() -> void:
 	var remaining_steps := maxi(max_len - trail.size(), 0)
 	_hud.update_remaining_steps(remaining_steps)
+	_hud.set_growth_countdown(_growth_interval - (steps % _growth_interval))
 	_hud.set_petal_gain(_food_len_gain)

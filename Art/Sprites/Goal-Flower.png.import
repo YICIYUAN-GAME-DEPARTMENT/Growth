@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbbkhwnjvuv1x"
-path="res://.godot/imported/Algee_illusitration.png-a8a4321d675c688d191e59a469da14c8.ctex"
+uid="uid://s04hgakxrr4d"
+path="res://.godot/imported/Goal-Flower.png-cd7f75cd0fb61ac5e38ae6b9d60b2694.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Algee_illusitration.png"
-dest_files=["res://.godot/imported/Algee_illusitration.png-a8a4321d675c688d191e59a469da14c8.ctex"]
+source_file="res://Art/Sprites/Goal-Flower.png"
+dest_files=["res://.godot/imported/Goal-Flower.png-cd7f75cd0fb61ac5e38ae6b9d60b2694.ctex"]
 
 [params]
 

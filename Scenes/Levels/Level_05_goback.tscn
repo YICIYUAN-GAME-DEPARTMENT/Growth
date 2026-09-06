@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://ddkv37kxuxyph"]
 
 [ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_std87"]
-[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://ImportArt/BG.png" id="2_scbyq"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://Art/Backdrops/BG.png" id="2_scbyq"]
 [ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="3_0ry87"]
 [ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="3_4t0fa"]
 [ext_resource type="PackedScene" uid="uid://csejctbgwl6k5" path="res://Scenes/Entities/Mechanism.tscn" id="4_0ry87"]
@@ -10,8 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="7_8a4n6"]
 [ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="8_2tqd2"]
 [ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="9_6e355"]
-[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://ImportArt/Algee-all.png" id="10_obv2x"]
-[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://ImportArt/Charlie-Default.png" id="11_ie4g8"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://Art/Sprites/Algee-all.png" id="10_obv2x"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://Art/Sprites/Charlie-Default.png" id="11_ie4g8"]
 [ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="12_xdbie"]
 
 [node name="Level" type="Node2D" unique_id=1958937689]

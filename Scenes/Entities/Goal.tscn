@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dprxeg350g0s0"]
 
 [ext_resource type="Script" uid="uid://bbi8ne8xbftcb" path="res://Scripts/Entities/Goal.gd" id="1_goal"]
-[ext_resource type="Texture2D" uid="uid://s04hgakxrr4d" path="res://ImportArt/Goal-Flower.png" id="2_vs13i"]
+[ext_resource type="Texture2D" uid="uid://s04hgakxrr4d" path="res://Art/Sprites/Goal-Flower.png" id="2_vs13i"]
 
 [node name="Goal" type="Node2D" unique_id=1654257061]
 position = Vector2(16, 16)

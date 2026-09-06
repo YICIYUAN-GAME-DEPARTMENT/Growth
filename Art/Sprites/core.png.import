@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmraebj5jtt33"
-path="res://.godot/imported/Algee-left.png-288729028444ade46d3c52aa470459c3.ctex"
+uid="uid://c207c3ppkcmes"
+path="res://.godot/imported/core.png-a661008c53b46c06f7a98d5412b70e21.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://ImportArt/Algee-left.png"
-dest_files=["res://.godot/imported/Algee-left.png-288729028444ade46d3c52aa470459c3.ctex"]
+source_file="res://Art/Sprites/core.png"
+dest_files=["res://.godot/imported/core.png-a661008c53b46c06f7a98d5412b70e21.ctex"]
 
 [params]
 

@@ -4,8 +4,8 @@ extends Node
 ## ----------------------------------------------------------------------------
 ## 就地重写既有 Art/Tiles/TerrainMech.tres 与 TerrainWall.tres（文件名/uid 不变），
 ## 因此所有引用它们的场景（含模板/旧关）自动换用新图集，无需改动场景 ext_resource。
-##   TerrainMech.tres ← ImportArt/TILE_Flower_Blob47_Animated_01.png（47 列 × 3 帧行）
-##   TerrainWall.tres ← ImportArt/TILE_Wall_Blob47__01.png          （47 列 × 1 行）
+##   TerrainMech.tres ← Art/Tiles/TILE_Flower_Blob47_Animated_01.png（47 列 × 3 帧行）
+##   TerrainWall.tres ← Art/Tiles/TILE_Wall_Blob47__01.png          （47 列 × 1 行）
 ## peering 参考 Art/Tiles/TerrainGrassBlob47.tres 逐列读入，确保列序语义一致。
 ## 运行：godot --headless res://tools/GenBlob47MechWall.tscn
 ## 注意：ResourceSaver.save 不写 gd_resource uid 头，本工具保存后自行补写。
@@ -15,8 +15,8 @@ const REF := "res://Art/Tiles/TerrainGrassBlob47.tres"
 ## 就地覆盖既有资源（保留原 uid = 场景引用不失联）
 const OUT_MECH := "res://Art/Tiles/TerrainMech.tres"
 const OUT_WALL := "res://Art/Tiles/TerrainWall.tres"
-const TEX_MECH := "res://ImportArt/TILE_Flower_Blob47_Animated_01.png"
-const TEX_WALL := "res://ImportArt/TILE_Wall_Blob47__01.png"
+const TEX_MECH := "res://Art/Tiles/TILE_Flower_Blob47_Animated_01.png"
+const TEX_WALL := "res://Art/Tiles/TILE_Wall_Blob47__01.png"
 ## 原 TerrainMech/TerrainWall 的 uid（不变）
 const MECH_TS_UID := "uid://dt67is7gr5ute"
 const WALL_TS_UID := "uid://dbo1r0lej0lvf"
