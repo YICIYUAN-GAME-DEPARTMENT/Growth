@@ -1,0 +1,26 @@
+{
+  "title": "Level04-失败",
+  "lines": [
+    
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "糟了，这些花挤满通道了，我们没办法拿到里面那朵蓝色的花了。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "你可以选择踩过这片花丛的。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "绝对不行！！！万一，我是说万一——维生装置或者防护服失效怎么办？"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "……第二种方案，少收集花瓣、在通道成为花海前冲过去。"
+    }
+  ]
+}

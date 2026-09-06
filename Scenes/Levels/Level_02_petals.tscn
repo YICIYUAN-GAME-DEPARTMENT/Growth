@@ -1,0 +1,86 @@
+[gd_scene format=4 uid="uid://bokr06o5yavi1"]
+
+[ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_6chh1"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://Art/Backdrops/BG.png" id="2_jio5u"]
+[ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="3_1cfbu"]
+[ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="4_4acij"]
+[ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="5_1cfbu"]
+[ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="5_ifc73"]
+[ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="6_0e30c"]
+[ext_resource type="PackedScene" uid="uid://dprxeg350g0s0" path="res://Scenes/Entities/Goal.tscn" id="6_4acij"]
+[ext_resource type="PackedScene" uid="uid://bn61nd5v2kny7" path="res://Scenes/Entities/Food.tscn" id="7_4acij"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://Art/Sprites/Algee-all.png" id="7_12ac4"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://Art/Sprites/Charlie-Default.png" id="8_agyxq"]
+[ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="9_4mya8"]
+
+[node name="Level2" type="Node2D" unique_id=1958937689]
+script = ExtResource("1_6chh1")
+level_id = 2
+level_name = "散落的花瓣"
+food_len_gain_override = 4
+story_start = "res://Resources/Dialogue/Story_Level02_Start.json"
+story_win = "res://Resources/Dialogue/Story_Level02_Win.json"
+
+[node name="World" type="Node2D" parent="." unique_id=2088720049]
+
+[node name="Bg" type="Sprite2D" parent="World" unique_id=1483216229]
+position = Vector2(640, 360)
+texture = ExtResource("2_jio5u")
+
+[node name="Ground" type="TileMapLayer" parent="World" unique_id=620393186]
+tile_map_data = PackedByteArray("AAAOAAsAAAAuAAAAAAAPAAsAAAAuAAAAAAAQAAsAAAAuAAAAAAARAAsAAAAuAAAAAAASAAsAAAAuAAAAAAATAAsAAAAuAAAAAAAUAAsAAAAuAAAAAAAVAAsAAAAuAAAAAAAWAAsAAAAuAAAAAAAXAAsAAAAsAAAAAAAYAAsAAAAkAAAAAAAZAAsAAAAjAAAAAAAZAAoAAAAaAAAAAAAYAAoAAAAfAAAAAAAXAAoAAAAtAAAAAAAWAAoAAAAuAAAAAAAVAAoAAAAuAAAAAAAUAAoAAAAuAAAAAAATAAoAAAAuAAAAAAASAAoAAAAuAAAAAAARAAoAAAAuAAAAAAAQAAoAAAAuAAAAAAAPAAoAAAAhAAAAAAAOAAoAAAAfAAAAAAANAAoAAAAKAAAAAAANAAsAAAAZAAAAAAAMAAsAAAACAAAAAAANAAwAAAAEAAAAAAAOAAwAAAApAAAAAAAPAAwAAAAuAAAAAAAQAAwAAAAuAAAAAAARAAwAAAAuAAAAAAASAAwAAAAuAAAAAAATAAwAAAAuAAAAAAAUAAwAAAAuAAAAAAAVAAwAAAAuAAAAAAAWAAwAAAAuAAAAAAARAAkAAAAfAAAAAAAQAAkAAAAfAAAAAAAPAAkAAAAKAAAAAAASAAkAAAAfAAAAAAATAAkAAAAfAAAAAAAUAAkAAAAfAAAAAAAVAAkAAAAfAAAAAAAWAAkAAAAfAAAAAAAXAAkAAAAaAAAAAAAPAA0AAAAkAAAAAAAOAA0AAAAEAAAAAAAQAA0AAAApAAAAAAARAA0AAAAuAAAAAAASAA0AAAAuAAAAAAATAA0AAAAuAAAAAAAUAA0AAAAuAAAAAAAVAA0AAAAsAAAAAAAWAA0AAAAkAAAAAAAXAA0AAAAiAAAAAAAVAA4AAAAiAAAAAAAUAA4AAAAkAAAAAAATAA4AAAAkAAAAAAASAA4AAAAkAAAAAAARAA4AAAAkAAAAAAAQAA4AAAAEAAAAAAAXAAwAAAAqAAAAAAAaAAsAAAANAAAAAAA=")
+tile_set = ExtResource("3_1cfbu")
+
+[node name="Obstacles" type="TileMapLayer" parent="World" unique_id=1559005235]
+tile_set = ExtResource("4_4acij")
+
+[node name="EntityRoot" type="Node2D" parent="World" unique_id=1535406282]
+
+[node name="PlayerSpawn" parent="World/EntityRoot" unique_id=1658100739 instance=ExtResource("5_1cfbu")]
+position = Vector2(464, 368)
+cell = Vector2i(14, 11)
+
+[node name="Goal" parent="World/EntityRoot" unique_id=1654257061 instance=ExtResource("6_4acij")]
+position = Vector2(784, 368)
+cell = Vector2i(24, 11)
+
+[node name="Food" parent="World/EntityRoot" unique_id=2013670240 instance=ExtResource("7_4acij")]
+position = Vector2(528, 368)
+cell = Vector2i(16, 11)
+
+[node name="Food2" parent="World/EntityRoot" unique_id=1482755839 instance=ExtResource("7_4acij")]
+position = Vector2(624, 400)
+cell = Vector2i(19, 12)
+
+[node name="MechanismCells" type="TileMapLayer" parent="World" unique_id=1566093649]
+tile_set = ExtResource("5_ifc73")
+
+[node name="PlayerCells" type="TileMapLayer" parent="World" unique_id=1322017958]
+tile_set = ExtResource("6_0e30c")
+
+[node name="PlayerFx" type="Node2D" parent="World" unique_id=901787452]
+
+[node name="Head" type="Sprite2D" parent="World/PlayerFx" unique_id=1446686610]
+visible = false
+z_index = 1
+texture = ExtResource("7_12ac4")
+hframes = 3
+vframes = 4
+
+[node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
+visible = false
+texture = ExtResource("8_agyxq")
+
+[node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("9_4mya8")]
+
+[node name="GrowLabel" parent="LevelHUD/Root/TopArea/HBoxContainer" parent_id_path=PackedInt32Array(1443197510, 27681162) index="6" unique_id=1368424989]
+visible = false
+
+[node name="GrowCard" parent="LevelHUD/Root/TopArea/HBoxContainer" parent_id_path=PackedInt32Array(1443197510, 27681162) index="7" unique_id=1715908551]
+visible = false
+
+[node name="Cam" type="Camera2D" parent="." unique_id=962089457]
+position = Vector2(640, 360)
+zoom = Vector2(1.5, 1.5)
+
+[editable path="LevelHUD"]

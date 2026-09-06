@@ -1,0 +1,45 @@
+{
+  "title": "Level01-开始",
+  "lines": [
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "查理，看！那里有一朵蓝色的花!"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "看到了。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "你要的就是那种花没错吧？"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "是的，蓝色的花。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "花……明明花粉对我来说是剧毒，你还叫我来采花……"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "我会开启维生装置保护你的，理论上现在你接近花不会受到任何影响。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "知道啦、知道啦。可是你打开维生装置的时候也不能移动，我们又要怎么过去呢？"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "试一试W/A/S/D和←/↑/↓/→走过去。"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Level02-胜利",
+  "lines": [
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "噢噢！你是怎么做到伸长管道的？"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "这涉及到了至少32767项理论知识，我可以从第1项为你说明……"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "好啦好啦，快走吧！真啰嗦！"
+    }
+  ]
+}

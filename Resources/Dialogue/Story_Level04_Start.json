@@ -1,0 +1,26 @@
+{
+  "title": "Level04-开始",
+  "lines": [
+    
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "查理快看！那朵花好像长得不太一样！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "注意到了，这也许是新种类的花，我的数据库里没有相关记录。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "等等！啊啊啊！这些花怎么在变多啊！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "数据库已更新。"
+    }
+  ]
+}

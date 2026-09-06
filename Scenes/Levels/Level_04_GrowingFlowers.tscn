@@ -1,0 +1,86 @@
+[gd_scene format=4 uid="uid://d3rpv1co13to5"]
+
+[ext_resource type="Script" uid="uid://cuco0gkrl0x6u" path="res://Scripts/Systems/Level.gd" id="1_85a3q"]
+[ext_resource type="Texture2D" uid="uid://buqsecenef4xu" path="res://Art/Backdrops/BG.png" id="2_m636q"]
+[ext_resource type="TileSet" uid="uid://7oycm5hew1qb" path="res://Art/Tiles/TerrainGrassBlob47.tres" id="3_pyixk"]
+[ext_resource type="TileSet" uid="uid://dbo1r0lej0lvf" path="res://Art/Tiles/TerrainWall.tres" id="4_xxonk"]
+[ext_resource type="PackedScene" uid="uid://h0x68v0j1hvl" path="res://Scenes/Entities/PlayerSpawn.tscn" id="5_m1tqs"]
+[ext_resource type="PackedScene" uid="uid://dprxeg350g0s0" path="res://Scenes/Entities/Goal.tscn" id="6_x22ql"]
+[ext_resource type="PackedScene" uid="uid://csejctbgwl6k5" path="res://Scenes/Entities/Mechanism.tscn" id="7_m636q"]
+[ext_resource type="TileSet" uid="uid://dt67is7gr5ute" path="res://Art/Tiles/TerrainMech.tres" id="7_v21hd"]
+[ext_resource type="PackedScene" uid="uid://bn61nd5v2kny7" path="res://Scenes/Entities/Food.tscn" id="8_pyixk"]
+[ext_resource type="TileSet" uid="uid://p6tsn13h62ix" path="res://Art/Tiles/PlayerSnek.tres" id="8_t1vxt"]
+[ext_resource type="Texture2D" uid="uid://i33cxvwf5fhm" path="res://Art/Sprites/Algee-all.png" id="9_pw1l4"]
+[ext_resource type="Texture2D" uid="uid://ucu4yny62pq4" path="res://Art/Sprites/Charlie-Default.png" id="10_jjm17"]
+[ext_resource type="PackedScene" uid="uid://brrve022q1vwa" path="res://Scenes/UI/LevelHUD.tscn" id="11_xksfq"]
+
+[node name="Level" type="Node2D" unique_id=1958937689]
+script = ExtResource("1_85a3q")
+level_id = 4
+level_name = "这些花怎么在变多啊！"
+initial_max_len_override = 9
+food_len_gain_override = 9
+growth_step_interval_override = 3
+story_start = "res://Resources/Dialogue/Story_Level04_Start.json"
+story_win = "res://Resources/Dialogue/Story_Level04_Win.json"
+story_fail = "res://Resources/Dialogue/Story_Level04_Fail.json"
+
+[node name="World" type="Node2D" parent="." unique_id=2088720049]
+
+[node name="Bg" type="Sprite2D" parent="World" unique_id=1483216229]
+position = Vector2(640, 360)
+texture = ExtResource("2_m636q")
+
+[node name="Ground" type="TileMapLayer" parent="World" unique_id=620393186]
+tile_map_data = PackedByteArray("AAANAAcAAAACAAAAAAAOAAcAAAARAAAAAAAPAAcAAAAkAAAAAAAPAAYAAAAfAAAAAAAQAAYAAAAhAAAAAAAOAAYAAAAKAAAAAAAQAAcAAAApAAAAAAARAAcAAAAuAAAAAAASAAcAAAAuAAAAAAATAAcAAAAuAAAAAAAUAAgAAAAuAAAAAAAVAAgAAAAuAAAAAAATAAgAAAApAAAAAAASAAgAAAAkAAAAAAARAAgAAAAkAAAAAAAQAAgAAAAEAAAAAAAUAAcAAAAuAAAAAAAVAAcAAAAuAAAAAAAWAAcAAAAuAAAAAAAXAAcAAAAuAAAAAAAXAAgAAAAuAAAAAAAXAAkAAAApAAAAAAAXAAoAAAAMAAAAAAAXAAsAAAAMAAAAAAAXAAwAAAAMAAAAAAAXAA0AAAAMAAAAAAAXAA4AAAAMAAAAAAAXAA8AAAAEAAAAAAAYAA8AAAApAAAAAAAYABAAAAAEAAAAAAAZABAAAAAiAAAAAAAZAA8AAAAqAAAAAAAYAA4AAAAuAAAAAAAZAA4AAAAqAAAAAAAZAA0AAAAqAAAAAAAZAAwAAAAqAAAAAAAZAAsAAAAaAAAAAAAYAAsAAAAtAAAAAAAYAA0AAAAuAAAAAAAYAAwAAAAuAAAAAAAYAAoAAAAqAAAAAAAYAAkAAAAsAAAAAAAYAAgAAAAuAAAAAAAWAAYAAAAuAAAAAAAVAAYAAAAuAAAAAAAUAAYAAAAuAAAAAAATAAYAAAAuAAAAAAASAAYAAAAuAAAAAAARAAYAAAAuAAAAAAAXAAYAAAAuAAAAAAAYAAYAAAAuAAAAAAASAAUAAAAfAAAAAAARAAUAAAAfAAAAAAAQAAUAAAAKAAAAAAATAAUAAAAhAAAAAAAUAAUAAAAuAAAAAAAVAAUAAAAuAAAAAAAWAAUAAAAuAAAAAAAXAAUAAAAuAAAAAAAYAAUAAAAtAAAAAAAYAAcAAAAuAAAAAAAZAAUAAAAfAAAAAAAZAAYAAAAuAAAAAAAWAAkAAAAkAAAAAAAWAAgAAAAuAAAAAAAZAAkAAAAkAAAAAAAZAAgAAAAuAAAAAAAZAAcAAAAuAAAAAAAaAAgAAAAqAAAAAAAaAAcAAAAqAAAAAAAaAAYAAAAqAAAAAAATAAkAAAAEAAAAAAAUAAkAAAAkAAAAAAAaAAkAAAAiAAAAAAAaAAUAAAAaAAAAAAAUAAQAAAAfAAAAAAATAAQAAAAKAAAAAAAVAAQAAAAfAAAAAAAWAAQAAAAfAAAAAAAXAAQAAAAfAAAAAAAYAAQAAAAaAAAAAAAVAAkAAAAkAAAAAAA=")
+tile_set = ExtResource("3_pyixk")
+
+[node name="Obstacles" type="TileMapLayer" parent="World" unique_id=1559005235]
+tile_set = ExtResource("4_xxonk")
+
+[node name="EntityRoot" type="Node2D" parent="World" unique_id=1535406282]
+
+[node name="Food2" parent="World/EntityRoot" unique_id=2013670240 instance=ExtResource("8_pyixk")]
+position = Vector2(720, 304)
+cell = Vector2i(22, 9)
+
+[node name="PlayerSpawn" parent="World/EntityRoot" unique_id=1658100739 instance=ExtResource("5_m1tqs")]
+position = Vector2(528, 240)
+cell = Vector2i(16, 7)
+
+[node name="Goal" parent="World/EntityRoot" unique_id=1654257061 instance=ExtResource("6_x22ql")]
+position = Vector2(784, 528)
+cell = Vector2i(24, 16)
+
+[node name="Mechanism" parent="World/EntityRoot" unique_id=2091959493 instance=ExtResource("7_m636q")]
+position = Vector2(752, 240)
+cell = Vector2i(23, 7)
+
+[node name="Food" parent="World/EntityRoot" unique_id=451932030 instance=ExtResource("8_pyixk")]
+position = Vector2(624, 208)
+cell = Vector2i(19, 6)
+
+[node name="MechanismCells" type="TileMapLayer" parent="World" unique_id=1566093649]
+tile_set = ExtResource("7_v21hd")
+
+[node name="PlayerCells" type="TileMapLayer" parent="World" unique_id=1322017958]
+tile_set = ExtResource("8_t1vxt")
+
+[node name="PlayerFx" type="Node2D" parent="World" unique_id=901787452]
+
+[node name="Head" type="Sprite2D" parent="World/PlayerFx" unique_id=1446686610]
+visible = false
+z_index = 1
+texture = ExtResource("9_pw1l4")
+hframes = 3
+vframes = 4
+
+[node name="Tail" type="Sprite2D" parent="World/PlayerFx" unique_id=576386316]
+visible = false
+texture = ExtResource("10_jjm17")
+
+[node name="LevelHUD" parent="." unique_id=1443197510 instance=ExtResource("11_xksfq")]
+
+[node name="Cam" type="Camera2D" parent="." unique_id=962089457]
+position = Vector2(671, 282)
+zoom = Vector2(1.3, 1.3)

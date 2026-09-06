@@ -1,0 +1,21 @@
+{
+  "title": "Level03-胜利",
+  "lines": [
+    
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "你本可以不用绕远路的，只要踏过这些花丛就可以节省至少一半的距离。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "做不到！！！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "……"
+    }
+  ]
+}

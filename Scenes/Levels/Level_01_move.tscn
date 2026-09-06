@@ -14,9 +14,9 @@
 
 [node name="Level" type="Node2D" unique_id=1958937689]
 script = ExtResource("1_2p1io")
-level_name = "去那里！"
+level_name = "走过去"
 initial_max_len_override = 12
-story_start = "res://Resources/Dialogue/Story_Level01_Intro.json"
+story_start = "res://Resources/Dialogue/Story_Level01_Start.json"
 story_win = "res://Resources/Dialogue/Story_Level01_Win.json"
 
 [node name="World" type="Node2D" parent="." unique_id=2088720049]
@@ -88,5 +88,6 @@ offset_bottom = 76.0
 
 [node name="Cam" type="Camera2D" parent="." unique_id=962089457]
 position = Vector2(640, 360)
+zoom = Vector2(1.5, 1.5)
 
 [editable path="LevelHUD"]

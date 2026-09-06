@@ -1,0 +1,30 @@
+{
+  "title": "Level02-开始",
+  "lines": [
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "看，前面还有一朵蓝色的花！"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "可是距离这么远，我们的管道不够长，我过不去呢。"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "没关系，看到那些蓝色的花瓣了吗？只要你收集它们，我就可以延长管道，这样你就可以接近它了。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "连花瓣都不能放过啊……"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "这是必要的。"
+    }
+  ]
+}

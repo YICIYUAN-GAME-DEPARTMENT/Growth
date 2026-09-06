@@ -1,0 +1,25 @@
+{
+  "title": "Level03-开始",
+  "lines": [
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "啊啊啊！地上有大片大片的花！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "不要害怕，你穿了防护服，这些花现在对你来说是没有危险的。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "不行不行！我绝对不会想碰这些花的！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "那就绕开它们。"
+    }
+  ]
+}

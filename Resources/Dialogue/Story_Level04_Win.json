@@ -1,0 +1,26 @@
+{
+  "title": "Level04-胜利",
+  "lines": [
+    
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "那朵花究竟怎么回事？！"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "这种花生长得很快，你走不了几步就会开始生长占据空间。"
+    },
+    {
+      "speaker": "algee",
+      "pose": "normal",
+      "text": "怎么会有这种事？！我真的后悔跟你一起来了……"
+    },
+    {
+      "speaker": "charlie",
+      "pose": "normal",
+      "text": "再次申明：你的防护服和我的维生装置可以让你无视这些花的影响。"
+    }
+  ]
+}
