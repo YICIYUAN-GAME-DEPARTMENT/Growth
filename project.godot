@@ -22,6 +22,8 @@ config/icon="uid://cee85f84ttd1e"
 
 [autoload]
 
+ButtonAudio="*res://Scenes/UI/ButtonAudio.tscn"
+
 GameManager="*res://Scripts/Autoload/GameManager.gd"
 EventManager="*res://Scripts/Autoload/EventManager.gd"
 SaveManager="*res://Scripts/Autoload/SaveManager.gd"
