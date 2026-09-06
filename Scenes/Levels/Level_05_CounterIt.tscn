@@ -21,6 +21,7 @@ level_name = "直面恐惧吧！"
 map_size = Vector2i(20, 17)
 initial_max_len_override = 7
 food_len_gain_override = 4
+growth_step_interval_override = 6
 story_start = "res://Resources/Dialogue/Story_Level05_Start.json"
 story_win = "res://Resources/Dialogue/Story_Level05_Win.json"
 story_fail = "res://Resources/Dialogue/Story_Level05_Fail.json"

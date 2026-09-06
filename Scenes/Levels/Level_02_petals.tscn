@@ -17,6 +17,7 @@
 script = ExtResource("1_6chh1")
 level_id = 2
 level_name = "散落的花瓣"
+initial_max_len_override = 3
 food_len_gain_override = 4
 story_start = "res://Resources/Dialogue/Story_Level02_Start.json"
 story_win = "res://Resources/Dialogue/Story_Level02_Win.json"

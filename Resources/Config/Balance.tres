@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_balance")
-initial_max_len = 3
-food_len_gain = 2
+initial_max_len = 99
+food_len_gain = 99
 mechanism_max_level = 4
-growth_step_interval = 6
+growth_step_interval = 99
 grow_anim_sec = 0.1
