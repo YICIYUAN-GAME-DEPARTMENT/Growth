@@ -26,6 +26,7 @@ ButtonAudio="*res://Scenes/UI/ButtonAudio.tscn"
 
 GameManager="*res://Scripts/Autoload/GameManager.gd"
 EventManager="*res://Scripts/Autoload/EventManager.gd"
+SfxManager="*res://Scenes/Audio/SfxManager.tscn"
 SaveManager="*res://Scripts/Autoload/SaveManager.gd"
 
 [display]

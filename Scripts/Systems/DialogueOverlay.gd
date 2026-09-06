@@ -26,6 +26,8 @@ var _line_index := -1
 var _typing := false
 var _char_count := 0
 var _typed_chars := 0.0
+## 已显示的字符数（打字机逐字音效节流：只有新打出字符才响一下）
+var _shown_chars := 0
 
 ## 角色注册表缓存：character_key -> {name: String, poses: {pose_key: String}}
 var _characters: Dictionary = {}
@@ -63,6 +65,10 @@ func _process(delta: float) -> void:
 	_typed_chars += delta * TYPE_CHARS_PER_SEC
 	var shown := mini(int(_typed_chars), _char_count)
 	_text_label.text = _current_text().substr(0, shown)
+	# 逐字音效：本帧有新打出的字符才播一次（AVG 文字浮现）
+	if shown > _shown_chars:
+		SfxManager.play_text_blip()
+		_shown_chars = shown
 	if shown >= _char_count:
 		_typing = false
 		_continue_hint.visible = true
@@ -95,6 +101,7 @@ func advance() -> void:
 	if _typing:
 		_typing = false
 		_typed_chars = _char_count
+		_shown_chars = _char_count
 		_text_label.text = _current_text()
 		_continue_hint.visible = true
 		return
@@ -145,6 +152,7 @@ func _apply_line(line: Dictionary) -> void:
 	_text_label.text = ""
 	_char_count = text.length()
 	_typed_chars = 0.0
+	_shown_chars = 0
 	_typing = true
 	_continue_hint.visible = false
 

@@ -1,0 +1,29 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Scripts/Autoload/SfxManager.gd" id="1_sfx"]
+
+[node name="SfxManager" type="Node"]
+process_mode = 3
+script = ExtResource("1_sfx")
+
+[node name="Type" type="AudioStreamPlayer" parent="."]
+volume_db = -19.0
+max_polyphony = 4
+
+[node name="Step" type="AudioStreamPlayer" parent="."]
+volume_db = -14.0
+max_polyphony = 3
+
+[node name="Pick" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
+max_polyphony = 2
+
+[node name="Win" type="AudioStreamPlayer" parent="."]
+volume_db = -9.0
+
+[node name="Lose" type="AudioStreamPlayer" parent="."]
+volume_db = -9.0
+
+[node name="Grow" type="AudioStreamPlayer" parent="."]
+volume_db = -11.0
+max_polyphony = 2
