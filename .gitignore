@@ -1,6 +1,9 @@
 # ── Godot 4+ generated / cache ────────────────────────────────
 .godot/
 /imported/
+*.exe
+*.pck
+*.zip
 
 # ── Platform build folders ────────────────────────────────────
 /android/

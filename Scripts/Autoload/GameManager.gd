@@ -78,18 +78,22 @@ func list_levels() -> Array[Dictionary]:
 	dir.list_dir_begin()
 	var fname := dir.get_next()
 	while fname != "":
-		if not dir.current_is_dir() and fname.begins_with("Level_") and fname.ends_with(".tscn") \
-				and fname != "LevelTemplate.tscn":
-			var path := LEVELS_DIR.path_join(fname)
-			var ps := load(path) as PackedScene
-			if ps != null:
-				var root := ps.instantiate()
-				var id := int(root.get("level_id")) if root.get("level_id") != null else 0
-				var name := str(root.get("level_name")) if root.get("level_name") != null else ""
-				root.free()
-				if name.is_empty():
-					name = fname.get_basename().trim_prefix("Level_")
-				out.append({"id": id, "name": name, "path": path})
+		if not dir.current_is_dir():
+			# 导出后 PCK 内的场景以 "<名>.tscn.remap" 条目列出（编辑器为原始名），
+			# 统一剥掉 .remap 再过滤，保证导出包里也能扫到关卡。
+			var scene_name := fname.trim_suffix(".remap")
+			if scene_name.begins_with("Level_") and scene_name.ends_with(".tscn") \
+					and scene_name != "LevelTemplate.tscn":
+				var path := LEVELS_DIR.path_join(scene_name)
+				var ps := load(path) as PackedScene
+				if ps != null:
+					var root := ps.instantiate()
+					var id := int(root.get("level_id")) if root.get("level_id") != null else 0
+					var name := str(root.get("level_name")) if root.get("level_name") != null else ""
+					root.free()
+					if name.is_empty():
+						name = scene_name.get_basename().trim_prefix("Level_")
+					out.append({"id": id, "name": name, "path": path})
 		fname = dir.get_next()
 	dir.list_dir_end()
 	out.sort_custom(func(a, b): return a.id < b.id)
