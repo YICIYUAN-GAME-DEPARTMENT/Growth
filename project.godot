@@ -10,7 +10,10 @@ config_version=5
 
 [application]
 
-config/name="Growth"
+config/name="Algee & Blooms"
+config/name_localized={
+"zh_CN": "阿吉与花海"
+}
 config/description="2026 GameJam project — theme: Grow. 2D grid puzzle (Godot 4.7 + GDScript)."
 config/version="v0.1"
 run/main_scene="res://Scenes/UI/MainMenu.tscn"
